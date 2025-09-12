@@ -1,0 +1,268 @@
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+
+html {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+
+  body {
+    overflow: hidden;
+    max-width: 100%;
+    width: 1400px;
+    height: 100%;
+    position: absolute;
+    font-family: "rubik";
+    display: flex;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+    background-color: rgb(186, 218, 255);
+
+
+    main {
+      max-width: 100%;
+      width: 1400px;
+      display: flex;
+      flex-direction: column;
+
+      header {
+        height: 50px;
+        padding-left: 20px;
+        padding-right: 10px;
+        padding-bottom: 10px;
+        padding-top: 10px;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+
+        .loginbutton {
+          display: flex;
+          align-items: center;
+        }
+
+        a {
+          display: flex;
+          align-items: center;
+          text-decoration: none;
+          color: #1e1e1e;
+          margin-right: 20px;
+        }
+
+        a:hover {
+          text-decoration: none;
+          color: #3b3b3b;
+        }
+      }
+
+      .contents {
+        border-top-left-radius: 50px;
+        border-top-right-radius: 50px;
+        border-top: 1px #1e1e1e6e solid;
+        border-left: 1px #1e1e1e6e solid;
+        border-right: 1px #1e1e1e6e solid;
+        width: calc(100% - 20px);
+        height: 100%;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: rgb(202, 234, 255);
+
+        p {
+          color: #04128e !important;
+          line-height: 80px;
+          padding-right: 7px;
+          font-size: 100px;
+          font-weight: lighter;
+          margin: 0;
+        }
+
+        h4 {
+          color: #04128e !important;
+          margin-top: 0;
+        }
+
+        .search {
+          max-width: 100%;
+          width: 742px;
+          display: flex;
+          height: 35px;
+
+          button {
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            border: none;
+            display: flex;
+            align-items: center;
+            color: white;
+            background-color: #8e0404;
+            cursor: pointer;
+          }
+
+          button:hover {
+            background-color: #ac0b0b;
+          }
+
+          input[type="text"] {
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+            border: 1px solid #8e0404;
+            width: 100%;
+            padding-left: 5px;
+          }
+
+          input[type="text"]:focus {
+            outline: none;
+          }
+        }
+
+        .tags {
+          max-width: 100%;
+          padding: 20px;
+          padding-top: 0;
+          margin-top: 20px;
+          display: flex;
+          flex-direction: column;
+
+          .tag {
+            display: flex;
+            flex-direction: column;
+          }
+
+          .tagform {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+
+            .lefttag {
+              margin-top: 15px;
+              width: 100%;
+              height: calc(100% - 40px);
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+
+              .date {
+                margin-left: 10px;
+              }
+            }
+
+            .righttag {
+              margin-top: 20px;
+              display: flex;
+              flex-wrap: wrap;
+              margin-bottom: 20px;
+              gap: 10px;
+              justify-content: center;
+              flex-direction: row;
+
+              .chkbx {
+                height: 45px;
+                width: calc(48% - 10px);
+                margin-bottom: 10px;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                border: #8e0404 1px solid;
+                border-radius: 5px;
+                padding-left: 10px;
+
+                input[type="checkbox"] {
+                  margin-right: 10px;
+                  cursor: pointer;
+                  display: none;
+                }
+
+                label {
+                  color: #8e0404;
+                  cursor: pointer;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.ahh {
+  height: 40px;
+}
+
+input[type="text"]:focus {
+  outline: none;
+}
+
+.right {
+        background-color: rgb(202, 234, 255);
+        border-top-left-radius: 50px;
+        border-top-right-radius: 50px;
+        width: calc(100% - 40px);
+        padding: 20px;
+        overflow-y: auto;
+    }
+
+    .tab-buttons {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .tab-btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 6px;
+        background: rgb(186, 218, 255);
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .tab-btn:hover {
+        background: rgb(150, 190, 250);
+    }
+
+    .tab-btn.active {
+        background: #1e1e1e;
+        color: white;
+    }
+
+    .code-block {
+        max-height: 650px;
+        position: relative;
+        background: #1e1e1e;
+        color: #f8f8f2;
+        padding: 15px;
+        border-radius: 10px;
+        font-family: "Fira Code", monospace;
+        font-size: 14px;
+        line-height: 1.4;
+        overflow-x: auto;
+        overflow-y: auto;
+        display: none;
+    }
+
+    .code-block.active {
+    display: block;
+    }
+
+    .copy-btn {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgb(186, 218, 255);
+        border: none;
+        padding: 6px 10px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 12px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+
+    .copy-btn:hover {
+    background: rgb(150, 190, 250);
+  }

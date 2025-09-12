@@ -3,16 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blade Test</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ asset('css/welcome.css') }}">
+    <title>Document</title>
 </head>
 <body>
-    <form action="{{ route('send') }}" method="POST">
-        @csrf
-        <button type="submit">Click Me</button>
-    </form>
-
-    <p>
-        {{ $greet ?? '' }}
-    </p>
+    <div class="container">
+        <a href="/layouts/plain">
+            Try Plain Layout
+        </a>
+        <a href="/layouts/sidenav">
+            Try Side Nav Bar Layout
+        </a>
+    </div>
 </body>
+
 </html>
