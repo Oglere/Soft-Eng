@@ -87,30 +87,26 @@
                         <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
                     </div>
 
-                    <form action="/out" method="POST">
-                        @csrf
-                        <button class="lgt">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="feather feather-log-in"
-                                >
-                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                                <polyline points="10 17 15 12 10 7" />
-                                <line x1="15" y1="12" x2="3" y2="12" />
-                            </svg>
+                    <a href="/layouts">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="feather feather-log-in"
+                            >
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                            <polyline points="10 17 15 12 10 7" />
+                            <line x1="15" y1="12" x2="3" y2="12" />
+                        </svg>
 
-                            Logout
-                        </button>
-                    </form>
-                </nav>
+                        Go Back
+                    </a>
             </div>
             <div class="right">
                 <h2>Code Reference</h2>
@@ -194,7 +190,17 @@
                     &lt;/a&gt;
 
                     &lt;a href="/admin/storage"&gt;
-                        &lt;svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-database"&gt;
+                        &lt;svg xmlns="http://www.w3.org/2000/svg"&gt;
+                        &gt;width="24"&gt;
+                        &gt;height="24"&gt;
+                        &gt;viewBox="0 0 24 24"&gt;
+                        &gt;fill="none"&gt;
+                        &gt;stroke="currentColor"&gt;
+                        &gt;stroke-width="2"&gt;
+                        &gt;stroke-linecap="round"&gt;
+                        &gt;stroke-linejoin="round"&gt;
+                        &gt;class="feather&gt;
+                        &gt;feather-database"&gt;
                             &lt;ellipse cx="12" cy="5" rx="9" ry="3"/&gt;
                             &lt;path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/&gt;
                             &lt;path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/&gt;
@@ -245,14 +251,7 @@
     &lt;/main&gt;
 &lt;/body&gt;
 &lt;/html&gt;
-
-&lt;script&gt;
-    function hawa() {
-    window.location.href = "";
-    }
-&lt;/script&gt;
                         </code></pre>
-
                 </div>
 
                 <div id="css" class="code-block">
@@ -480,4 +479,3 @@ svg {
     });
     }
 </script>
-

@@ -11,7 +11,7 @@
 <body>
     <main>
         <header>
-            <a class="death" href="{{ url('/go/login') }}">
+            <a class="death" href="/layouts">
                 <div class="loginbutton">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -29,7 +29,7 @@
                         <polyline points="10 17 15 12 10 7"></polyline>
                         <line x1="15" y1="12" x2="3" y2="12"></line>
                     </svg>
-                    <h4> &nbsp; Login</h4>
+                    <h4> &nbsp; Go Back</h4>
                 </div>
             </a>
         </header>

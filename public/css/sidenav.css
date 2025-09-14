@@ -186,7 +186,7 @@ input[type="text"]:focus {
     }
 
     .code-block {
-        max-height: 700px;
+        height: calc(100% - 150px);
         position: relative;
         background: #1e1e1e;
         color: #f8f8f2;

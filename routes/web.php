@@ -5,7 +5,7 @@ use App\Http\Controllers\LoginController; // Login Module
 use App\Http\Controllers\QueryController; // Landing Page and Search Query Module
 use App\Http\Controllers\OtpController; // OTP Module
 
-use App\Http\Controllers\Controller; // PDF Reader Module
+use App\Http\Controllers\PdfController; // PDF Reader Module
 
 use App\Http\Controllers\StudentController; // Student Functions
 
@@ -18,12 +18,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/layouts/plain', function () {
-    return view('layout.plain');
-});
-
-Route::get('/layouts/sidenav', function () {
-    return view('layout.sidenavbar');
+Route::prefix('/layouts')->group(function (){
+    Route::get('/', [PdfController::class, 'layouts']);
+    Route::get('/plain', [PdfController::class, 'plain_layout']);
+    Route::get('/sidenav', [PdfController::class, 'sidenav_layout']);
+    Route::get('/static', [PdfController::class, 'static_pdf_layout']);
+    Route::get('/dynamic', [PdfController::class, 'dynamic_pdf_layout']);
 });
 
 // Route::prefix('/')->group(function (){
