@@ -1,0 +1,43 @@
+
+.dash{
+    width: 60%;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+    border: 1px solid #ddd;
+
+}
+
+tr{
+  background-color: #ffffff
+}
+
+tr:hover {background-color: #ddd;}
+
+th {
+  background-color: #030281 ;
+  color: white;
+  text-align: center;
+}
+
+.icon{
+  width: 20px;
+  float: right;
+  position:relative;
+}
+
+.sto-button {
+    border:none;
+    padding: 5px 10px;
+    background-color: #8e0404;
+    border-radius: 5px;
+}
