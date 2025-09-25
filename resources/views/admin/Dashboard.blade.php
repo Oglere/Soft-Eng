@@ -70,7 +70,7 @@
 
                             Manage Users
                         </a>
-                        <a href="recovery" class="unq uou">Recovery</a>
+                        <a href="/admin/manage-users/recover-user" class="unq uou">Recovery</a>
                     </div>
 
                     <a href="/admin/storage">

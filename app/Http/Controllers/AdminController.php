@@ -14,12 +14,15 @@ class AdminController extends Controller
         return view('admin.ManageUser');
     }
 
+    public function account_recovery() {
+    }
+
     public function storage_page() {
         return view('admin.Storage');
     }
 
-    // public function account_setting_page() {
-
-    // }
+    public function account_setting_page() {
+        return view('admin.EditAcc');
+    }
 
 }

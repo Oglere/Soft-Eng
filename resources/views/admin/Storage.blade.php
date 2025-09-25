@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DARA - Storage</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/Storage.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/Storage.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 </head>
@@ -25,7 +25,7 @@
                 </div>
                 <nav class="nav-links">
                     <div class="dropdown">
-                        <a href="#" class="trigger">
+                        <a href="/admin" class="trigger">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -47,30 +47,32 @@
                         <a href="/" class="unq uou">Search Studies</a>
                     </div>
 
+                    <div class="dropdown">
+                        <a href="/admin/manage-users">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="feather feather-users"
+                                >
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
 
-                    <a href="{{ asset('layout/ManagerUser') }}">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="feather feather-users"
-                            >
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                            <circle cx="9" cy="7" r="4" />
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                        </svg>
+                            Manage Users
+                        </a>
+                        <a href="/admin/manage-users/recover-user" class="unq uou">Recovery</a>
+                    </div>
 
-                        Manage Users
-                    </a>
-
-                    <a href="./Storage.html">
+                    <a href="/admin/storage" style="color: #030281; font-weight: normal;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-database">
                             <ellipse cx="12" cy="5" rx="9" ry="3"/>
                             <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
@@ -84,8 +86,8 @@
                         <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
                     </div>
 
-                    <a href="" class="unq" style="color: #8e0404; font-weight: normal;">Edit Account</a>
-                    <a href="recovery" class="unq">Recovery</a>
+                    <a href="/admin/account-settings" class="unq">Account Settings</a>
+
 
                     <div class="asd2" style=" width: 100%; display: flex; justify-content: center;">
                         <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
@@ -115,39 +117,38 @@
                     </form>
                 </nav>
             </div>
-            
-        <div class="dash">
 
-    <table>
-    <tr>
-        <th style="width: 50%;">Title </th>
-        <th>Status</th>
-        <th>File Size</th>
-        <th>Actions</th>
-    </tr>
-    <tr>
-        <td>asdasd</td>
-        <td>Gdsadn</td>
-        <td>fsd</td>
-        <td> <button class="sto-button"> <i class="fa fa-eye"></i> </button> </td>
-    </tr>
-    <tr>
-        <td>sadsa</td>
-        <td>asdsad</td>
-        <td>asdasd</td>
-        <td><button class="sto-button"> <i class="fa fa-eye"></i> </button></td>
-    </tr>
-    <tr>
-        <td>asdsadsa</td>
-        <td>greascd</td>
-        <td>wedasd</td>
-        <td><button class="sto-button"> <i class="fa fa-eye"></i> </button></td>
-    </tr>
-    </table>
+            <div class="right">
+                <div class="dash">
+                    <table>
+                        <tr>
+                            <th style="width: 50%;">Title </th>
+                            <th>Status</th>
+                            <th>File Size</th>
+                            <th>Actions</th>
+                        </tr>
+                        <tr>
+                            <td>asdasd</td>
+                            <td>Gdsadn</td>
+                            <td>fsd</td>
+                            <td> <button class="sto-button"> <i class="fa fa-eye"></i> </button> </td>
+                        </tr>
+                        <tr>
+                            <td>sadsa</td>
+                            <td>asdsad</td>
+                            <td>asdasd</td>
+                            <td><button class="sto-button"> <i class="fa fa-eye"></i> </button></td>
+                        </tr>
+                        <tr>
+                            <td>asdsadsa</td>
+                            <td>greascd</td>
+                            <td>wedasd</td>
+                            <td><button class="sto-button"> <i class="fa fa-eye"></i> </button></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
 
-
-        </div>
-        
         <footer>
         </footer>
     </main>
@@ -159,4 +160,3 @@
     window.location.href = "";
     }
 </script>
-                        

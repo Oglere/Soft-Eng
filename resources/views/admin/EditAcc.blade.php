@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DARA - Edit Account</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/EditAcc.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/EditAcc.css') }}">
     <script src="./java.js"></script>
 </head>
 <body style="overflow: hidden; height: calc(100% - 61px)">
@@ -24,7 +24,7 @@
                 </div>
                 <nav class="nav-links">
                     <div class="dropdown">
-                        <a href="./Dashboard.html" class="trigger">
+                        <a href="/admin" class="trigger">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -46,30 +46,32 @@
                         <a href="/" class="unq uou">Search Studies</a>
                     </div>
 
+                    <div class="dropdown">
+                        <a href="/admin/manage-users">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="feather feather-users"
+                                >
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
 
-                    <a href="#">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            class="feather feather-users"
-                            >
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                            <circle cx="9" cy="7" r="4" />
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                        </svg>
+                            Manage Users
+                        </a>
+                        <a href="/admin/manage-users/recover-user" class="unq uou">Recovery</a>
+                    </div>
 
-                        Manage Users
-                    </a>
-
-                    <a href="#">
+                    <a href="/admin/storage">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-database">
                             <ellipse cx="12" cy="5" rx="9" ry="3"/>
                             <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
@@ -83,15 +85,14 @@
                         <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
                     </div>
 
-                    <a href="#" class="unq" style="color: #8e0404; font-weight: normal;">Edit Account</a>
-                    <a href="recovery" class="unq">Recovery</a>
+                    <a href="#" class="unq" style="color: #8e0404; font-weight: normal;">Account Settings</a>
 
                     <div class="asd2" style=" width: 100%; display: flex; justify-content: center;">
                         <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
                     </div>
 
                     <form action="/out" method="POST">
-                                                <button class="lgt">
+                        <button class="lgt">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -114,43 +115,43 @@
                     </form>
                 </nav>
             </div>
-            
-        <div class="dash">
 
-    <form class="Edit-form" name="RegForm" onsubmit="return validateForm()" onreset="resetErrors()">
-        <h1>Edit Your Account</h1>
-        <p>
-            <label for="Username">Username</label>
-            <input type="text" id="Uname" name="UsenName" placeholder="Enter your Username" />
-            <span id="uname-error" class="error-message"></span>
-        </p>
-        <p>
-            <label for="Fname">Edit First Name</label>
-            <input type="text" id="EFname" name="Fname" placeholder="Enter your First Name" />
-            <span id="EFname-error" class="error-message"></span>
-        </p>
-        <p>
-            <label for="Lname">Edit Last Name</label>
-            <input type="text" id="ELname" name="Lname" placeholder="Enter your Last Name" />
-            <span id="ELname-error" class="error-message"></span>
-        </p>
-        <p>
-            <label for="email">E-mail Address</label>
-            <input type="text" id="email" name="EMail" placeholder="Enter your email" />
-            <span id="email-error" class="error-message"></span>
-        </p>
-        <p>
-            <label for="password">Password</label>
-            <input type="password" id="password" name="Password" />
-            <span id="password-error" class="error-message"></span>
-        </p>
-        <p>
-            <input type="submit" value="Send" name="Submit" />
-        </p>
-    </form>
+            <div class="right">
+                <div class="dash">
+                    <form class="Edit-form" name="RegForm" onsubmit="return validateForm()" onreset="resetErrors()">
+                        <h1>Edit Your Account</h1>
+                        <p>
+                            <label for="Username">Username</label>
+                            <input type="text" id="Uname" name="UsenName" placeholder="Enter your Username" />
+                            <span id="uname-error" class="error-message"></span>
+                        </p>
+                        <p>
+                            <label for="Fname">Edit First Name</label>
+                            <input type="text" id="EFname" name="Fname" placeholder="Enter your First Name" />
+                            <span id="EFname-error" class="error-message"></span>
+                        </p>
+                        <p>
+                            <label for="Lname">Edit Last Name</label>
+                            <input type="text" id="ELname" name="Lname" placeholder="Enter your Last Name" />
+                            <span id="ELname-error" class="error-message"></span>
+                        </p>
+                        <p>
+                            <label for="email">E-mail Address</label>
+                            <input type="text" id="email" name="EMail" placeholder="Enter your email" />
+                            <span id="email-error" class="error-message"></span>
+                        </p>
+                        <p>
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="Password" />
+                            <span id="password-error" class="error-message"></span>
+                        </p>
+                        <p>
+                            <input type="submit" value="Send" name="Submit" />
+                        </p>
+                    </form>
+                </div>
+            </div>
 
-        </div>
-        
         <footer>
         </footer>
     </main>
@@ -162,4 +163,3 @@
     window.location.href = "";
     }
 </script>
-                        

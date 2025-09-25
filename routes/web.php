@@ -49,8 +49,9 @@ Route::prefix('teacher')->group(function (){
 Route::prefix('admin')->group(function (){
     Route::get('/', [AdminController::class, 'dashboard_page']);
     Route::get('/manage-users/', [AdminController::class, 'user_control_page']);
+    Route::get('/manage-users/recover-user', [AdminController::class, 'account_recovery']);
     Route::get('/storage/', [AdminController::class, 'storage_page']);
-    Route::get('/account-setting/', [AdminController::class, 'account_setting_page']);
+    Route::get('/account-settings/', [AdminController::class, 'account_setting_page']);
 
     // Route::post(); // Back End
 

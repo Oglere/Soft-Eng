@@ -46,7 +46,7 @@
                     </div>
 
                     <div class="dropdown">
-                        <a href="">
+                        <a href="" style="color: #030281; font-weight: normal;">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -67,7 +67,7 @@
 
                             Manage Users
                         </a>
-                        <a href="recovery" class="unq uou">Recover Account</a>
+                        <a href="/admin/manage-users/recover-user" class="unq uou">Recover Account</a>
                     </div>
 
                     <a href="storage">
@@ -84,7 +84,7 @@
                         <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
                     </div>
 
-                    <a href="#" class="unq" style="color: #8e0404; font-weight: normal;">Account Settings</a>
+                    <a href="/admin/account-settings" class="unq">Account Settings</a>
 
 
                     <div class="asd2" style=" width: 100%; display: flex; justify-content: center;">
