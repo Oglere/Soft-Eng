@@ -1,0 +1,116 @@
+
+.column{
+  float: left;
+  position:relative;
+  width: 30%;
+  padding: 0 10px;
+  color: white;
+  margin-bottom: 10px;
+}
+
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+@media screen and (max-width: 600px) {
+  .column {
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+  }
+
+}
+
+.card-1 {
+  text-align: left;
+  background-color: rgb(22, 143, 22);
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.card-2 {
+  text-align: left;
+  border-radius: 10px;
+  background-color: rgb(247, 47, 47);
+  padding: 5px;
+}
+
+.card-3 {
+  text-align: left;
+  background-color: rgb(206, 203, 203);
+  border-radius: 10px;
+  flex-wrap: wrap;
+  padding: 5px;
+}
+
+.card-4{
+    background-color: rgba(255, 255, 255, 0.829);
+    padding: 5px;
+    border-radius: 10px;
+    color: black;
+    column-gap: 20px;
+    border: 2px solid grey;
+}
+.box1{
+  width: 55%;
+}
+
+.box2{
+  width: 35%;
+}
+.card-5{
+    background-color:rgba(255, 255, 255, 0.829);
+    padding: 5px;
+    border-radius: 10px;
+    color: black;
+    border: 2px solid grey;
+}
+
+.small-box-footer {
+    background-color: gray;
+    position: static;
+    flex-wrap: wrap;
+    text-decoration: none;
+    display: flex;
+    padding: 4px;
+    margin: 2px;
+    text-align: center;
+    justify-content: center;
+    color: white;
+    border-radius: 0 0 5px 5px;
+}
+.small-box-footer a{
+    text-decoration: none;
+}
+
+/*  table */
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr{
+  background-color: #ffffff
+}
+
+th {
+  background-color: #030281 ;
+  color: white;
+}
+
+.icon{
+  width: 20px;
+  float: right;
+  position:relative;
+}
