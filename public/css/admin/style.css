@@ -10,11 +10,12 @@ html {
 
   body {
     background-color: rgb(186, 218, 255);
-    overflow: hidden;
+    overflow: auto;
     max-width: 100%;
     width: 1400px;
     height: 100%;
-    position: absolute;
+    position: relative;
+    min-height: 100vh;
     font-family: "rubik";
     display: flex;
     padding: 0;
@@ -29,13 +30,14 @@ html {
       flex-direction: column;
 
       header {
+        border-bottom: 2px solid black;
         height: 50px;
         padding-left: 20px;
         padding-right: 10px;
         padding-bottom: 10px;
         padding-top: 10px;
         display: flex;
-        flex-direction: row-reverse;
+        justify-content: end;
         align-items: center;
       }
     }
@@ -60,7 +62,7 @@ input[type="text"]:focus {
 
   .left {
     height: 100vh;
-    overflow: auto;
+    overflow-y: auto;
     width: 210px;
     display: block;
     display: flex;
@@ -157,14 +159,16 @@ input[type="text"]:focus {
   }
 
   .right {
-    border: 2px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-self: start;
-    width: 100%;
-    padding: 10px;
-    gap: 10px;
+      border-left: 2px solid #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      width: 100%;
+      height: calc(100vh - 94px);       /* now fills parent's height */
+      padding: 10px;
+      gap: 10px;
+      overflow-y: auto;   /* vertical scrollbar */
+      overflow-x: hidden; /* hide horizontal scrollbar */
   }
   .row{
     display: flex;

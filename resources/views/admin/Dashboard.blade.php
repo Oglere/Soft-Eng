@@ -10,6 +10,7 @@
     <title>DARA - Edit Account</title>
     <link rel="stylesheet" href="{{ asset('css/admin/style.css') }}">
     <link rel="stylesheet" href="{{ asset('css/admin/Dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/chart.css') }}">
 </head>
 <body style="overflow: hidden; height: calc(100% - 61px)">
     <main>
@@ -121,44 +122,63 @@
 
         <div class="right">
                 <div class="row">
-                    <div class="card-1" style="background-color: #4CAF50;">
-                        <h1>21</h1>
-                        Total User
-                        <!-- <p>Total User</p> -->
-                        <a href="./ManageUser.html" class="small-box-footer">More info <i class="bi bi-link-45deg"></i></a>
-                    </div>
+                    <!-- <div class="column"> -->
+                        <div class="card-1" style="background-color: #4CAF50;">
+                            <h1>21</h1>
+                            Total User
+                            <!-- <p>Total User</p> -->
+                            <a href="./ManageUser.html" class="small-box-footer">More info <i class="bi bi-link-45deg"></i></a>
+                        </div>
+                    <!-- </div> -->
 
-                    <div class="card-1" style="background-color: #da0707ff;">
-                        <h1>1</h1>
-                        Account Suspended
-                        <!-- <p></p> -->
-                        <a href="#" class="small-box-footer">More info <i class="bi bi-link-45deg"></i></a>
-                    </div>
+                    <!-- <div class="column"> -->
+                        <div class="card-1" style="background-color: #da0707ff;">
+                            <h1>1</h1>
+                            Account Suspended
+                            <!-- <p></p> -->
+                            <a href="#" class="small-box-footer">More info <i class="bi bi-link-45deg"></i></a>
+                        </div>
+                    <!-- </div> -->
+                    
 
-
-                    <div class="card-1" style="background-color: #ffffffff;">
-                        <h1>10.60 MB</h1>
-                        Total Space Used
-                        <!-- <p></p> -->
-                        <a href="./Storage.html" class="small-box-footer">More info <i class="bi bi-link-45deg"></i></a>
-                    </div>
+                    <!-- <div class="column"> -->
+                        <div class="card-1" style="background-color: #ffffffff;">
+                            <h1>10.60 MB</h1>
+                            Total Space Used
+                            <!-- <p></p> -->
+                            <a href="./Storage.html" class="small-box-footer">More info <i class="bi bi-link-45deg"></i></a>
+                        </div>
+                    <!-- </div> -->
+                    
                 </div>    
-            
-            <!-- <div class="row"> -->
-                
-            <!-- </div > -->
+   
                 <div class="row">
-                    <div class="card-1">
-                        <div class="card-4">
-                        Student Overview
+                    
+                    <div class="card-3">
+                        <div class="card-content">
+                            <h3>Student Overview</h3>
                             <hr>
-                        25 <br>Student Distribution in the Database
+                            <h1>25</h1>
+                            <p>Total Students in the Database</p>
+                            <canvas id="chart1" class="chart"></canvas>
+
                         </div>
                     </div>
 
-                    <div class="card-1">
-                        <div class="card-5">
-                        Student Overview
+                    <div class="card-2">
+                        <div class="card-content">
+                            <h3>Student Distribution Overview</h3>
+                            <hr>
+        
+                            <!-- <div class="chart" id="chart2"></div> -->
+                            <canvas id="chart2" class="chart2" width="100" hight="100"></canvas>
+                            <ul class="legend">
+                                <li><span class="approved"></span>Approved</li>
+                                <li><span class="pending"></span>Pending</li>
+                                <li><span class="needs-revision"></span>Needs Revision</li>
+                                <li><span class="rejected"></span>Rejected</li>
+                                <li><span class="abandoned"></span>Abandoned</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -209,8 +229,5 @@
 </body>
 </html>
 
-<script>
-    function hawa() {
-    window.location.href = "";
-    }
-</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ asset('js/chart.js') }}"></script>
