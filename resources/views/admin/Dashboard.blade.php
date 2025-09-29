@@ -120,92 +120,86 @@
             </div>
 
         <div class="right">
-            <div class="dash">
+                <div class="row">
+                    <div class="card-1" style="background-color: #4CAF50;">
+                        <h1>21</h1>
+                        Total User
+                        <!-- <p>Total User</p> -->
+                        <a href="./ManageUser.html" class="small-box-footer">More info <i class="bi bi-link-45deg"></i></a>
+                    </div>
 
-            <div class="row">
-                <div class="column">
+                    <div class="card-1" style="background-color: #da0707ff;">
+                        <h1>1</h1>
+                        Account Suspended
+                        <!-- <p></p> -->
+                        <a href="#" class="small-box-footer">More info <i class="bi bi-link-45deg"></i></a>
+                    </div>
+
+
+                    <div class="card-1" style="background-color: #ffffffff;">
+                        <h1>10.60 MB</h1>
+                        Total Space Used
+                        <!-- <p></p> -->
+                        <a href="./Storage.html" class="small-box-footer">More info <i class="bi bi-link-45deg"></i></a>
+                    </div>
+                </div>    
+            
+            <!-- <div class="row"> -->
+                
+            <!-- </div > -->
+                <div class="row">
                     <div class="card-1">
-                    <h1>21</h1>
-                    Total User
-                    <!-- <p>Total User</p> -->
-                    <a href="./ManageUser.html" class="small-box-footer">More info <i class="bi bi-link-45deg"></i></a>
+                        <div class="card-4">
+                        Student Overview
+                            <hr>
+                        25 <br>Student Distribution in the Database
+                        </div>
+                    </div>
+
+                    <div class="card-1">
+                        <div class="card-5">
+                        Student Overview
+                        </div>
                     </div>
                 </div>
+          
+                <div class="table_wrapper">
+                    <table>
+                        <tr>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        <tr>
+                            <td>asdasd</td>
+                            <td>Gdsadn</td>
+                            <td>fsd</td>
+                            <td>asd</td>
+                            <td>asd</td>
+                            <td>ghrgvd</td>
+                        </tr>
+                        <tr>
+                            <td>sadsa</td>
+                            <td>asdsad</td>
+                            <td>asdasd</td>
+                            <td>asd</td>
+                            <td>dsaq</td>
+                            <td>wfas</td>
+                        </tr>
+                        <tr>
+                            <td>bfscasd</td>
+                            <td>greascd</td>
+                            <td>wedasd</td>
+                            <td>asdwf</td>
+                            <td>qwedfsa</td>
+                            <td>ghytrfe</td>
+                        </tr>
 
-                <div class="column">
-                    <div class="card-2">
-                    <h1>1</h1>
-                    Account Suspended
-                    <!-- <p></p> -->
-                    <a href="#" class="small-box-footer">More info <i class="bi bi-link-45deg"></i></a>
-                    </div>
-                </div>
-
-
-                <div class="column">
-                    <div class="card-3">
-                    <h1>10.60 MB</h1>
-                    Total Space Used
-                    <!-- <p></p> -->
-                    <a href="./Storage.html" class="small-box-footer">More info <i class="bi bi-link-45deg"></i></a>
-                    </div>
-                </div>
-
-
-                <div class="column box1">
-                    <div class="card-4">
-                    Student Overview
-                        <hr>
-                    25 <br>Student Distribution in the Database
-                    </div>
-                </div>
-
-                <div class="column box2">
-                    <div class="card-5">
-                    Student Overview
-                    </div>
-                </div>
+                    </table>
             </div>
-
-
-            <table>
-                <tr>
-                    <th>Firstname</th>
-                    <th>Lastname</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-                <tr>
-                    <td>asdasd</td>
-                    <td>Gdsadn</td>
-                    <td>fsd</td>
-                    <td>asd</td>
-                    <td>asd</td>
-                    <td>ghrgvd</td>
-                </tr>
-                <tr>
-                    <td>sadsa</td>
-                    <td>asdsad</td>
-                    <td>asdasd</td>
-                    <td>asd</td>
-                    <td>dsaq</td>
-                    <td>wfas</td>
-                </tr>
-                <tr>
-                    <td>bfscasd</td>
-                    <td>greascd</td>
-                    <td>wedasd</td>
-                    <td>asdwf</td>
-                    <td>qwedfsa</td>
-                    <td>ghytrfe</td>
-                </tr>
-
-            </table>
-
-
-        </div>
 
         </div>
 
