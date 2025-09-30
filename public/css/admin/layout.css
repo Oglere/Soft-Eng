@@ -1,6 +1,11 @@
-.spacer{
-    /* width: 100%; */
+table.table thead th {
+    background-color: #134686 !important;
+    color: white !important;
+    text-align: center;
 }
+
+
+
 body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -92,11 +97,7 @@ main {
     display: flex;
     justify-content: center;
 } */
-.menu-wrapper{
-    /* border: 1px solid green; */
-    justify-content: center;
-    align-self: center;
-}
+
 .sidenav_name {
     font-weight: 600; /* semi-bold */
 }

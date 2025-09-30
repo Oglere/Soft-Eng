@@ -1,10 +1,15 @@
 <?php
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\StorageController;
+use App\Http\Controllers\Admin\ManageUsersController;
 
 
 Route::prefix('/admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/storage', [StorageController::class, 'index'])->name('admin.storage');
+    Route::get('/manageuser', [ManageUsersController::class, 'index'])->name('admin.manageuser');
+
 });
 
 // Route::prefix('/test')->group(function (){

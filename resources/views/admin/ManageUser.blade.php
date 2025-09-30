@@ -1,168 +1,50 @@
+@extends('layouts.admin')
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DARA - Manage User</title>
-    <link rel="stylesheet" href="{{ asset('css/admin/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/admin/ManageUser.css') }}">
-</head>
-<body style="overflow: hidden; height: calc(100% - 61px)">
-    <main>
-        <header>
-            <div class="ahh">
-                <img src="../../Imgs/DARA.png" alt="DARA Logo" class="ahh">
-            </div>
-        </header>
+@section('title', 'Manage User')
 
-        <div class="main" style="height: 100%;">
-            <div class="left" >
-                <div class="profile">
-                    <h2> Name </h2>
-                </div>
-                <nav class="nav-links">
-                    <div class="dropdown">
-                        <a href="/admin" class="trigger">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="feather feather-home"
-                                >
-                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                                <polyline points="9 22 9 12 15 12 15 22" />
-                            </svg>
+@section('content')
 
-                            Dashboard
-                        </a>
-                        <!-- <a href="/" class="unq uou">Search Studies</a> -->
-                    </div>
+<div class="row mt-4 d-flex justify-content-between align-items-center">
+    <div class="col-md-6">
+        <form action="" method="GET" class="d-flex">
+            <input type="text" name="search" class="form-control me-2" placeholder="Search..." value="{{ request('search') }}">
+            <select name="filter" class="form-select me-2" style="max-width: 150px;">
+                <option value="">All</option>
+                <option value="1">Option 1</option>
+                <option value="2">Option 2</option>
+                <option value="3">Option 3</option>
+            </select>
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+        </form>
+    </div>
+    <div class="col-md-2 text-end">
+        <a href="" class="btn btn-primary">Add</a>
+    </div>
+</div>
 
-                    <div class="dropdown">
-                        <a href="" style="color: #030281; font-weight: normal;">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="feather feather-users"
-                                >
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                <circle cx="9" cy="7" r="4" />
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                            </svg>
+<div class="row mt-4">
+    <div class="col-12">
+        <table class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>title1</th>
+                    <th>title2</th>
+                    <th>title3</th>
+                    <th>title4</th>
+                    <th>title5</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>2</td>
+                    <td>3</td>
+                    <td>4</td>
+                    <td>5</td>
+                </tr>
+            </tbody>
+        </table>
 
-                            Manage Users
-                        </a>
-                        <a href="/admin/manage-users/recover-user" class="unq uou">Recover Account</a>
-                    </div>
-
-                    <a href="storage">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-database">
-                            <ellipse cx="12" cy="5" rx="9" ry="3"/>
-                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
-                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
-                        </svg>
-
-                        Storage
-                    </a>
-
-                    <div class="asd2" style=" width: 100%; margin-top: 10px; display: flex; justify-content: center;">
-                        <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
-                    </div>
-
-                    <a href="/admin/account-settings" class="unq">Account Settings</a>
-
-
-                    <div class="asd2" style=" width: 100%; display: flex; justify-content: center;">
-                        <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
-                    </div>
-
-                    <form action="/out" method="POST">
-                        <button class="lgt">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="feather feather-log-in"
-                                >
-                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                                <polyline points="10 17 15 12 10 7" />
-                                <line x1="15" y1="12" x2="3" y2="12" />
-                            </svg>
-
-                            Logout
-                        </button>
-                    </form>
-                </nav>
-            </div>
-
-            <div class="right">
-                <div class="dash">
-                    <table>
-                        <tr>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                        <tr>
-                            <td>asdasd</td>
-                            <td>Gdsadn</td>
-                            <td>fsd</td>
-                            <td>asd</td>
-                            <td>asd</td>
-                            <td> <input type="submit" value="Send" name="Submit" /> </td>
-                        </tr>
-                        <tr>
-                            <td>sadsa</td>
-                            <td>asdsad</td>
-                            <td>asdasd</td>
-                            <td>asd</td>
-                            <td>dsaq</td>
-                            <td>wfas</td>
-                        </tr>
-                        <tr>
-                            <td>bfscasd</td>
-                            <td>greascd</td>
-                            <td>wedasd</td>
-                            <td>asdwf</td>
-                            <td>qwedfsa</td>
-                            <td>ghytrfe</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <footer>
-        </footer>
-    </main>
-</body>
-</html>
-
-<script>
-    function hawa() {
-    window.location.href = "";
-    }
-</script>
+    </div>
+</div>
+@endsection
