@@ -21,9 +21,12 @@ Route::prefix('/admin')->group(function () {
 
 });
 
+
+//👇 fuck this route what do you mean???
 // Route::prefix('/test')->group(function (){
 //     Route::get('/testlayout', [AdminController::class, 'test']);
 // });
+
 // Route::prefix('/')->group(function (){
 //     Route::get('/', [QueryController::class, 'landing_page']);
 //     Route::get('/results/', [QueryController::class, 'results_page']);
