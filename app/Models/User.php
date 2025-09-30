@@ -10,7 +10,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $primaryKey = 'user_id'; // custom PK
+    protected $primaryKey = 'user_id'; // custom PK // why faller??? why custom pk?? when u can just use the id? and do hash manager *facepalm* -- norben
     public $incrementing = true;
     protected $keyType = 'int';
 

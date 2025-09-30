@@ -8,7 +8,16 @@ use App\Http\Controllers\Admin\ManageUsersController;
 Route::prefix('/admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/storage', [StorageController::class, 'index'])->name('admin.storage');
-    Route::get('/manageuser', [ManageUsersController::class, 'index'])->name('admin.manageuser');
+
+    // ManageUsers
+    Route::get('/manageuser', [ManageUsersController::class, 'index'])->name('manageuser.index');
+    Route::get('/manageuser/create', [ManageUsersController::class, 'addForm'])->name('manageuser.create');
+    Route::post('/manageuser/store', [ManageUsersController::class, 'store'])->name('manageuser.store');
+    // Route::get('/manageuser/{id}/edit', [ManageUsersController::class, 'edit'])->name('manageuser.edit');
+    // Route::put('/manageuser/{id}', [ManageUsersController::class, 'update'])->name('manageuser.update');
+    // Route::delete('/manageuser/{id}', [ManageUsersController::class, 'destroy'])->name('manageuser.destroy');
+
+
 
 });
 
