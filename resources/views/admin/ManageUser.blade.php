@@ -42,7 +42,7 @@
 
                             Dashboard
                         </a>
-                        <a href="/" class="unq uou">Search Studies</a>
+                        <!-- <a href="/" class="unq uou">Search Studies</a> -->
                     </div>
 
                     <div class="dropdown">
