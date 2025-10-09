@@ -1,0 +1,179 @@
+.right {
+    background-color: #fdf9e9;
+    overflow: auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form#documentForm {
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  width: 700px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+
+  h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #04128e;
+  }
+
+  label {
+    font-weight: bold;
+    color: #1e1e1e;
+  }
+
+  input[type="text"],
+  input[type="date"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #8e0404;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+  textarea {
+    height: 100px;
+    resize: vertical;
+  }
+
+  input[type="file"] {
+    margin-bottom: 20px;
+  }
+
+  .checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+    gap: 10px;
+    justify-content: center;
+    flex-direction: row;
+
+    .chkbx {
+      height: 45px;
+      width: calc(48% - 10px);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      border: #04128e 1px solid;
+      border-radius: 5px;
+      padding-left: 10px;
+
+      input[type="checkbox"] {
+        margin-right: 10px;
+        cursor: pointer;
+        appearance: none; /* Remove default checkbox */
+      }
+
+      label {
+        color: #04128e;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .sbt {
+    width: 100%;
+    padding: 10px;
+    background-color: #8e0404;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  button:hover {
+    background-color: #ac0b0b;
+  }
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+.container {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  background-color: #fcfcfc;
+  margin-bottom: 40px;
+}
+
+.card {
+  border-radius: 10px;
+  box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
+  width: 600px;
+  height: 280px;
+  background-color: #ffffff;
+  padding: 10px 30px 40px;
+}
+
+.card h3 {
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.drop_box {
+  margin: 10px 0;
+  padding: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  border: 3px dotted #a3a3a3;
+  border-radius: 5px;
+}
+
+.drop_box h4 {
+  font-size: 16px;
+  font-weight: 400;
+  color: #2e2e2e;
+}
+
+.drop_box p {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  color: #a3a3a3;
+}
+
+.btn {
+  text-decoration: none;
+  background-color: #8e0404;
+  color: #ffffff;
+  padding: 10px 20px;
+  border: none;
+  outline: none;
+  transition: 0.3s;
+}
+
+.btn:hover {
+  text-decoration: none;
+  background-color: #ffffff;
+  background-color: #8e0404;
+  padding: 10px 20px;
+  border: none;
+  outline: 1px solid #010101;
+}
+
+.form input {
+  margin: 10px 0;
+  width: 100%;
+  background-color: #e2e2e2;
+  border: none;
+  outline: none;
+  padding: 12px 20px;
+  border-radius: 4px;
+}

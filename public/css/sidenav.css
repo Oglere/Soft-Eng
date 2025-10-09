@@ -7,7 +7,7 @@ html {
   margin: 0;
 
   body {
-    background-color: rgb(186, 218, 255);
+    background-color:#0c1c43 ;
     max-width: 100%;
     width: 1400px;
     height: 100%;
@@ -66,6 +66,7 @@ input[type="text"]:focus {
 
       h2 {
         margin-bottom: 10px;
+        color: #ffffff;
       }
 
       .logout-btn {
@@ -86,6 +87,7 @@ input[type="text"]:focus {
       display: flex;
       flex-direction: column;
       width: 100%;
+      color: #ffffff;
 
       a {
         font-size: small;
@@ -94,10 +96,10 @@ input[type="text"]:focus {
         align-items: center;
         text-align: left;
         padding: 10px 10px;
-        color: black;
         text-decoration: none;
         border-radius: 5px;
         transition: all 0.1s ease;
+        color: #ffffff;
 
       }
 
@@ -166,7 +168,7 @@ input[type="text"]:focus {
   }
 
     .right {
-        background-color: rgb(202, 234, 255);
+        background-color: #fdf9e9;
         border-top-left-radius: 50px;
         border-top-right-radius: 50px;
         border-top: 1px #1e1e1e6e solid;
@@ -249,7 +251,7 @@ input[type="text"]:focus {
     align-items: center;
     text-align: left;
     padding: 10px 10px;
-    color: black;
+    color: #ffffff;
     border-radius: 5px;
     transition: all 0.1s ease;
     justify-content: left;

@@ -5,21 +5,19 @@ use App\Http\Controllers\LoginController; // Login Module
 use App\Http\Controllers\QueryController; // Landing Page and Search Query Module
 use App\Http\Controllers\OtpController; // OTP Module
 
-use App\Http\Controllers\PdfController; // PDF Reader Module
+use App\Http\Controllers\Controller; // PDF Reader Module
 
 use App\Http\Controllers\StudentController; // Student Functions
-
 use App\Http\Controllers\TeacherController; // Teacher Functions
-
 use App\Http\Controllers\AdminController; // Admin Functions
 
-Route::prefix('/layouts')->group(function (){
-    Route::get('/', [PdfController::class, 'layouts']);
-    Route::get('/plain', [PdfController::class, 'plain_layout']);
-    Route::get('/sidenav', [PdfController::class, 'sidenav_layout']);
-    Route::get('/static', [PdfController::class, 'static_pdf_layout']);
-    Route::get('/dynamic', [PdfController::class, 'dynamic_pdf_layout']);
-});
+// Route::prefix('/layouts')->group(function (){
+//     Route::get('/', [PdfController::class, 'layouts']);
+//     Route::get('/plain', [PdfController::class, 'plain_layout']);
+//     Route::get('/sidenav', [PdfController::class, 'sidenav_layout']);
+//     Route::get('/static', [PdfController::class, 'static_pdf_layout']);
+//     Route::get('/dynamic', [PdfController::class, 'dynamic_pdf_layout']);
+// });
 
 Route::prefix('/')->group(function (){
     Route::get('/', [QueryController::class, 'landing_page'])->name('landing');
@@ -41,11 +39,18 @@ Route::prefix('/')->group(function (){
 });
 
 Route::prefix('student')->group(function (){
-    Route::get('/', [StudentController::class, 'dashboard_page'])->name('student.dashboard');
-    Route::get('/submission/', [StudentController::class, 'submission_page'])->name('document.submission');
-    Route::get('/doc-status/', [StudentController::class, 'doc_status_page'])->name('document.status');
-    Route::get('/pdf-reader/{id}', [StudentController::class, 'pdf_reader_page'])->name('student.pdf.reader');
-    Route::get('/account-setting/', [StudentController::class, 'account_setting_page'])->name('student.account.setting');
+    Route::get('/dashboard', [StudentController::class, 'dashboard_page'])->name('student.dashboard'); // ✅ Add this name
+    Route::get('/search', [StudentController::class, 'search_page']);
+    Route::get('/submission', [StudentController::class, 'submission'])->name('student.submission');
+    Route::post('/submit', [StudentController::class, 'submit_document'])->name('student.submit'); // ✅ NEW: Handles form submission
+    Route::get('/doc_status/', [StudentController::class, 'doc_status_page'])->name('student.doc_status');
+    Route::get('/view-status/{id}', [StudentController::class, 'viewStatus'])->name('student.view-status');
+    Route::delete('/abandon/{id}', [StudentController::class, 'abandon'])->name('student.abandon');
+    Route::get('/pdf-reader/{id}', [StudentController::class, 'pdf_reader_page']);
+    Route::get('/account-setting', [StudentController::class, 'account_setting_page'])->name('student.account_setting');
+    Route::post('/account-setting/verify', [StudentController::class, 'verify_identity'])->name('student.verify_identity');
+    Route::post('/account-setting/update', [StudentController::class, 'update_account'])->name('student.update_account');
+    Route::post('/account-setting/cancel', [StudentController::class, 'cancel_update'])->name('student.cancel_update');
 
 });
 

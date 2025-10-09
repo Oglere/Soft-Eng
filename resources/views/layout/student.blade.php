@@ -38,7 +38,7 @@
                 </div>
                 <nav class="nav-links">
                     <div class="dropdown">
-                        <a href="{{ url('/student') }}" class="{{ request()->is('student') ? 'active-link' : '' }}">
+                        <a href="{{ url('/student/dashboard') }}" class="{{ request()->is('student') ? 'active-link' : '' }}">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -98,7 +98,7 @@
                         Submit Studies
                     </a>
 
-                    <a href="{{ url('/student/doc-status') }}" class="{{ request()->is('student/doc-status') ? 'active-link' : '' }}">
+                    <a href="{{ url('/student/doc_status') }}" class="{{ request()->is('student/doc-status') ? 'active-link' : '' }}">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"

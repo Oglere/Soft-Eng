@@ -33,6 +33,10 @@ class DocumentRepository extends Model
         'archived',
     ];
 
+    protected $casts = [
+        'date_submitted' => 'datetime',
+    ];
+
     // Relationships
     public function student()
     {
