@@ -104,8 +104,10 @@ input[type="text"]:focus {
       }
 
       .active-link {
-        color: #04128e;
+        color: #ffffff;
+        font-weight: bolder;
         font-weight: normal;
+        text-decoration: underline;
       }
 
       .active-sublink {

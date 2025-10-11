@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -7,12 +6,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\DocumentRepository;
 use App\Models\User;
 
-class StudentController extends Controller
-{
+class StudentController extends Controller{
+
     /**
      * Display the student dashboard page.
-     *
-     * @return \Illuminate\View\View
      */
     public function dashboard_page()
     {
@@ -54,8 +51,6 @@ class StudentController extends Controller
 
     /**
      * Display the student submission page.
-     *
-     * @return \Illuminate\View\View
      */
      public function submission()
     {
@@ -74,7 +69,7 @@ class StudentController extends Controller
             'publication_date' => 'nullable|date',
             'document_types' => 'required|array',
             'document_types.*' => 'string',
-            'file' => 'required|mimes:pdf|max:20480', // 20MB
+            'file' => 'required|mimes:pdf|max:25600', // 25MB
         ]);
 
         // Upload file
@@ -100,10 +95,9 @@ class StudentController extends Controller
         return redirect()->route('student.submission')
             ->with('success', 'Document submitted successfully!');
     }
+
     /**
      * Display the student document status page.
-     *
-     * @return \Illuminate\View\View
      */
     public function doc_status_page()
     {
@@ -118,11 +112,8 @@ class StudentController extends Controller
 
     /**
      * Display the Pending Document.
-     *
      * @param int $id The PDF ID.
-     * @return \Illuminate\View\View
      */
-
     public function viewStatus($id)
     {
         $document = DocumentRepository::findOrFail($id);
@@ -135,8 +126,9 @@ class StudentController extends Controller
         $document->document_types = $metadata['document_types'] ?? [];
         $document->keywords = $metadata['keywords'] ?? [];
 
-        return view('student.view-status', compact('document'));
+        return view('student.view_status', compact('document'));
     }
+
     public function abandon($id)
     {
         $document = DocumentRepository::findOrFail($id);
@@ -153,9 +145,7 @@ class StudentController extends Controller
     
     /**
      * Display the PDF reader page for a specific ID.
-     *
      * @param int $id The PDF ID.
-     * @return \Illuminate\View\View
      */
     public function pdf_reader_page($id)
     {
@@ -166,15 +156,14 @@ class StudentController extends Controller
 
     /**
      * Display the student account setting page.
-     *
-     * @return \Illuminate\View\View
      */
     public function account_setting_page()
     {
-        // Assuming there is an account-setting.blade.php view file.
-        return view('student.account-setting');
+        // Assuming there is an account_setting.blade.php view file.
+        return view('student.account_setting');
     }
-/**
+
+    /**
      * Verify student identity (password check before editing).
      */
     public function verify_identity(Request $request)
@@ -232,6 +221,7 @@ class StudentController extends Controller
         return redirect()->route('student.account_setting')
             ->with('success', 'Account updated successfully!');
     }
+
     public function cancel_update(Request $request)
     {
     // Just redirect back to account settings without triggering success SweetAlert

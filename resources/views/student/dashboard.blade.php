@@ -1,34 +1,7 @@
 @extends('layout.student')
 <link rel="stylesheet" href="{{ asset('css/student/std_control.css') }}">
-<style>
-    .right h1 {
-        font-size: 40px;
-        font-weight: bold;
-        color: #0c1c43;
-    }
-    .home-icon,
-    .feather-log-in {
-        cursor: pointer;
-        transition: transform 0.2s ease;
-    }
+<link rel="stylesheet" href="{{ asset('css/student/dashboard.css') }}">
 
-    .home-icon:hover,
-    .feather-log-in:hover {
-        transform: scale(1.2);
-    }
-
-    .ahh {
-        display: flex;
-        align-items: center;
-    }
-    .cardco .text {
-        margin-left: 15px;
-    }
-    .cardco .count {
-        margin: none;
-        font-size: 80px;
-    }
-</style>
 
 @section('right')
 

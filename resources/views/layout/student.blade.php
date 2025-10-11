@@ -14,7 +14,7 @@
             Student | Documen Status
         @elseif (request()->is('student/pdf-reader*'))
             Student | Read
-        @elseif (request()->is('student/account-setting*'))
+        @elseif (request()->is('student/account_setting*'))
             Student | Account Setting
         @else
             Student | Page
@@ -115,14 +115,16 @@
                             <circle cx="12" cy="12" r="3" />
                         </svg>
 
-                        Document Status
+                        Submitted Studies
                     </a>
 
                     <div class="asd2" style=" width: 100%; margin-top: 10px; display: flex; justify-content: center;">
                         <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
                     </div>
 
-                    <a href="{{ url('/student/account-setting') }}" class=" {{ request()->is('student/account-setting') ? 'active-sublink' : 'unq' }}">Edit Account</a>
+                    <a href="{{ url('/student/account_setting') }}" class=" {{ request()->is('student/account_setting') ? 'active-sublink' : 'unq' }}">
+                        Account Settings
+                    </a>
 
                     <div class="asd2" style=" width: 100%; display: flex; justify-content: center;">
                         <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
