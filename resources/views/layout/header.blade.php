@@ -6,14 +6,15 @@
 
     <title>DARA Main Page</title>
     <link rel="stylesheet" href="{{ asset('css/guest/main.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/guest/main.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
 <header>
     <div class="header-left">
-        <img src="{{ asset('storage/images/DARA.png') }}" alt="DARA Logo">
+        <a href="/">
+            <img src="{{ asset('storage/images/DARA.png') }}" alt="DARA Logo">
+        </a>
         <h2>D A R A</h2>
     </div>
 
@@ -39,12 +40,12 @@
 
                 <ul class="user-menu">
                     <li>
-                        <a href="{{ url('/profile') }}">
-                            <i class="fa-solid fa-user-graduate"></i> Profile
+                        <a href="{{ url('/' . $role) }}">
+                            <i class="fa-solid fa-user-graduate"></i> Dashboard
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('/settings') }}">
+                        <a href="{{ url('/' . $role) . '/account-setting' }}">
                             <i class="fa-solid fa-gear"></i> Settings
                         </a>
                     </li>
