@@ -15,23 +15,22 @@
             </svg>
             <h2>Verify OTP</h2>
             <p class="instructions">
-                Enter the 6-digit OTP sent to your email address.
+                Enter the 6-digit OTP sent to your email address ({{ $email }}).
                 This helps us verify your identity.
             </p>
         </div>
 
-        {{-- OTP Form --}}
 
         <form action="{{ url('auth/verify-otp') }}" method="POST" class="recovery-form">
             @csrf
 
             <div class="otp-inputs">
-                <input type="text" maxlength="1" class="otp-box" required>
-                <input type="text" maxlength="1" class="otp-box" required>
-                <input type="text" maxlength="1" class="otp-box" required>
-                <input type="text" maxlength="1" class="otp-box" required>
-                <input type="text" maxlength="1" class="otp-box" required>
-                <input type="text" maxlength="1" class="otp-box" required>
+                <input type="tel" maxlength="1" class="otp-box" required>
+                <input type="tel" maxlength="1" class="otp-box" required>
+                <input type="tel" maxlength="1" class="otp-box" required>
+                <input type="tel" maxlength="1" class="otp-box" required>
+                <input type="tel" maxlength="1" class="otp-box" required>
+                <input type="tel" maxlength="1" class="otp-box" required>
             </div>
 
             <button type="submit" class="submit-btn">Verify</button>
@@ -43,14 +42,13 @@
                 @csrf
                 <button type="submit" class="btn btn-link p-0 m-0 align-baseline">Resend OTP</button>
             </form>
+
             @if(session('status'))
-            <div class="alert alert-success">
-                {{ session('status') }}
-            </div>
-@endif
-
+                <div class="alert alert-success">
+                    {{ session('status') }}
+                </div>
+            @endif
         </p>
-
     </div>
 </div>
 
@@ -166,4 +164,56 @@
     }
 
 </style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const inputs = document.querySelectorAll(".otp-box");
+
+    inputs.forEach((input, index) => {
+
+
+        input.addEventListener("input", (e) => {
+            e.target.value = e.target.value.replace(/[^0-9]/g, "");
+
+
+            if (e.target.value && index < inputs.length - 1) {
+                const allPrevFilled = [...inputs].slice(0, index + 1).every(inp => inp.value);
+                if (allPrevFilled) {
+                    inputs[index + 1].focus();
+                }
+            }
+        });
+
+
+        input.addEventListener("focus", () => {
+            for (let i = 0; i < index; i++) {
+                if (!inputs[i].value) {
+                    inputs[i].focus();
+                    break;
+                }
+            }
+        });
+
+
+        input.addEventListener("keydown", (e) => {
+            if (e.key === "Tab") {
+                const allPrevFilled = [...inputs].slice(0, index).every(inp => inp.value);
+                if (!allPrevFilled) {
+                    e.preventDefault();
+                    for (let i = 0; i < index; i++) {
+                        if (!inputs[i].value) {
+                            inputs[i].focus();
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (e.key === "Backspace" && !e.target.value && index > 0) {
+                inputs[index - 1].focus();
+            }
+        });
+    });
+});
+</script>
 @endsection
