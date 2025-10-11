@@ -43,6 +43,7 @@ Route::prefix('student')->group(function (){
     Route::get('/search', [StudentController::class, 'search_page']);
     Route::get('/submission', [StudentController::class, 'submission'])->name('student.submission');
     Route::post('/submit', [StudentController::class, 'submit_document'])->name('student.submit'); // ✅ NEW: Handles form submission
+    Route::post('/student/check-title', [App\Http\Controllers\StudentController::class, 'checkTitle'])->name('student.checkTitle');
     Route::get('/doc_status/', [StudentController::class, 'doc_status_page'])->name('student.doc_status');
     Route::get('/view_status/{id}', [StudentController::class, 'viewStatus'])->name('student.view_status');
     Route::delete('/abandon/{id}', [StudentController::class, 'abandon'])->name('student.abandon');

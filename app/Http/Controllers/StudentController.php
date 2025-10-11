@@ -43,11 +43,13 @@ class StudentController extends Controller{
         ));
     }
 
+
     public function search_page()
     {
         // Assuming there is an account-setting.blade.php view file.
         return view('student.search');
     }
+
 
     /**
      * Display the student submission page.
@@ -59,6 +61,7 @@ class StudentController extends Controller{
 
         return view('student.submission', compact('teachers'));
     }
+
 
     public function submit_document(Request $request)
     {
@@ -96,6 +99,31 @@ class StudentController extends Controller{
             ->with('success', 'Document submitted successfully!');
     }
 
+
+    /**
+     * Confirmation if a duplicate title exists.
+     */
+    public function checkTitle(Request $request)
+    {
+        $title = trim($request->input('title'));
+
+        if (!$title) {
+            return response()->json(['exists' => false]);
+        }
+
+        $count = \App\Models\DocumentRepository::where('title', 'like', $title . '%')->count();
+
+        if ($count > 0) {
+            return response()->json([
+                'exists' => true,
+                'next_title' => $title . ' (' . ($count + 1) . ')'
+            ]);
+        }
+
+        return response()->json(['exists' => false]);
+    }
+
+
     /**
      * Display the student document status page.
      */
@@ -109,6 +137,7 @@ class StudentController extends Controller{
 
     return view('student.doc_status', compact('submissions'));
     }
+
 
     /**
      * Display the Pending Document.
@@ -129,6 +158,7 @@ class StudentController extends Controller{
         return view('student.view_status', compact('document'));
     }
 
+
     public function abandon($id)
     {
         $document = DocumentRepository::findOrFail($id);
@@ -142,6 +172,7 @@ class StudentController extends Controller{
 
         return redirect()->route('student.submission')->with('success', 'Document abandoned successfully.');
     }
+
     
     /**
      * Display the PDF reader page for a specific ID.
@@ -154,6 +185,7 @@ class StudentController extends Controller{
         return view('student.pdf-reader');
     }
 
+
     /**
      * Display the student account setting page.
      */
@@ -162,6 +194,7 @@ class StudentController extends Controller{
         // Assuming there is an account_setting.blade.php view file.
         return view('student.account_setting');
     }
+
 
     /**
      * Verify student identity (password check before editing).
@@ -183,6 +216,7 @@ class StudentController extends Controller{
 
         return redirect()->route('student.account_setting');
     }
+
 
     /**
      * Update student account after verification.
@@ -222,6 +256,7 @@ class StudentController extends Controller{
             ->with('success', 'Account updated successfully!');
     }
 
+    
     public function cancel_update(Request $request)
     {
     // Just redirect back to account settings without triggering success SweetAlert

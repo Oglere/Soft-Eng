@@ -1,68 +1,80 @@
 .right {
-    background-color: #fdf9e9;
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-    align-content: flex-start;
+	background-color: #fdf9e9;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	justify-content: center;
+	width: 100%;
+	align-content: flex-start;
 
-  h1 {
-    font-weight: lighter;
-    font-size: 80px;
-    text-align: center;
-  }
+	h1 {
+	font-weight: lighter;
+	font-size: 80px;
+	text-align: center;
+	}
 
-  .cardco {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-    align-content: center;
-    padding-left: 20px;
+	.cardco {
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		justify-content: center;
+		width: 100%;
+		align-content: center;
+		padding-left: 20px;
 
-    .cards {
-      display: flex;
-      height: 150px;
-      width: 250px;
-      margin-bottom: 10px;
-      margin-right: 140px;
+		.cards {
+			display: flex;
+			height: 120px;
+			width: 230px;
+			margin-bottom: 10px;
+			margin-right: 140px;
 
-      .svg {
-        height: 100%;
-      }
+			.svg {
+				height: 100%;
+				margin: 0 !important;
+			}
 
-      .count {
-        font-size: 100px;
-        margin-left: 10px;
-      }
+			.count {
+				font-size: 100px;
+				margin-left: 10px;
+			}
 
-      .count:last-child {
-        margin-left: -10px;
-      }
+			.count:last-child {
+				margin-left: -10px;
+			}
 
-      .text {
-        p {
-          font-size: 25px;
-        }
-      }
+			.text {
 
-      .svg2 {
-        color: green;
-      }
+				p {
+				font-size: 25px;
+				}
+			}
 
-      .svg3 {
-        color: blue;
-      }
+			.svg1, .svg2, .svg3, .svg4, .svg5 {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
 
-      .svg4 {
-        color: orange;
-      }
+			.svg1 {
+				color: rgb(0, 0, 0);
+			}
 
-      .svg5 {
-        color: red;
-      }
-    }
-  }
+			.svg2 {
+				color: green;
+			}
+
+			.svg3 {
+				color: blue;
+			}
+
+			.svg4 {
+				color: orange;
+			}
+
+			.svg5 {
+				color: red;
+			}
+		}
+	}
 }

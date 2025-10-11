@@ -107,7 +107,7 @@ input[type="text"]:focus {
         color: #ffffff;
         font-weight: bolder;
         font-weight: normal;
-        text-decoration: underline;
+        
       }
 
       .active-sublink {

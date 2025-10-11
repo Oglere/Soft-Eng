@@ -97,96 +97,124 @@
 @endsection
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 @if(session('success'))
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    Swal.fire({
-        icon: 'success',
-        title: 'Success!',
-        text: "{{ session('success') }}",
-        confirmButtonColor: '#04128e',
-    });
-});
-</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: "{{ session('success') }}",
+                confirmButtonColor: '#04128e',
+            });
+        });
+    </script>
 @endif
 
 <script>
-document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("documentForm");
-    const fileInput = document.getElementById("fileID");
-    const chooseFileBtn = document.getElementById("chooseFileBtn");
-    const fileNameDisplay = document.getElementById("fileNameDisplay");
-    const checkboxes = document.querySelectorAll(".chkbx input[type='checkbox']");
-    const dateField = document.getElementById('publication_date');
+    document.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("documentForm");
+        const fileInput = document.getElementById("fileID");
+        const chooseFileBtn = document.getElementById("chooseFileBtn");
+        const fileNameDisplay = document.getElementById("fileNameDisplay");
+        const checkboxes = document.querySelectorAll(".chkbx input[type='checkbox']");
+        const dateField = document.getElementById('publication_date');
+        const titleField = document.getElementById('title');
 
-    // ✅ Set min date to today
-    const today = new Date().toISOString().split('T')[0];
-    dateField.setAttribute('min', today);
+        // ✅ Set min date to today
+        const today = new Date().toISOString().split('T')[0];
+        dateField.setAttribute('min', today);
 
-    // ✅ Checkbox UI toggle
-    document.querySelectorAll(".chkbx").forEach(wrapper => {
-        const checkbox = wrapper.querySelector('input');
-        wrapper.addEventListener("click", () => {
-            checkbox.checked = !checkbox.checked;
-            wrapper.classList.toggle("active", checkbox.checked);
+        // ✅ Checkbox UI toggle
+        document.querySelectorAll(".chkbx").forEach(wrapper => {
+            const checkbox = wrapper.querySelector('input');
+            wrapper.addEventListener("click", () => {
+                checkbox.checked = !checkbox.checked;
+                wrapper.classList.toggle("active", checkbox.checked);
+            });
+        });
+
+        // ✅ File selection
+        chooseFileBtn.addEventListener("click", () => fileInput.click());
+        fileInput.addEventListener("change", () => {
+            const file = fileInput.files[0];
+            if (file) {
+                if (file.type !== "application/pdf") {
+                    fileNameDisplay.textContent = "Only PDF files are allowed.";
+                    fileNameDisplay.style.color = "red";
+                    fileInput.value = "";
+                } else if (file.size > 25 * 1024 * 1024) { // 25MB
+                    fileNameDisplay.textContent = "File exceeds 25MB limit.";
+                    fileNameDisplay.style.color = "red";
+                    fileInput.value = "";
+                } else {
+                    fileNameDisplay.textContent = file.name;
+                    fileNameDisplay.style.color = "green";
+                }
+            }
+        });
+
+        // ✅ Frontend validation & duplicate check before submit
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            let valid = true;
+            document.querySelectorAll(".error").forEach(el => el.textContent = "");
+
+            const abstract = document.getElementById("abstract");
+            const keywords = document.getElementById("keywords");
+            const teacher = document.getElementById("teacher_id");
+            const citations = document.getElementById("citations");
+            const file = fileInput.files[0];
+            const checkedTypes = Array.from(checkboxes).some(c => c.checked);
+
+            // Validate fields
+            if (!titleField.value.trim()) { document.getElementById("titleError").textContent = "Title is required."; valid = false; }
+            if (!abstract.value.trim()) { document.getElementById("abstractError").textContent = "Abstract is required."; valid = false; }
+            if (!keywords.value.trim()) { document.getElementById("keywordsError").textContent = "Keywords are required."; valid = false; }
+            if (!teacher.value) { document.getElementById("teacherError").textContent = "Please select a teacher."; valid = false; }
+            if (!checkedTypes) { document.getElementById("typeError").textContent = "Select at least one type of study."; valid = false; }
+            if (!file) { document.getElementById("fileError").textContent = "Please upload a PDF file."; valid = false; }
+            if (!citations.value.trim()) { document.getElementById("citationsError").textContent = "Citations are required."; valid = false; }
+
+            if (!valid) {
+                document.getElementById("globalError").style.display = "block";
+                window.scrollTo({ top: 0, behavior: "smooth" });
+                return;
+            }
+
+            // ✅ Check if title already exists before submitting
+            fetch("{{ route('student.checkTitle') }}", {
+                method: "POST",
+                headers: {
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ title: titleField.value })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.exists) {
+                    Swal.fire({
+                        title: "Duplicate Title Found",
+                        text: "The title already exists. Would you like to proceed with '" + data.next_title + "'?",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonText: "Proceed",
+                        cancelButtonText: "Cancel",
+                        confirmButtonColor: "#04128e"
+                    }).then(result => {
+                        if (result.isConfirmed) {
+                            titleField.value = data.next_title;
+                            form.submit(); // Proceed to submit with new title
+                        }
+                    });
+                } else {
+                    form.submit(); // Proceed normally
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                Swal.fire("Error", "Something went wrong. Try again.", "error");
+            });
         });
     });
-
-    // ✅ File selection
-    chooseFileBtn.addEventListener("click", () => fileInput.click());
-    fileInput.addEventListener("change", () => {
-        const file = fileInput.files[0];
-        if (file) {
-            if (file.type !== "application/pdf") {
-                fileNameDisplay.textContent = "Only PDF files are allowed.";
-                fileNameDisplay.style.color = "red";
-                fileInput.value = "";
-            } else if (file.size > 25 * 1024 * 1024) { // 25MB
-                fileNameDisplay.textContent = "File exceeds 25MB limit.";
-                fileNameDisplay.style.color = "red";
-                fileInput.value = "";
-            } else {
-                fileNameDisplay.textContent = file.name;
-                fileNameDisplay.style.color = "green";
-            }
-        }
-    });
-
-    // ✅ Frontend validation before submit
-    form.addEventListener("submit", function (e) {
-        let valid = true;
-
-        // Clear previous errors
-        document.querySelectorAll(".error").forEach(el => el.textContent = "");
-
-        const title = document.getElementById("title");
-        const abstract = document.getElementById("abstract");
-        const keywords = document.getElementById("keywords");
-        const teacher = document.getElementById("teacher_id");
-        const citations = document.getElementById("citations");
-        const file = fileInput.files[0];
-        const checkedTypes = Array.from(checkboxes).some(c => c.checked);
-
-        // Validate each field
-        if (!title.value.trim()) { document.getElementById("titleError").textContent = "Title is required."; valid = false; }
-        if (!abstract.value.trim()) { document.getElementById("abstractError").textContent = "Abstract is required."; valid = false; }
-        if (!keywords.value.trim()) { document.getElementById("keywordsError").textContent = "Keywords are required."; valid = false; }
-        if (!teacher.value) { document.getElementById("teacherError").textContent = "Please select a teacher."; valid = false; }
-        if (!checkedTypes) { document.getElementById("typeError").textContent = "Select at least one type of study."; valid = false; }
-        if (!file) { document.getElementById("fileError").textContent = "Please upload a PDF file."; valid = false; }
-        if (!citations.value.trim()) { document.getElementById("citationsError").textContent = "Citations are required."; valid = false; }
-
-        if (file && (file.type !== "application/pdf" || file.size > 25 * 1024 * 1024)) {
-            document.getElementById("fileError").textContent = "Invalid file. Must be PDF and ≤ 25MB.";
-            valid = false;
-        }
-
-        if (!valid) {
-            e.preventDefault();
-            document.getElementById("globalError").style.display = "block";
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
-    });
-});
 </script>

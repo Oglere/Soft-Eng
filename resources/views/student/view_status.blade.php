@@ -1,6 +1,18 @@
 @extends('layout.student')
 <link rel="stylesheet" href="{{ asset('css/student/view_status.css') }}">
 
+<style>
+    .no-file {
+    background: #f9f9f9;
+    color: #555;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    font-style: italic;
+}
+</style>
+
 @section('right')
 
     <div class="viewContainer">
@@ -38,10 +50,25 @@
         </form>
     </div>
     
-    <div class="pdfview">
-        <embed src="{{ asset('assets/pdf.pdf') }}" type="application/pdf" width="100%" height="100%" style="border-radius: 20px;">
+    {{-- ✅ Dynamic PDF viewer --}}
+    <div class="pdfview"> 
+        @if($document->file && file_exists(public_path('storage/' . $document->file)))
+            <embed src="{{ asset('storage/' . $document->file) }}" 
+                type="application/pdf" 
+                width="100%" height="100%" 
+                style="border-radius: 20px;">
+        @elseif($document->file && file_exists(public_path($document->file)))
+            {{-- For manually stored files under /public/uploads/... --}}
+            <embed src="{{ asset($document->file) }}" 
+                type="application/pdf" 
+                width="100%" height="100%" 
+                style="border-radius: 20px;">
+        @else
+            <div class="no-file">
+                <p>No PDF file found for this document.</p>
+            </div>
+        @endif
     </div>
-</div>
 @endsection
 
 <script src="{{ asset('') }}"></script>
