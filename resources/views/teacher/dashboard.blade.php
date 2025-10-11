@@ -3,7 +3,6 @@
 
 @section('right')
 
-    Teacher Dashboard
 
     {{-- Code Here --}}
 

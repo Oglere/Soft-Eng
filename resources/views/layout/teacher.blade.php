@@ -23,7 +23,16 @@
     <main>
         <header>
             <div class="ahh">
-                <img src="../../Imgs/DARA.png" alt="DARA Logo" class="ahh">
+                <img
+                    src="{{ asset('storage/images/DARA.png') }}"
+                    alt="DARA Logo"
+                    style=" width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            object-fit: cover;
+                            background: white;
+                            border: 2px solid white;
+                    ">
             </div>
         </header>
 
