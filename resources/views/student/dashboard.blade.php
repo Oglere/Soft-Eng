@@ -12,23 +12,6 @@
         transition: transform 0.2s ease;
     }
 
-    .home-icon:hover,
-    .feather-log-in:hover {
-        transform: scale(1.2);
-    }
-
-    .ahh {
-        display: flex;
-        align-items: center;
-    }
-    .cardco .text {
-        margin-left: 15px;
-    }
-    .cardco .count {
-        margin: none;
-        font-size: 80px;
-    }
-</style>
 
 @section('right')
 

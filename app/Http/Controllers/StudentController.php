@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -7,12 +6,10 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\DocumentRepository;
 use App\Models\User;
 
-class StudentController extends Controller
-{
+class StudentController extends Controller{
+
     /**
      * Display the student dashboard page.
-     *
-     * @return \Illuminate\View\View
      */
     public function dashboard_page()
     {
@@ -46,16 +43,16 @@ class StudentController extends Controller
         ));
     }
 
+
     public function search_page()
     {
         // Assuming there is an account-setting.blade.php view file.
         return view('student.search');
     }
 
+
     /**
      * Display the student submission page.
-     *
-     * @return \Illuminate\View\View
      */
      public function submission()
     {
@@ -64,6 +61,7 @@ class StudentController extends Controller
 
         return view('student.submission', compact('teachers'));
     }
+
 
     public function submit_document(Request $request)
     {
@@ -74,7 +72,7 @@ class StudentController extends Controller
             'publication_date' => 'nullable|date',
             'document_types' => 'required|array',
             'document_types.*' => 'string',
-            'file' => 'required|mimes:pdf|max:20480', // 20MB
+            'file' => 'required|mimes:pdf|max:25600', // 25MB
         ]);
 
         // Upload file
@@ -100,10 +98,34 @@ class StudentController extends Controller
         return redirect()->route('student.submission')
             ->with('success', 'Document submitted successfully!');
     }
+
+
+    /**
+     * Confirmation if a duplicate title exists.
+     */
+    public function checkTitle(Request $request)
+    {
+        $title = trim($request->input('title'));
+
+        if (!$title) {
+            return response()->json(['exists' => false]);
+        }
+
+        $count = \App\Models\DocumentRepository::where('title', 'like', $title . '%')->count();
+
+        if ($count > 0) {
+            return response()->json([
+                'exists' => true,
+                'next_title' => $title . ' (' . ($count + 1) . ')'
+            ]);
+        }
+
+        return response()->json(['exists' => false]);
+    }
+
+
     /**
      * Display the student document status page.
-     *
-     * @return \Illuminate\View\View
      */
     public function doc_status_page()
     {
@@ -116,13 +138,11 @@ class StudentController extends Controller
     return view('student.doc_status', compact('submissions'));
     }
 
+
     /**
      * Display the Pending Document.
-     *
      * @param int $id The PDF ID.
-     * @return \Illuminate\View\View
      */
-
     public function viewStatus($id)
     {
         $document = DocumentRepository::findOrFail($id);
@@ -135,8 +155,10 @@ class StudentController extends Controller
         $document->document_types = $metadata['document_types'] ?? [];
         $document->keywords = $metadata['keywords'] ?? [];
 
-        return view('student.view-status', compact('document'));
+        return view('student.view_status', compact('document'));
     }
+
+
     public function abandon($id)
     {
         $document = DocumentRepository::findOrFail($id);
@@ -150,12 +172,11 @@ class StudentController extends Controller
 
         return redirect()->route('student.submission')->with('success', 'Document abandoned successfully.');
     }
+
     
     /**
      * Display the PDF reader page for a specific ID.
-     *
      * @param int $id The PDF ID.
-     * @return \Illuminate\View\View
      */
     public function pdf_reader_page($id)
     {
@@ -164,17 +185,18 @@ class StudentController extends Controller
         return view('student.pdf-reader');
     }
 
+
     /**
      * Display the student account setting page.
-     *
-     * @return \Illuminate\View\View
      */
     public function account_setting_page()
     {
-        // Assuming there is an account-setting.blade.php view file.
-        return view('student.account-setting');
+        // Assuming there is an account_setting.blade.php view file.
+        return view('student.account_setting');
     }
-/**
+
+
+    /**
      * Verify student identity (password check before editing).
      */
     public function verify_identity(Request $request)
@@ -194,6 +216,7 @@ class StudentController extends Controller
 
         return redirect()->route('student.account_setting');
     }
+
 
     /**
      * Update student account after verification.
@@ -232,6 +255,8 @@ class StudentController extends Controller
         return redirect()->route('student.account_setting')
             ->with('success', 'Account updated successfully!');
     }
+
+    
     public function cancel_update(Request $request)
     {
     // Just redirect back to account settings without triggering success SweetAlert
