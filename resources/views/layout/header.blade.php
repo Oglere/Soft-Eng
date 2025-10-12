@@ -15,7 +15,6 @@
         <a href="/">
             <img src="{{ asset('storage/images/DARA.png') }}" alt="DARA Logo">
         </a>
-        <h2>D A R A</h2>
     </div>
 
     <!-- Hamburger for mobile -->

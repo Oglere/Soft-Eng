@@ -11,6 +11,10 @@ class LoginController extends Controller
 {
     public function Login_page()
     {
+        if (auth()->check()) {
+            return redirect('/');
+        }
+
         return view('guest.login');
     }
 
@@ -69,10 +73,17 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+        $user = auth()->user();
+
+        if ($user) {
+            $user->last_login = now();
+            $user->save();
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login.page'); // back to login page
+        return redirect()->route('login.page');
     }
 }

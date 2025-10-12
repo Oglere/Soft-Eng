@@ -38,7 +38,7 @@ Route::prefix('/')->group(function (){
 
 });
 
-Route::prefix('student')->group(function (){
+Route::middleware('auth.session:student')->prefix('student')->group(function (){
     Route::get('/dashboard', [StudentController::class, 'dashboard_page'])->name('student.dashboard'); // ✅ Add this name
     Route::get('/search', [StudentController::class, 'search_page']);
     Route::get('/submission', [StudentController::class, 'submission'])->name('student.submission');
@@ -54,7 +54,7 @@ Route::prefix('student')->group(function (){
 
 });
 
-Route::prefix('teacher')->group(function (){
+Route::middleware('auth.session:teacher')->prefix('teacher')->group(function (){
     Route::get('/', [TeacherController::class, 'dashboard_page'])->name('teacher.dashboard');
     Route::get('/review-document/', [TeacherController::class, 'review_page'])->name('teacher.review');
     Route::get('/review-document/{id}', [TeacherController::class, 'pdf_reader_page'])->name('teacher.pdf.reader');
@@ -62,7 +62,7 @@ Route::prefix('teacher')->group(function (){
 
 });
 
-Route::prefix('admin')->group(function (){
+Route::middleware('auth.session:admin')->prefix('admin')->group(function (){
     Route::get('/', [AdminController::class, 'dashboard_page'])->name('admin.dashboard');
     Route::get('/manage-users/', [AdminController::class, 'user_control_page'])->name('manage.user');
     Route::get('/manage-users/recover', [AdminController::class, 'user_recovery_page'])->name('recover.user');

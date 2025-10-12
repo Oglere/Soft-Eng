@@ -21,6 +21,7 @@ return new class extends Migration
         $table->string('phone_number')->nullable();
         $table->string('role');
         $table->string('profile_picture')->nullable();
+        $table->integer('attempts')->nullable();
         $table->dateTime('last_login')->nullable();
         $table->boolean('is_active')->default(true);
         $table->timestamps();
