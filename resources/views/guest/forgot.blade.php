@@ -35,7 +35,7 @@
                 {{-- Email field --}}
                 <div class="input-wrapper">
                     <div class="input-group">
-                        <i class="fas fa-envelope"></i>
+                        <i class="fas fa-envelope" style="margin-right: 10px"></i>
                         <input type="email"
                                name="email"
                                placeholder="Enter your email"

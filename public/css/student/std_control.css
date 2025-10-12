@@ -22,28 +22,35 @@
 		align-content: center;
 		padding-left: 20px;
 
-		.cards {
-			display: flex;
-			height: 120px;
-			width: 230px;
-			margin-bottom: 10px;
-			margin-right: 140px;
+    .cards {
+      color: #0e100f !important;
+      display: flex;
+      height: 200px;
+      width: 250px;
+      margin-bottom: 10px;
+      margin-right: 140px;
 
-			.svg {
-				height: 100%;
-				margin: 0 !important;
-			}
+      .svg {
+        height: 100%;
+        color: #0e100f !important;
+      }
 
-			.count {
-				font-size: 100px;
-				margin-left: 10px;
-			}
+      .count {
+        font-size: 100px;
+        margin-left: 10px;
+        color: #0e100f !important;
+      }
 
 			.count:last-child {
 				margin-left: -10px;
 			}
 
-			.text {
+      .text {
+        p {
+          font-size: 25px;
+          color: #0e100f;
+        }
+      }
 
 				p {
 				font-size: 25px;
