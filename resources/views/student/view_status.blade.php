@@ -63,4 +63,4 @@
     </div>
 @endsection
 
-<script src="{{ asset('') }}"></script>
+<script src="{{asset('js/student/sweetalert2@11.js')}}"></script>

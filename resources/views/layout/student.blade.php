@@ -26,6 +26,10 @@
 <body style="overflow: hidden; height: calc(100% - 61px)">
     <main>
         <header>
+            <a href="{{ url('/student/dashboard')}}" class="ahhh">
+                <h3>D.A.R.A</h3>
+            </a>
+
             <div class="ahh">
                 <img
                     src="{{ asset('storage/images/DARA.png') }}"

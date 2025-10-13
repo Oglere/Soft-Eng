@@ -23,65 +23,67 @@
 		padding-left: 20px;
 
     .cards {
-      color: #0e100f !important;
-      display: flex;
-      height: 200px;
-      width: 250px;
-      margin-bottom: 10px;
-      margin-right: 140px;
+		color: #0e100f !important;
+		display: flex;
+		height: 120px;
+		width: 220px;
+		margin-bottom: 10px;
+      	margin-right: 140px;
 
-      .svg {
-        height: 100%;
-        color: #0e100f !important;
-      }
+		.svg {
+			height: 100%;
+			color: #0e100f !important;
+		}
 
-      .count {
-        font-size: 100px;
-        margin-left: 10px;
-        color: #0e100f !important;
-      }
+		.count {
+			font-size: 100px;
+			color: #0e100f !important;
+		}
 
-			.count:last-child {
-				margin-left: -10px;
-			}
+		.count:last-child {
+			margin-left: -10px;
+		}
 
-      .text {
-        p {
-          font-size: 25px;
-          color: #0e100f;
-        }
-      }
+		.text {
+			align-content: center;
 
-				p {
+			p {
+				margin-left: 10px;
 				font-size: 25px;
-				}
+				color: #0e100f;
 			}
+		}
+			
+			p {
+				font-size: 25px;
+			}
+		}
 
-			.svg1, .svg2, .svg3, .svg4, .svg5 {
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
+		.svg1, .svg2, .svg3, .svg4, .svg5 {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
 
-			.svg1 {
-				color: rgb(0, 0, 0);
-			}
+		.svg1 {
+			color: rgb(0, 0, 0);
+		}
 
-			.svg2 {
-				color: green;
-			}
+		.svg2 {
+			color: green;
+		}
 
-			.svg3 {
-				color: blue;
-			}
+		.svg3 {
+			color: blue;
+		}
 
-			.svg4 {
-				color: orange;
-			}
+		.svg4 {
+			color: orange;
+		}
 
-			.svg5 {
-				color: red;
-			}
+		.svg5 {
+			color: red;
 		}
 	}
 }
+

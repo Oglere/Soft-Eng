@@ -13,6 +13,7 @@ class StudentController extends Controller{
      */
     public function dashboard_page()
     {
+
         $studentId = Auth::id(); // get the actual logged-in student id
 
         // Fetch counts dynamically
@@ -41,6 +42,7 @@ class StudentController extends Controller{
             'revisionsToDo',
             'rejectedStudies'
         ));
+        
     }
 
 

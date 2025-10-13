@@ -96,7 +96,7 @@
 <div id="alrt" style="color: black; margin-top: 10px; text-align: center;"></div>
 @endsection
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{asset('js/student/sweetalert2@11.js')}}"></script>
 @if(session('success'))
     <script>
         document.addEventListener("DOMContentLoaded", function () {

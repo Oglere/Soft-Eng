@@ -207,7 +207,7 @@
     @endif
 @endsection
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{asset('js/student/sweetalert2@11.js')}}"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         // Home icon redirect

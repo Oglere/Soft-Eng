@@ -83,6 +83,7 @@
 </div>
 @endsection
 
+<script src="{{asset('js/student/sweetalert2@11.js')}}"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');

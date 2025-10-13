@@ -11,7 +11,7 @@
         cursor: pointer;
         transition: transform 0.2s ease;
     }
-
+</style>
 
 @section('right')
 
@@ -150,4 +150,4 @@
     </div>
 @endsection
 
-<script src="{{ asset('') }}"></script>
+<script src="{{asset('js/student/sweetalert2@11.js')}}"></script>
