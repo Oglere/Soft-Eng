@@ -44,7 +44,7 @@
         </div>
         </a>
 
-        <a href="doc-status#approved-studies" style="text-decoration: none; color: inherit" class="cards published">
+        <a href="{{ route('student.doc_status', ['status' => 'approved']) }}" style="text-decoration: none; color: inherit" class="cards published">
             <div class="svg2" style="color: #0ae41c;">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -68,7 +68,7 @@
             </div>
         </a>
 
-        <a href="doc-status#pending-studies" style="text-decoration: none; color: inherit;"  class="cards pending">
+        <a href="{{ route('student.doc_status', ['status' => 'pending']) }}" style="text-decoration: none; color: inherit;"  class="cards pending">
             <div class="svg3" style="color: #0a56e4;">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -99,7 +99,7 @@
             </div>
         </a>
 
-        <a href="doc-status#revisions-studies" style="text-decoration: none; color: inherit;"  class="cards revisions">
+        <a href="{{ route('student.doc_status', ['status' => 'revision']) }}" style="text-decoration: none; color: inherit;"  class="cards revisions">
             <div class="svg4" style="color: #e4bc0a;">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -124,7 +124,7 @@
             </div>
         </a>
 
-        <a href="doc-status#rejected-studies" style="text-decoration: none; color: inherit;"  class="cards rejected">
+        <a href="{{ route('student.doc_status', ['status' => 'rejected']) }}" style="text-decoration: none; color: inherit;"  class="cards rejected">
             <div class="svg5" style="color: #e40a0a;">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"

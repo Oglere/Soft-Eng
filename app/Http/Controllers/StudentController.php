@@ -6,14 +6,13 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\DocumentRepository;
 use App\Models\User;
 
-class StudentController extends Controller{
-
+class StudentController extends Controller
+{
     /**
      * Display the student dashboard page.
      */
     public function dashboard_page()
     {
-
         $studentId = Auth::id(); // get the actual logged-in student id
 
         // Fetch counts dynamically
@@ -42,28 +41,23 @@ class StudentController extends Controller{
             'revisionsToDo',
             'rejectedStudies'
         ));
-        
     }
-
 
     public function search_page()
     {
-        // Assuming there is an account-setting.blade.php view file.
         return view('student.search');
     }
-
 
     /**
      * Display the student submission page.
      */
-     public function submission()
+    public function submission()
     {
         // Fetch all teachers (assuming role field = 'teacher')
         $teachers = \App\Models\User::where('role', 'teacher')->get();
 
         return view('student.submission', compact('teachers'));
     }
-
 
     public function submit_document(Request $request)
     {
@@ -92,7 +86,7 @@ class StudentController extends Controller{
                 'keywords' => $request->keywords,
                 'document_types' => $request->document_types
             ]),
-            'file' => $filePath,
+            'file' => $filePath, // ✅ stores relative path (e.g. documents/thesis.pdf)
             'status' => 'pending',
             'date_submitted' => now(),
             'study_type' => implode(', ', $request->document_types),
@@ -101,8 +95,6 @@ class StudentController extends Controller{
         return redirect()->route('student.submission')
             ->with('success', 'Document submitted successfully!');
     }
-
-
 
     /**
      * Confirmation if a duplicate title exists.
@@ -127,25 +119,28 @@ class StudentController extends Controller{
         return response()->json(['exists' => false]);
     }
 
-
     /**
      * Display the student document status page.
+     * ✅ Updated to support filtering from dashboard (approved, pending, etc.)
      */
-    public function doc_status_page()
+    public function doc_status_page(Request $request)
     {
-    $studentId = Auth::id();
-    // Fetch all documents for the logged-in student
-    $submissions = DocumentRepository::where('student_id', $studentId)
-                    ->latest('date_submitted')
-                    ->get();
+        $studentId = Auth::id();
+        $filter = $request->query('status', 'all'); // get ?status= from URL
 
-    return view('student.doc_status', compact('submissions'));
+        $query = DocumentRepository::where('student_id', $studentId);
+
+        if ($filter !== 'all') {
+            $query->where('status', $filter);
+        }
+
+        $submissions = $query->latest('date_submitted')->get();
+
+        return view('student.doc_status', compact('submissions', 'filter'));
     }
 
-
     /**
-     * Display the Pending Document.
-     * @param int $id The PDF ID.
+     * Display the individual document view (PDF, metadata, etc.)
      */
     public function viewStatus($id)
     {
@@ -162,43 +157,29 @@ class StudentController extends Controller{
         return view('student.view_status', compact('document'));
     }
 
-
     public function abandon($id)
     {
         $document = DocumentRepository::findOrFail($id);
-        
-        // Option 1: delete completely
         $document->delete();
-
-        // Option 2: mark as abandoned (safer)
-        // $document->status = 'abandoned';
-        // $document->save();
 
         return redirect()->route('student.submission')->with('success', 'Document abandoned successfully.');
     }
 
-    
     /**
      * Display the PDF reader page for a specific ID.
-     * @param int $id The PDF ID.
      */
     public function pdf_reader_page($id)
     {
-        // You can use the $id variable to fetch the correct PDF.
-        // For example, return view('pdf-reader', ['pdfId' => $id]);
         return view('student.pdf-reader');
     }
-
 
     /**
      * Display the student account setting page.
      */
     public function account_setting_page()
     {
-        // Assuming there is an account_setting.blade.php view file.
         return view('student.account_setting');
     }
-
 
     /**
      * Verify student identity (password check before editing).
@@ -215,12 +196,10 @@ class StudentController extends Controller{
             return back()->withErrors(['login_error' => 'Incorrect password. Please try again.']);
         }
 
-        // Store in session that user has verified identity
         session(['account_verified' => true]);
 
         return redirect()->route('student.account_setting');
     }
-
 
     /**
      * Update student account after verification.
@@ -253,18 +232,15 @@ class StudentController extends Controller{
 
         $user->save();
 
-        // Remove verification session after update
         session()->forget('account_verified');
 
         return redirect()->route('student.account_setting')
             ->with('success', 'Account updated successfully!');
     }
 
-    
     public function cancel_update(Request $request)
     {
-    // Just redirect back to account settings without triggering success SweetAlert
-    return redirect()->route('student.account_setting_page')
-        ->with('cancel_message', 'Account update canceled.');
+        return redirect()->route('student.account_setting_page')
+            ->with('cancel_message', 'Account update canceled.');
     }
 }

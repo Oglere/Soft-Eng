@@ -109,3 +109,37 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('searchInput');
+    const statusFilter = document.getElementById('statusFilter');
+    const rows = document.querySelectorAll('#statusTable tbody tr');
+
+    // 🔍 Search functionality
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.toLowerCase();
+        rows.forEach(row => {
+            const title = row.querySelector('td:first-child').innerText.toLowerCase();
+            row.style.display = title.includes(query) ? '' : 'none';
+        });
+    });
+
+    // ⚙️ Filter by status
+    statusFilter.addEventListener('change', () => {
+        const filter = statusFilter.value.toLowerCase();
+        rows.forEach(row => {
+            const status = row.getAttribute('data-status');
+            row.style.display = (filter === 'all' || status === filter) ? '' : 'none';
+        });
+    });
+
+    // 🪄 Auto-select filter if passed from URL
+    const selectedFilter = "{{ $filter ?? 'all' }}";
+    if (selectedFilter && statusFilter) {
+        statusFilter.value = selectedFilter;
+        statusFilter.dispatchEvent(new Event('change')); // apply instantly
+    }
+});
+
+</script>
