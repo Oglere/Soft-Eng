@@ -2,15 +2,7 @@
 <link rel="stylesheet" href="{{ asset('css/student/view_status.css') }}">
 
 <style>
-    .no-file {
-    background: #f9f9f9;
-    color: #555;
-    border: 1px solid #ddd;
-    border-radius: 12px;
-    padding: 40px;
-    text-align: center;
-    font-style: italic;
-}
+
 </style>
 
 @section('right')
