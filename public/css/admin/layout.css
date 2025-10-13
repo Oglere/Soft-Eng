@@ -1,8 +1,10 @@
-table.table thead th {
+/* table.table thead th {
     background-color: #134686 !important;
     color: white !important;
     text-align: center;
-}
+    border-collapse: collapse;
+    position:static;
+} */
 
 
 
@@ -19,7 +21,7 @@ header {
     display: flex;
     justify-content: space-between; /* puts them at opposite ends */
     align-items: center;
-    background-color: #134686;
+    background-color: #0C1C43;
     color: white;
     padding: 15px 20px;
     height: 71px;
@@ -53,8 +55,8 @@ header h1 {
 
 /* Side nav */
 .sidebar {
-    width: 220px;
-    background: #1a58a3;
+    width: 250px;
+    background:#012b55;
     color: white;
     padding: 20px;
     /* border-right: 2px solid black; */
@@ -81,8 +83,9 @@ header h1 {
 }
 
 .sidebar a:hover {
-    background: #2c3e50;
+    background: #012b55;
     padding-left: 5px;
+    border-radius: 5px;
 }
 
 /* Main content */
@@ -91,12 +94,7 @@ main {
     flex: 1;
     padding: 20px;
     overflow-y: auto;
-}
-
-/* .menu-wrapper{
-    display: flex;
-    justify-content: center;
-} */
+}       
 
 .sidenav_name {
     font-weight: 600; /* semi-bold */
@@ -129,8 +127,7 @@ main {
 
     .content-area {
         margin-left: 0; /* main takes full width */
-        
-
+    
     }
 
     .content-area.shift {

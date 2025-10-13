@@ -17,9 +17,9 @@
             <button type="submit" class="btn btn-outline-primary">Search</button>
         </form>
     </div>
-    <div class="col-md-2 text-end">
-        <a href="{{ route('manageuser.create') }}"class="btn btn-primary">Add</a>
-    </div>
+        <div class="col-md-2 text-end" id="addbutton" >
+            <a href="{{ route('manageuser.create') }}"class="btn " id="MUBTN" >Add</a>
+        </div>
 </div>
 
 <div class="row mt-4">
@@ -27,20 +27,22 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>title1</th>
-                    <th>title2</th>
-                    <th>title3</th>
-                    <th>title4</th>
-                    <th>title5</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
+                    <td>asdw</td>
+                    <td>dasd</td>
+                    <td>fasd</td>
+                    <td>fasx</td>
+                    <td>gasxsa</td>
+                    <td>asdds</td>
                 </tr>
             </tbody>
         </table>

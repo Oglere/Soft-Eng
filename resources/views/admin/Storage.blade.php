@@ -27,20 +27,18 @@
         <table class="table table-bordered table-striped">
             <thead>
                 <tr>
-                    <th>title1</th>
-                    <th>title2</th>
-                    <th>title3</th>
-                    <th>title4</th>
-                    <th>title5</th>
+                    <th>title</th>
+                    <th>Status</th>
+                    <th>File Size</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>1</td>
-                    <td>2</td>
-                    <td>3</td>
-                    <td>4</td>
-                    <td>5</td>
+                    <td>asdsd</td>
+                    <td>asdsd</td>
+                    <td>asdsd</td>
+                    <td>asdsad</td>
                 </tr>
             </tbody>
         </table>

@@ -5,6 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>@yield('title', 'Admin Panel')</title>
         <link rel="stylesheet" href="{{ asset('css/admin/layout.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/admin/AdminDash.css') }}">
         <link rel="stylesheet" href="{{ asset('css/admin/components.css') }}">
         <link rel="stylesheet" href="{{ asset('css/admin/chart.css') }}">
 

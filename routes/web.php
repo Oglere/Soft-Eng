@@ -1,13 +1,17 @@
 <?php
+use App\Http\Controllers\editaccController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\StorageController;
 use App\Http\Controllers\Admin\ManageUsersController;
+use App\Http\Controllers\Admin\AccountSettingsController;
+
 
 
 Route::prefix('/admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
     Route::get('/storage', [StorageController::class, 'index'])->name('admin.storage');
+    Route::get('/editacc', [AccountSettingsController::class, 'editaccView'])->name('admin.editacc');
 
     // ManageUsers
     Route::get('/manageuser', [ManageUsersController::class, 'index'])->name('manageuser.index');

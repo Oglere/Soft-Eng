@@ -23,8 +23,8 @@
                 <nav class="nav-links">
 
 
-                    <div class="">
-                        <a href="{{ route('dashboard') }}" class="trigger">
+                    <div class="" >
+                        <a href="{{ route('dashboard') }}" class="trigger" >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
