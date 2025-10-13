@@ -14,6 +14,7 @@ return new class extends Migration
     Schema::create('document_repositories', function (Blueprint $table) {
         $table->id('document_id');
         $table->string('title');
+        $table->text('abstract')->nullable();
 
         $table->foreignId('student_id')->nullable();
         $table->foreignId('teacher_id')->nullable();

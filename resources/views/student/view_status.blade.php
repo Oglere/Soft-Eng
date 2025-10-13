@@ -1,27 +1,32 @@
 @extends('layout.student')
 <link rel="stylesheet" href="{{ asset('css/student/view_status.css') }}">
 
-<style>
-
-</style>
-
 @section('right')
 
     <div class="viewContainer">
         <!-- Left side: document details -->
         <div class="par">
             <p><strong>Title:</strong> {{ $document->title }}</p>
-            <p><strong>Abstract:</strong> {{ $document->abstract ?? 'N/A' }}</p>
-            <p><strong>Date Submitted:</strong> {{ $document->date_submitted ? $document->date_submitted->format('F d, Y') : 'N/A' }}</p>
-            <p><strong>Study Type:</strong> {{ is_array($document->document_types) ? implode(', ', $document->document_types) : 'N/A' }}</p>
+            <p><strong>Abstract:</strong> 
+                {{ $document->abstract ?? ($document->metadata['abstract'] ?? 'N/A') }}
+            </p>
+            <p><strong>Date Submitted:</strong> 
+                {{ $document->date_submitted ? $document->date_submitted->format('F d, Y') : 'N/A' }}
+            </p>
+            <p><strong>Study Type:</strong> 
+                {{ is_array($document->document_types) ? implode(', ', $document->document_types) : 'N/A' }}
+            </p>
         </div>
 
         <!-- Right side: Abandon Button -->
-        <form method="POST" action="{{ route('student.abandon', ['id' => $document->document_id]) }}">
+        <form id="abandonForm" method="POST" 
+              action="{{ route('student.abandon', ['id' => $document->document_id]) }}">
             @csrf
             @method('DELETE')
-            <button type="submit" class="par-btn" style="background-color:#ff4d4d; ">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            
+            <button type="button" id="abandonBtn" class="par-btn" style="background-color:#ff4d4d;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" 
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="3 6 5 6 21 6"></polyline>
                     <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
                     <path d="M10 11v6"></path>
@@ -29,9 +34,10 @@
                 </svg>
                 Abandon Document
             </button>
-            <a href="{{ route('student.doc_status')}}" class="par-btn"
-            style="">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+
+            <a href="{{ route('student.doc_status') }}" class="par-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" 
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="3 6 5 6 21 6"></polyline>
                     <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"></path>
                     <path d="M10 11v6"></path>
@@ -63,4 +69,37 @@
     </div>
 @endsection
 
+{{-- ✅ SweetAlert Confirm Dialog --}}
 <script src="{{asset('js/student/sweetalert2@11.js')}}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const abandonBtn = document.getElementById('abandonBtn');
+    const abandonForm = document.getElementById('abandonForm');
+
+    abandonBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Abandon Document?',
+            text: "Are you sure you want to abandon this document? You can’t undo this action unless you resubmit it.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, abandon it',
+            cancelButtonText: 'Revert'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                abandonForm.submit();
+            } else {
+                Swal.fire({
+                    title: 'Cancelled',
+                    text: 'Your document is safe and was not abandoned.',
+                    icon: 'info',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+            }
+        });
+    });
+});
+</script>

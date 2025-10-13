@@ -69,7 +69,7 @@ class StudentController extends Controller{
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'abstract' => 'required|string',
+            'abstract' => 'required|string|max:10000',
             'teacher_id' => 'required|exists:users,user_id',
             'publication_date' => 'nullable|date',
             'document_types' => 'required|array',
@@ -83,7 +83,8 @@ class StudentController extends Controller{
         // Save document
         DocumentRepository::create([
             'title' => $request->title,
-            'student_id' => auth::id(),
+            'abstract' => $request->abstract,
+            'student_id' => Auth::id(),
             'teacher_id' => $request->teacher_id,
             'authors' => $request->co_authors,
             'citation' => $request->citations,
@@ -100,6 +101,7 @@ class StudentController extends Controller{
         return redirect()->route('student.submission')
             ->with('success', 'Document submitted successfully!');
     }
+
 
 
     /**

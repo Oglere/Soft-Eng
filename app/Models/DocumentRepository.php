@@ -16,6 +16,7 @@ class DocumentRepository extends Model
 
     protected $fillable = [
         'title',
+        'abstract',
         'student_id',
         'teacher_id',
         'approved_by',
