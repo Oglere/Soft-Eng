@@ -5,6 +5,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    height: 100%;
 }
 
 header {
@@ -78,8 +79,8 @@ header {
 }
 
 main {
+    height: 100%;
     text-align: center;
-    padding: 40px 20px;
     min-height: calc(95vh - 140px);
     background-color: #fffce4 !important;
 }
@@ -92,6 +93,7 @@ footer {
 }
 
 .brand {
+    margin-top: 80px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -131,7 +133,7 @@ footer {
     justify-content: center;
     align-items: center;
     margin: 0 auto 40px auto;
-    max-width: 700px;
+    max-width: 990px;
     border-radius: 8px;
     overflow: hidden;
     border: 2px solid #0e100f;
@@ -163,6 +165,7 @@ footer {
     flex-wrap: wrap;
 }
 
+/* Base card style */
 .category-card {
     width: 150px;
     height: 150px;
@@ -175,23 +178,52 @@ footer {
     align-items: center;
     background-color: white;
     transition: 0.3s;
+    cursor: pointer;
+    position: relative;
 }
 
+/* Hover style */
 .category-card:hover {
     background-color: #e6f0ff;
     transform: translateY(-5px);
 }
 
+/* When checkbox is checked */
+.category-card input:checked + img,
+.category-card input:checked + img + span {
+    filter: brightness(0.9);
+}
+
+.category-card input:checked ~ * {
+    background-color: #e6f0ff;
+}
+
+.category-card:has(input:checked) {
+    background-color: #e6f0ff;
+    border-color: #007bff;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.15);
+    transform: translateY(-5px);
+}
+
+/* Image and text styling */
 .category-card img {
     width: 100px;
     height: 100px;
     object-fit: contain;
+    pointer-events: none;
 }
 
 .category-card span {
     font-size: 14px;
     font-weight: bold;
     color: #0c1c43;
+    pointer-events: none;
+}
+
+/* Smooth transitions */
+.category-card,
+.category-card * {
+    transition: all 0.25s ease;
 }
 
 /* User Dropdown */
@@ -309,3 +341,48 @@ footer {
         display: block;
     }
 }
+
+.date-range {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 20px auto;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+
+.date-field {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-weight: bold;
+    color: #0c1c43;
+}
+
+.date-field label {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+.date-field input[type="date"] {
+    padding: 8px 10px;
+    border: 2px solid #0c1c43;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.date-field input[type="date"]:hover,
+.date-field input[type="date"]:focus {
+    background-color: #e6f0ff;
+    border-color: #0e100f;
+}
+
+.category-card.active {
+    background-color: #e6f0ff;
+    transform: translateY(-5px);
+    border-color: #0e100f;
+}
+

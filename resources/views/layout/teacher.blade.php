@@ -94,7 +94,7 @@
                         <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
                     </div>
 
-                    <a href="{{ url('/teacher/account-setting') }}" class=" {{ request()->is('teacher/account-setting') ? 'active-sublink' : 'unq' }}">Edit Account</a>
+                    <a href="{{ url('/teacher/account-setting') }}" class=" {{ request()->is('teacher/account-setting') ? 'active-sublink' : 'unq' }}">Account Settings</a>
 
                     <div class="asd2" style=" width: 100%; display: flex; justify-content: center;">
                         <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>

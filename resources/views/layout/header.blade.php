@@ -22,6 +22,7 @@
         <i class="fa-solid fa-bars"></i>
     </button>
 
+
     <nav class="header-nav" id="headerNav">
         @guest
             <a class="loginbutton" href="{{ url('/auth/login') }}">
@@ -39,7 +40,7 @@
 
                 <ul class="user-menu">
                     <li>
-                        <a href="{{ url('/' . $role) }}">
+                        <a href="{{ url('/' . $role) . '/dashboard'}}">
                             <i class="fa-solid fa-user-graduate"></i> Dashboard
                         </a>
                     </li>

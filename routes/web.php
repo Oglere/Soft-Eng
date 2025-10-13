@@ -43,22 +43,33 @@ Route::middleware('auth.session:student')->prefix('student')->group(function (){
     Route::get('/search', [StudentController::class, 'search_page']);
     Route::get('/submission', [StudentController::class, 'submission'])->name('student.submission');
     Route::post('/submit', [StudentController::class, 'submit_document'])->name('student.submit'); // ✅ NEW: Handles form submission
+    Route::post('/student/check-title', [App\Http\Controllers\StudentController::class, 'checkTitle'])->name('student.checkTitle');
     Route::get('/doc_status/', [StudentController::class, 'doc_status_page'])->name('student.doc_status');
-    Route::get('/view-status/{id}', [StudentController::class, 'viewStatus'])->name('student.view-status');
+    Route::get('/view_status/{id}', [StudentController::class, 'viewStatus'])->name('student.view_status');
     Route::delete('/abandon/{id}', [StudentController::class, 'abandon'])->name('student.abandon');
     Route::get('/pdf-reader/{id}', [StudentController::class, 'pdf_reader_page']);
-    Route::get('/account-setting', [StudentController::class, 'account_setting_page'])->name('student.account_setting');
-    Route::post('/account-setting/verify', [StudentController::class, 'verify_identity'])->name('student.verify_identity');
-    Route::post('/account-setting/update', [StudentController::class, 'update_account'])->name('student.update_account');
-    Route::post('/account-setting/cancel', [StudentController::class, 'cancel_update'])->name('student.cancel_update');
+    Route::get('/account_setting', [StudentController::class, 'account_setting_page'])->name('student.account_setting');
+
+    Route::post('/account_setting/verify', [StudentController::class, 'verify_identity'])->name('student.verify_identity');
+    Route::post('/account_setting/update', [StudentController::class, 'update_account'])->name('student.update_account');
+    Route::post('/account_setting/cancel', [StudentController::class, 'cancel_update'])->name('student.cancel_update');
 
 });
 
 Route::middleware('auth.session:teacher')->prefix('teacher')->group(function (){
     Route::get('/', [TeacherController::class, 'dashboard_page'])->name('teacher.dashboard');
-    Route::get('/review-document/', [TeacherController::class, 'review_page'])->name('teacher.review');
+    Route::get('/review-document/', [TeacherController::class, 'review_page'])->name('teacher.review.list');
     Route::get('/review-document/{id}', [TeacherController::class, 'pdf_reader_page'])->name('teacher.pdf.reader');
-    Route::get('/account-setting/', [TeacherController::class, 'account_setting_page'])->name('teacher.account.setting');
+    Route::get('/account-setting', [TeacherController::class, 'account_setting_page'])->name('teacher.account_setting');
+
+    Route::post('/review-document/{id}/approve', [TeacherController::class, 'pdf_approve'])->name('teacher.approve');
+    Route::post('/review-document/{id}/revise', [TeacherController::class, 'pdf_revise'])->name('teacher.revise');
+    Route::post('/review-document/{id}/reject', [TeacherController::class, 'pdf_reject'])->name('teacher.reject');
+    Route::post('/review-document/{id}/revert', [TeacherController::class, 'pdf_revert'])->name('teacher.revert');
+
+    Route::post('/account_setting/verify', [TeacherController::class, 'verify_identity'])->name('teacher.verify_identity');
+    Route::post('/account_setting/update', [TeacherController::class, 'update_account'])->name('teacher.update_account');
+    Route::post('/account_setting/cancel', [TeacherController::class, 'cancel_update'])->name('teacher.cancel_update');
 
 });
 
@@ -68,6 +79,9 @@ Route::middleware('auth.session:admin')->prefix('admin')->group(function (){
     Route::get('/manage-users/recover', [AdminController::class, 'user_recovery_page'])->name('recover.user');
     Route::get('/storage/', [AdminController::class, 'storage_page'])->name('storage');
     Route::get('/storage/{id}', [AdminController::class, 'storage_page'])->name('admin.pdf.reader');
-    Route::get('/account-setting/', [AdminController::class, 'account_setting_page'])->name('admin.account.setting');
+    Route::get('/account-setting/', [AdminController::class, 'account_setting_page'])->name('admin.account_setting');
 
+    Route::post('/account_setting/verify', [AdminController::class, 'verify_identity'])->name('admin.verify_identity');
+    Route::post('/account_setting/update', [AdminController::class, 'update_account'])->name('admin.update_account');
+    Route::post('/account_setting/cancel', [AdminController::class, 'cancel_update'])->name('admin.cancel_update');
 });

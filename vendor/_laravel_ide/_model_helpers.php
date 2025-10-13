@@ -669,9 +669,10 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
-     * @property bool $is_active
-     * @property string|null $last_login
-     * @property string|null $profile_picture
+     * @property boolean $is_active
+     * @property \Illuminate\Support\Carbon|null $last_login
+     * @property mixed $attempts
+     * @property \Illuminate\Support\Carbon|null $locked_until
      * @property string $role
      * @property string|null $phone_number
      * @property string $email
@@ -696,7 +697,8 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereEmail($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User wherePhoneNumber($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereRole($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereProfilePicture($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereLockedUntil($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereAttempts($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereLastLogin($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereIsActive($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereCreatedAt($value)
