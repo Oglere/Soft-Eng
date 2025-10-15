@@ -18,7 +18,6 @@ namespace App\Models {
      * @property mixed $file
      * @property string|null $metadata
      * @property string|null $citation
-     * @property string|null $authors
      * @property mixed $approved_by
      * @property mixed $teacher_id
      * @property mixed $student_id
@@ -32,7 +31,6 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<DocumentRepository>|DocumentRepository whereStudentId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<DocumentRepository>|DocumentRepository whereTeacherId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<DocumentRepository>|DocumentRepository whereApprovedBy($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<DocumentRepository>|DocumentRepository whereAuthors($value)
      * @method static \Illuminate\Database\Eloquent\Builder<DocumentRepository>|DocumentRepository whereCitation($value)
      * @method static \Illuminate\Database\Eloquent\Builder<DocumentRepository>|DocumentRepository whereMetadata($value)
      * @method static \Illuminate\Database\Eloquent\Builder<DocumentRepository>|DocumentRepository whereFile($value)
