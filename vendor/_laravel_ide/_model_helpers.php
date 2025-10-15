@@ -13,7 +13,7 @@ namespace App\Models {
      * @property string|null $abandoned_date
      * @property string|null $study_type
      * @property string|null $date_reviewed
-     * @property string|null $date_submitted
+     * @property \Illuminate\Support\Carbon|null $date_submitted
      * @property string $status
      * @property mixed $file
      * @property string|null $metadata

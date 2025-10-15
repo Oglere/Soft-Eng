@@ -1,7 +1,7 @@
 @extends('layout.admin')
 {{-- <link rel="stylesheet" href="{{ asset('') }}"> --}}
 
-@section('right')
+@section('content')
 
     Admin Storage
 
