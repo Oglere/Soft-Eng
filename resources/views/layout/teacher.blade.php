@@ -6,7 +6,7 @@
 
     <title>
         DARA -
-        @if (request()->is('teacher'))
+        @if (request()->is('teacher/dashboard'))
             Teacher
         @elseif (request()->is('teacher/review-document*'))
             Teacher | To Review
@@ -24,7 +24,7 @@
         <header>
             <div class="ahh">
                 <img
-                    src="{{ asset('storage/images/DARA.png') }}"
+                    src="{{ asset('images/DARA.png') }}"
                     alt="DARA Logo"
                     style=" width: 40px;
                             height: 40px;
@@ -43,7 +43,7 @@
                 </div>
                 <nav class="nav-links">
                     <div class="dropdown">
-                        <a href="{{ url('/teacher') }}" class="{{ request()->is('teacher') ? 'active-link' : '' }}">
+                        <a href="{{ url('/teacher/dashboard') }}" class="{{ request()->is('teacher/dashboard') ? 'active-link' : '' }}">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"

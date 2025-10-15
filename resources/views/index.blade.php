@@ -4,7 +4,7 @@
     <div class="contents">
         {{-- Brand section --}}
         <div class="brand">
-            <img src="{{ asset('storage/images/DARA.png') }}" alt="DARA Logo" class="logo">
+            <img src="{{ asset('images/DARA.png') }}" alt="DARA Logo" class="logo">
             <div class="brand-text">
                 Digital Academic Repository Archives
             </div>

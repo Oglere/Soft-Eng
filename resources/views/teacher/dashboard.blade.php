@@ -73,21 +73,21 @@
     <div class="stats-overview">
         {{-- Pending --}}
         <div class="stat-box">
-            <img src="{{ asset('storage/images/book.png') }}" alt="Pending">
+            <img src="{{ asset('images/book.png') }}" alt="Pending">
             <span class="count">{{ $pending }}</span>
             <p>Studies to Review</p>
         </div>
 
         {{-- Approved --}}
         <div class="stat-box">
-            <img src="{{ asset('storage/images/approved.png') }}" alt="Approved">
+            <img src="{{ asset('images/approved.png') }}" alt="Approved">
             <span class="count">{{ $approved }}</span>
             <p>Approved Studies</p>
         </div>
 
         {{-- Rejected --}}
         <div class="stat-box">
-            <img src="{{ asset('storage/images/reject.png') }}" alt="Rejected">
+            <img src="{{ asset('images/reject.png') }}" alt="Rejected">
             <span class="count">{{ $rejected }}</span>
             <p>Rejected Studies</p>
         </div>

@@ -28,7 +28,7 @@
         <header>
             <div class="ahh">
                 <img
-                    src="{{ asset('storage/images/DARA.png') }}"
+                    src="{{ asset('images/DARA.png') }}"
                     alt="DARA Logo"
                     style=" width: 40px;
                             height: 40px;

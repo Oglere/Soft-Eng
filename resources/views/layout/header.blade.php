@@ -13,7 +13,7 @@
 <header>
     <div class="header-left">
         <a href="/">
-            <img src="{{ asset('storage/images/DARA.png') }}" alt="DARA Logo">
+            <img src="{{ asset('images/DARA.png') }}" alt="DARA Logo">
         </a>
     </div>
 
