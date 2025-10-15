@@ -24,7 +24,7 @@ class QueryController extends Controller
         $user = auth()->user();
 
         // Start query
-        $query = \App\Models\DocumentRepository::query();
+        $query = \App\Models\DocumentRepository::where('status', 'Approved');
 
         // 🔍 Keyword search
         if ($request->filled('search')) {
@@ -67,8 +67,7 @@ class QueryController extends Controller
     {
         $user = auth()->user();
 
-        // Fetch only approved documents
-        $document = \App\Models\DocumentRepository::findOrFail($id)
+        $document = \App\Models\DocumentRepository::where('document_id', $id)
             ->where('status', 'Approved')
             ->firstOrFail();
 
@@ -77,6 +76,7 @@ class QueryController extends Controller
             'role' => $user ? $user->role : 'guest',
         ]);
     }
+
 
 
     public function login_page() {
