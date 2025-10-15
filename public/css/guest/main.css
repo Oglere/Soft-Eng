@@ -96,6 +96,7 @@ footer {
 }
 
 .brand {
+    flex-direction: column;
     margin-top: 80px;
     display: flex;
     justify-content: center;
@@ -114,7 +115,8 @@ footer {
 }
 
 .brand-text {
-    text-align: left;
+    color: #0c1c43;
+    font-size: 40px;
 }
 
 .site-name {
