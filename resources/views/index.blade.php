@@ -41,7 +41,7 @@
                 @foreach (['Case Study', 'Proposal', 'Thesis', 'Capstone', 'System Studies'] as $type)
                     <label class="category-card">
                         <input type="checkbox" name="document_types[]" value="{{ $type }}" hidden>
-                        <img src="{{ asset('storage/images/' . strtolower(str_replace(' ', '_', $type)) . '.jpg') }}" alt="{{ $type }}">
+                        <img src="{{ asset('images/' . strtolower(str_replace(' ', '_', $type)) . '.png') }}" alt="{{ $type }}">
                         <span>{{ $type }}</span>
                     </label>
                 @endforeach
