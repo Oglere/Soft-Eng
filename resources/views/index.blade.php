@@ -5,10 +5,6 @@
         {{-- Brand section --}}
         <div class="brand">
             <img src="{{ asset('storage/images/DARA.png') }}" alt="DARA Logo" class="logo">
-            <div class="brand-text">
-                <h1 class="site-name">D A R A</h1>
-                <p class="tagline">Digital Academic Repository and Archive</p>
-            </div>
         </div>
 
         {{-- Search form --}}
@@ -70,4 +66,19 @@ document.addEventListener('DOMContentLoaded', function () {
         dateTo.min = dateFrom.value; // set min of "to" based on "from"
     });
 });
+</script>
+<script>
+    // Auto-submit when category is toggled
+    document.querySelectorAll('input[name="document_types[]"]').forEach(chk => {
+        chk.addEventListener('change', () => document.getElementById('searchForm').submit());
+    });
+
+    // Set min date for "to" when "from" changes
+    document.addEventListener('DOMContentLoaded', function () {
+        const from = document.getElementById('date_from');
+        const to = document.getElementById('date_to');
+        from.addEventListener('change', () => {
+            to.min = from.value;
+        });
+    });
 </script>
