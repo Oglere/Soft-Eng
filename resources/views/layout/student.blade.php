@@ -27,7 +27,7 @@
     <main>
         <header>
             <a href="{{ url('/student/dashboard')}}" class="ahhh">
-                <h3>D.A.R.A</h3>
+                <h3>DARA</h3>
             </a>
 
             <div class="ahh">

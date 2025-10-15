@@ -40,11 +40,7 @@
 
                 <ul class="user-menu">
                     <li>
-<<<<<<< HEAD
-                        <a href="{{ url('/' . $role) . '/dashboard' }}">
-=======
                         <a href="{{ url('/' . $role) . '/dashboard'}}">
->>>>>>> 7e515dd9c9808fe63b22cfc137b406a30301ee8c
                             <i class="fa-solid fa-user-graduate"></i> Dashboard
                         </a>
                     </li>
