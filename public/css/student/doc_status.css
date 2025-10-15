@@ -165,7 +165,7 @@ td a:hover {
 }
 
 /* ─────────────────────────────
-   Status Labels (with changeable colors)
+   Status Labels
 ────────────────────────────── */
 .status {
     display: inline-block;
@@ -178,8 +178,8 @@ td a:hover {
 }
 
 /* ✅ Easily changeable background colors */
-.status.pending  { background-color: #00000094; }
-.status.approved { background-color: #00d40779; }
+.status.pending  { background-color: #000000; }
+.status.approved { background-color: #00d407; }
 .status.rejected { background-color: #ff1900a9; }
 .status.revision { background-color: #17a2b8; }
 .status.unknown  { background-color: #6c757d; }
