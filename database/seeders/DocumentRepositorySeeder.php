@@ -20,7 +20,6 @@ class DocumentRepositorySeeder extends Seeder
                 'student_id' => 1,
                 'teacher_id' => 2,
                 'approved_by' => null,
-                'authors' => 'Juan Dela Cruz, Maria Santos',
                 'citation' => 'Dela Cruz, J., & Santos, M. (2025). The Impact of Online Learning on Student Performance. University of Example Press.',
                 'metadata' => json_encode([
                     'keywords' => ['online learning', 'academic performance', 'student engagement'],
@@ -44,7 +43,6 @@ class DocumentRepositorySeeder extends Seeder
                 'student_id' => 1,
                 'teacher_id' => 2,
                 'approved_by' => null,
-                'authors' => 'Juan Dela Cruz, Maria Santos',
                 'citation' => 'Dela Cruz, J., & Santos, M. (2025). Sustainable Urban Farming Practices in Metro Manila. Philippine Research Journal.',
                 'metadata' => json_encode([
                     'keywords' => ['urban farming', 'sustainability', 'food security'],
@@ -68,7 +66,6 @@ class DocumentRepositorySeeder extends Seeder
                 'student_id' => 1,
                 'teacher_id' => 2,
                 'approved_by' => 2,
-                'authors' => 'Juan Dela Cruz, Maria Santos',
                 'citation' => 'Dela Cruz, J., & Santos, M. (2025). The Role of AI in Modern Education Systems. EduTech Journal.',
                 'metadata' => json_encode([
                     'keywords' => ['AI', 'education', 'machine learning'],
@@ -92,7 +89,6 @@ class DocumentRepositorySeeder extends Seeder
                 'student_id' => 1,
                 'teacher_id' => 2,
                 'approved_by' => null,
-                'authors' => 'Juan Dela Cruz, Maria Santos',
                 'citation' => 'Dela Cruz, J., & Santos, M. (2025). Analysis of Climate Change Awareness Among Filipino Youth. Environmental Studies Journal.',
                 'metadata' => json_encode([
                     'keywords' => ['climate change', 'awareness', 'Filipino youth'],

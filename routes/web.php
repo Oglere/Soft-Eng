@@ -38,13 +38,8 @@ Route::prefix('/')->group(function (){
 
 });
 
-<<<<<<< HEAD
-Route::prefix('student')->group(function (){
-    Route::get('/dashboard', [StudentController::class, 'dashboard_page'])->name('student.dashboard');
-=======
 Route::middleware('auth.session:student')->prefix('student')->group(function (){
     Route::get('/dashboard', [StudentController::class, 'dashboard_page'])->name('student.dashboard'); // ✅ Add this name
->>>>>>> 7e515dd9c9808fe63b22cfc137b406a30301ee8c
     Route::get('/search', [StudentController::class, 'search_page']);
     Route::get('/submission', [StudentController::class, 'submission'])->name('student.submission');
     Route::post('/submit', [StudentController::class, 'submit_document'])->name('student.submit');
