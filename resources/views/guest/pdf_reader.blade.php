@@ -48,28 +48,28 @@
 
     {{-- Right side results --}}
     <div class="rightSide">
-        <ul class="results-list">
-            @forelse ($results as $doc)
-                <li class="result-item">
-                    <a href="{{ url('/study/' . $doc->document_id) }}" class="result-title">
-                        {{ $doc->title }}
-                    </a>
-                    <div class="result-meta">
-                        <span>{{ url('/study/' . $doc->document_id) }}</span><br>
-                        <span>Date Submitted: {{ $doc->created_at->format('F d, Y') }}</span> —
-                        <span>Author: {{ $doc->author }} ({{ $doc->student_id ?? 'N/A' }})</span> —
-                        <span>Category: {{ $doc->type }}</span>
-                    </div>
-                </li>
-            @empty
-                <li class="no-results">No results found.</li>
-            @endforelse
-        </ul>
+        <div class="pdfview" style="width: 100%; height: 100%;">
+            @if($document->file && file_exists(public_path('storage/' . $document->file)))
+                <embed src="{{ asset('storage/' . $document->file) }}"
+                    type="application/pdf"
+                    width="100%" height="100%"
+                    style="border-radius: 10px;">
+            @elseif($document->file && file_exists(public_path($document->file)))
+                <embed src="{{ asset($document->file) }}"
+                    type="application/pdf"
+                    width="100%" height="100%"
+                    style="border-radius: 10px;">
+            @else
+                <div class="no-file">
+                    <p>No PDF file found for this document.</p>
+                </div>
+            @endif
+        </div>
     </div>
 </div>
 @endsection
 
-<link rel="stylesheet" href="{{ asset('js/guest/result.js') }}">
+{{-- <link rel="stylesheet" href="{{ asset('js/guest/result.js') }}"> --}}
 
 <script>
     // Auto-submit when category is toggled

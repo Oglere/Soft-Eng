@@ -22,7 +22,7 @@ use App\Http\Controllers\AdminController; // Admin Functions
 Route::prefix('/')->group(function (){
     Route::get('/', [QueryController::class, 'landing_page'])->name('landing');
     Route::get('/results/', [QueryController::class, 'results_page']);
-    Route::get('/document/{id}', [QueryController::class, 'document_page']);
+    Route::get('/study/{id}', [QueryController::class, 'document_page']);
     Route::get('/auth/login', [LoginController::class, 'login_page'])->name('login.page');
     Route::get('/auth/recovery', [OtpController::class, 'recovery_page'])->name('password.recover');
     Route::get('/auth/verify-otp', [OtpController::class, 'showVerifyOtpForm'])->name('password.verify.form');

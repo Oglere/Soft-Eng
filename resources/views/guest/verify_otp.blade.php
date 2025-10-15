@@ -21,7 +21,7 @@
         </div>
 
 
-        <form action="{{ url('auth/verify-otp') }}" method="POST" class="recovery-form">
+        <form action="{{ url('auth/verify-otp') }}" method="POST" class="recovery-form" id="otpForm">
             @csrf
 
             <div class="otp-inputs">
@@ -32,6 +32,9 @@
                 <input type="tel" maxlength="1" class="otp-box" required>
                 <input type="tel" maxlength="1" class="otp-box" required>
             </div>
+
+            <!-- Hidden input that holds the final 6-digit code -->
+            <input type="hidden" name="otp" id="otpInput">
 
             <button type="submit" class="submit-btn">Verify</button>
         </form>
@@ -214,6 +217,13 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     });
+});
+</script>
+
+<script>
+document.getElementById('otpForm').addEventListener('submit', function(e) {
+    const digits = Array.from(document.querySelectorAll('.otp-box')).map(i => i.value).join('');
+    document.getElementById('otpInput').value = digits;
 });
 </script>
 @endsection

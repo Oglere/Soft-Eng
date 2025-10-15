@@ -15,7 +15,7 @@ header {
     justify-content: space-between;
     align-items: center;
     padding: 10px 40px; /* smaller default */
-    background-color: #0e100f;
+    background-color: #fffce4 !important;
     color: #fffce4;
     z-index: 1000;
 }
@@ -62,7 +62,7 @@ header {
     align-items: center;
     gap: 5px;
     text-decoration: none;
-    color: inherit;
+    color: #0e100f;
     padding: 8px 12px;
     border-radius: 6px;
     transition: background 0.2s;
@@ -87,8 +87,8 @@ main {
 
 footer {
     padding: 10px;
-    background-color: #0e100f;
-    color: #fffce4;
+    background-color: #fffce4;
+    color: #0e100f;
     text-align: center;
 }
 
@@ -200,7 +200,7 @@ footer {
 
 .category-card:has(input:checked) {
     background-color: #e6f0ff;
-    border-color: #007bff;
+    border-color: #00346b;
     box-shadow: 0 4px 10px rgba(0, 123, 255, 0.15);
     transform: translateY(-5px);
 }
@@ -238,7 +238,7 @@ footer {
     gap: 8px;
     background: none;
     border: none;
-    color: white;
+    color: #0e100f;
     cursor: pointer;
     font-size: 16px;
     padding: 6px 12px;

@@ -26,7 +26,7 @@ class QueryController extends Controller
         // Start query
         $query = \App\Models\DocumentRepository::query();
 
-        // 🔍 Search keyword
+        // 🔍 Keyword search
         if ($request->filled('search')) {
             $keyword = $request->input('search');
             $query->where(function ($q) use ($keyword) {
@@ -36,7 +36,7 @@ class QueryController extends Controller
             });
         }
 
-        // 📅 Date range
+        // 📅 Date range filter
         if ($request->filled('date_from') && $request->filled('date_to')) {
             $query->whereBetween('date_submitted', [
                 $request->input('date_from'),
@@ -44,18 +44,37 @@ class QueryController extends Controller
             ]);
         }
 
-        // 📂 Document types
+        // 📂 Study type filter (supports multi-values like "Thesis, System Study")
         if ($request->filled('document_types')) {
             $types = $request->input('document_types');
-            $query->whereIn('study_type', $types);
+            $query->where(function ($q) use ($types) {
+                foreach ($types as $type) {
+                    $q->orWhere('study_type', 'like', "%{$type}%");
+                }
+            });
         }
 
-        // ✅ Final results
+        // ✅ Fetch results
         $results = $query->orderBy('date_submitted', 'desc')->get();
 
         return view('guest.results', [
             'role' => $user ? $user->role : 'guest',
             'results' => $results,
+        ]);
+    }
+
+    public function document_page($id)
+    {
+        $user = auth()->user();
+
+        // Fetch only approved documents
+        $document = \App\Models\DocumentRepository::findOrFail($id)
+            ->where('status', 'Approved')
+            ->firstOrFail();
+
+        return view('guest.pdf_reader', [
+            'document' => $document,
+            'role' => $user ? $user->role : 'guest',
         ]);
     }
 
