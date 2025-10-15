@@ -1,5 +1,6 @@
 @extends('layout.admin')
 {{-- <link rel="stylesheet" href="{{ asset('') }}"> --}}
+@section('title', 'Dashboard')
 
 @section('content')
 
