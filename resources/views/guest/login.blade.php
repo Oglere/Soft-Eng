@@ -60,9 +60,47 @@
 
                 {{-- General error --}}
                 @if ($errors->has('general'))
-                    <div class="general-error">{{ $errors->first('general') }}</div>
-                @endif
+                    <div class="general-error">
+                        {{ $errors->first('general') }}
+                    </div>
 
+                    {{-- ⏳ Dynamic countdown message --}}
+                    @if (session('retry_after'))
+                        <div id="lock-countdown" class="countdown-timer"></div>
+
+                        <script>
+                            document.addEventListener('DOMContentLoaded', () => {
+                                let remaining = {{ (int) session('retry_after') }};
+                                const countdownElement = document.getElementById('lock-countdown');
+                                const loginButton = document.querySelector('.login-btn');
+
+
+                                function formatTime(seconds) {
+                                    const m = Math.floor(seconds / 60);
+                                    const s = seconds % 60;
+                                    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                                }
+
+                                function updateCountdown() {
+                                    if (remaining <= 0) {
+                                        countdownElement.textContent = "You can now try logging in again.";
+                                        if (loginButton) {
+                                            loginButton.style.opacity = 1;
+                                            loginButton.textContent = "Login";
+                                        }
+                                        return;
+                                    }
+
+                                    countdownElement.textContent = `You can login again in ${formatTime(remaining)}`;
+                                    remaining--;
+                                    setTimeout(updateCountdown, 1000);
+                                }
+
+                                updateCountdown();
+                            });
+                        </script>
+                    @endif
+                @endif
                 {{-- Role selection (styled radio buttons as cards) --}}
                 <div class="input-wrapper role-selection">
                     <p class="role-title">Please Select a Role :</p>
@@ -101,6 +139,7 @@
                     <a href="{{ route('password.recover') }}">Forgot Password?</a>
                 </div>
             </form>
+
         </div>
     </div>
 @endsection

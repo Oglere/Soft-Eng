@@ -3,14 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable; // so you can still use Auth
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $primaryKey = 'user_id'; // custom PK
+    protected $primaryKey = 'user_id';
     public $incrementing = true;
     protected $keyType = 'int';
 
@@ -22,13 +22,21 @@ class User extends Authenticatable
         'email',
         'phone_number',
         'role',
-        'profile_picture',
+        'locked_until',
+        'attempts',
         'last_login',
         'is_active',
     ];
 
     protected $hidden = [
         'password_hash',
+    ];
+
+    // ✅ Automatically convert timestamps to Carbon instances
+    protected $casts = [
+        'locked_until' => 'datetime',
+        'last_login' => 'datetime',
+        'is_active' => 'boolean',
     ];
 
     // Relationships

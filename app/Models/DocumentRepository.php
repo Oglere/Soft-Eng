@@ -20,7 +20,6 @@ class DocumentRepository extends Model
         'student_id',
         'teacher_id',
         'approved_by',
-        'authors',
         'citation',
         'metadata',
         'file',

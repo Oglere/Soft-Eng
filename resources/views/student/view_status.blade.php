@@ -47,19 +47,19 @@
             </a>
         </form>
     </div>
-    
+
     {{-- ✅ Dynamic PDF viewer --}}
-    <div class="pdfview"> 
+    <div class="pdfview">
         @if($document->file && file_exists(public_path('storage/' . $document->file)))
-            <embed src="{{ asset('storage/' . $document->file) }}" 
-                type="application/pdf" 
-                width="100%" height="100%" 
+            <embed src="{{ asset('storage/' . $document->file) }}"
+                type="application/pdf"
+                width="100%" height="100%"
                 style="border-radius: 20px;">
         @elseif($document->file && file_exists(public_path($document->file)))
             {{-- For manually stored files under /public/uploads/... --}}
-            <embed src="{{ asset($document->file) }}" 
-                type="application/pdf" 
-                width="100%" height="100%" 
+            <embed src="{{ asset($document->file) }}"
+                type="application/pdf"
+                width="100%" height="100%"
                 style="border-radius: 20px;">
         @else
             <div class="no-file">

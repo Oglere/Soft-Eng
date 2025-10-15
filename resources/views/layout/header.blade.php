@@ -15,13 +15,13 @@
         <a href="/">
             <img src="{{ asset('storage/images/DARA.png') }}" alt="DARA Logo">
         </a>
-        <h2>D A R A</h2>
     </div>
 
     <!-- Hamburger for mobile -->
     <button class="hamburger" id="hamburger">
         <i class="fa-solid fa-bars"></i>
     </button>
+
 
     <nav class="header-nav" id="headerNav">
         @guest
@@ -40,7 +40,11 @@
 
                 <ul class="user-menu">
                     <li>
+<<<<<<< HEAD
                         <a href="{{ url('/' . $role) . '/dashboard' }}">
+=======
+                        <a href="{{ url('/' . $role) . '/dashboard'}}">
+>>>>>>> 7e515dd9c9808fe63b22cfc137b406a30301ee8c
                             <i class="fa-solid fa-user-graduate"></i> Dashboard
                         </a>
                     </li>

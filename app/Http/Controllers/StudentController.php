@@ -43,11 +43,14 @@ class StudentController extends Controller
         ));
     }
 
+<<<<<<< HEAD
     public function search_page()
     {
         return view('student.search');
     }
 
+=======
+>>>>>>> 7e515dd9c9808fe63b22cfc137b406a30301ee8c
     /**
      * Display the student submission page.
      */
@@ -59,7 +62,12 @@ class StudentController extends Controller
         return view('student.submission', compact('teachers'));
     }
 
+<<<<<<< HEAD
     public function submit_document(Request $request)
+=======
+
+   public function submit_document(Request $request)
+>>>>>>> 7e515dd9c9808fe63b22cfc137b406a30301ee8c
     {
         $request->validate([
             'title' => 'required|string|max:255',
@@ -71,20 +79,23 @@ class StudentController extends Controller
             'file' => 'required|mimes:pdf|max:25600', // 25MB
         ]);
 
-        // Upload file
+        // Upload file to storage/app/public/documents
         $filePath = $request->file('file')->store('documents', 'public');
 
-        // Save document
+        // ✅ Save document with 'abstract' included in metadata
         DocumentRepository::create([
             'title' => $request->title,
+<<<<<<< HEAD
             'abstract' => $request->abstract,
+=======
+>>>>>>> 7e515dd9c9808fe63b22cfc137b406a30301ee8c
             'student_id' => Auth::id(),
             'teacher_id' => $request->teacher_id,
-            'authors' => $request->co_authors,
             'citation' => $request->citations,
             'metadata' => json_encode([
+                'abstract' => $request->abstract, // 👈 added abstract here
                 'keywords' => $request->keywords,
-                'document_types' => $request->document_types
+                'document_types' => $request->document_types,
             ]),
             'file' => $filePath, // ✅ stores relative path (e.g. documents/thesis.pdf)
             'status' => 'pending',
@@ -96,6 +107,11 @@ class StudentController extends Controller
             ->with('success', 'Document submitted successfully!');
     }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 7e515dd9c9808fe63b22cfc137b406a30301ee8c
     /**
      * Confirmation if a duplicate title exists.
      */
@@ -160,11 +176,20 @@ class StudentController extends Controller
     public function abandon($id)
     {
         $document = DocumentRepository::findOrFail($id);
+<<<<<<< HEAD
+=======
+
+        // Option 1: delete completely
+>>>>>>> 7e515dd9c9808fe63b22cfc137b406a30301ee8c
         $document->delete();
 
         return redirect()->route('student.submission')->with('success', 'Document abandoned successfully.');
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7e515dd9c9808fe63b22cfc137b406a30301ee8c
     /**
      * Display the PDF reader page for a specific ID.
      */
@@ -238,9 +263,18 @@ class StudentController extends Controller
             ->with('success', 'Account updated successfully!');
     }
 
+<<<<<<< HEAD
     public function cancel_update(Request $request)
     {
         return redirect()->route('student.account_setting_page')
             ->with('cancel_message', 'Account update canceled.');
+=======
+
+    public function cancel_update(Request $request)
+    {
+    // Just redirect back to account settings without triggering success SweetAlert
+    return redirect()->route('student.account_setting')
+        ->with('cancel_message', 'Account update canceled.');
+>>>>>>> 7e515dd9c9808fe63b22cfc137b406a30301ee8c
     }
 }

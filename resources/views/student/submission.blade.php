@@ -18,7 +18,7 @@
     </div>
 @endif
 
-<form id="documentForm" method="post" enctype="multipart/form-data" 
+<form id="documentForm" method="post" enctype="multipart/form-data"
       action="{{ route('student.submit') }}"
       style="background-color: #f5f5f5; padding: 40px; border-radius: 10px; box-shadow: 5px 5px 1px #04128e;">
     @csrf
@@ -31,8 +31,8 @@
         <!-- LEFT COLUMN -->
         <div class="form-col left-col">
             <div class="container">
-                <div class="card"> 
-                    <h3>Upload File</h3> 
+                <div class="card">
+                    <h3>Upload File</h3>
                     <div class="drop_box">
                         <div class="header"><h4>Select File here</h4></div>
                         <p>Files Supported: PDF (max 25MB)</p>

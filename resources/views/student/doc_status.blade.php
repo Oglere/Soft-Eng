@@ -50,11 +50,11 @@
                     <td class="status-cell" style="text-align: center;">
                         @if($submission->status === 'pending')
                             <span class="status pending">Pending</span>
-                        @elseif($submission->status === 'approved')
+                        @elseif($submission->status == 'Approved')
                             <span class="status approved">Approved</span>
-                        @elseif($submission->status === 'rejected')
+                        @elseif($submission->status === 'Rejected')
                             <span class="status rejected">Rejected</span>
-                        @elseif($submission->status === 'revision')
+                        @elseif($submission->status == 'Revision')
                             <span class="status revision">For Revision</span>
                         @else
                             <span class="status unknown">Unknown</span>
@@ -62,7 +62,7 @@
                     </td>
                     <td style="text-align: center;">
                         <a href="{{ route('student.view_status', ['id' => $submission->document_id]) }}" class="edit-btn" title="Edit">
-                            <svg style="margin: 0;" xmlns="http://www.w3.org/2000/svg" fill="none" 
+                            <svg style="margin: 0;" xmlns="http://www.w3.org/2000/svg" fill="none"
                                  viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                  class="edit-icon">
                                 <path stroke-linecap="round" stroke-linejoin="round"
