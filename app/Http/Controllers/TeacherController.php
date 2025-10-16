@@ -22,7 +22,13 @@ class TeacherController extends Controller
         $rejected = DocumentRepository::where('teacher_id', $user->user_id)
             ->where('status', 'rejected')->count();
 
-        return view('teacher.dashboard', compact('user', 'pending', 'approved', 'rejected'));
+        $pendingList = DocumentRepository::where('teacher_id', $user->user_id)
+            ->where('status', 'pending')
+            ->orderBy('date_submitted', 'desc')
+            ->take(5) // show last 5 pending
+            ->get();
+
+        return view('teacher.dashboard', compact('user', 'pending', 'approved', 'rejected', 'pendingList'));
     }
 
     public function review_page(Request $request)

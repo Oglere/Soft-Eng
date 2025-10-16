@@ -2,94 +2,92 @@
 
 @section('right')
 <style>
-    /* Teacher Dashboard Styles */
+/* Match Student Dashboard Design */
 
-.teacher-dashboard {
-    text-align: center;
-    padding: 40px 20px;
-    font-family: 'Poppins', sans-serif;
+.right h1 {
+    font-size: 40px;
+    font-weight: bold;
+    color: #0e100f;
 }
 
-.welcome-message {
-    color: #030281;
-    font-weight: 700;
-    margin-bottom: 40px;
-}
-
-.stats-overview {
+.cardco {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 60px;
     flex-wrap: wrap;
-    margin-bottom: 50px;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 40px;
 }
 
-.stat-box {
-    text-align: center;
-    background: #ffffff;
+.cards {
     border-radius: 20px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    width: 230px;
+    text-align: center;
     padding: 25px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    width: 180px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.stat-box:hover {
+.cards:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
 }
 
-.stat-box img {
-    width: 60px;
-    height: 60px;
+.cards img {
+    width: 100px;
+    height: 100px;
     margin-bottom: 10px;
 }
 
-.stat-box .count {
-    display: block;
-    font-size: 28px;
+.count {
+    font-size: 38px;
     font-weight: bold;
-    color: #030281;
-    margin-bottom: 5px;
+    color: #0e100f;
 }
 
-.stat-box p {
-    margin: 0;
-    font-size: 15px;
+.text p {
+    font-size: 16px;
+    font-weight: 500;
     color: #555;
+    margin-top: 5px;
 }
-
 </style>
 
+<h1>
+    Welcome, {{ $user->first_name }}! You have
+</h1>
 
-<div class="teacher-dashboard">
-    {{-- Welcome Message --}}
-    <h2 class="welcome-message">
-        Welcome, {{ $user->first_name }}! You Have
-    </h2>
+<div class="cardco">
 
-    {{-- Stats Overview --}}
-    <div class="stats-overview">
-        {{-- Pending --}}
-        <div class="stat-box">
+    {{-- Pending --}}
+    <div class="cards pending">
+        <div class="svg1">
             <img src="{{ asset('images/book.png') }}" alt="Pending">
-            <span class="count">{{ $pending }}</span>
-            <p>Studies to Review</p>
         </div>
+        <div class="count">{{ $pending }}</div>
+        <div class="text">
+            <p>STUDIES TO REVIEW</p>
+        </div>
+    </div>
 
-        {{-- Approved --}}
-        <div class="stat-box">
+    {{-- Approved --}}
+    <div class="cards approved">
+        <div class="svg2">
             <img src="{{ asset('images/approved.png') }}" alt="Approved">
-            <span class="count">{{ $approved }}</span>
-            <p>Approved Studies</p>
         </div>
+        <div class="count">{{ $approved }}</div>
+        <div class="text">
+            <p>APPROVED STUDIES</p>
+        </div>
+    </div>
 
-        {{-- Rejected --}}
-        <div class="stat-box">
+    {{-- Rejected --}}
+    <div class="cards rejected">
+        <div class="svg3">
             <img src="{{ asset('images/reject.png') }}" alt="Rejected">
-            <span class="count">{{ $rejected }}</span>
-            <p>Rejected Studies</p>
+        </div>
+        <div class="count">{{ $rejected }}</div>
+        <div class="text">
+            <p>REJECTED STUDIES</p>
         </div>
     </div>
 
