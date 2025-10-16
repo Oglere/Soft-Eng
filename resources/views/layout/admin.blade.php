@@ -6,7 +6,7 @@
 
     <title>
         DARA -
-        @if (request()->is('admin'))
+        @if (request()->is('admin/dashboard'))
             Admin
         @elseif (request()->is('admin/storage*'))
             Admin | Storage
@@ -27,7 +27,7 @@
         <header>
             <div class="ahh">
                 <img
-                    src="{{ asset('storage/images/DARA.png') }}"
+                    src="{{ asset('images/DARA.png') }}"
                     alt="DARA Logo"
                     style=" width: 40px;
                             height: 40px;
@@ -46,7 +46,7 @@
                 </div>
                 <nav class="nav-links">
                     <div class="dropdown">
-                        <a href="{{ url('/admin') }}" class="{{ request()->is('admin') ? 'active-link' : '' }}">
+                        <a href="{{ url('/admin/dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active-link' : '' }}">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"

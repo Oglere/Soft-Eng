@@ -74,7 +74,7 @@ Route::middleware('auth.session:teacher')->prefix('teacher')->group(function (){
 });
 
 Route::middleware('auth.session:admin')->prefix('admin')->group(function (){
-    Route::get('/', [AdminController::class, 'dashboard_page'])->name('admin.dashboard');
+    Route::get('/dashboard', [AdminController::class, 'dashboard_page'])->name('admin.dashboard');
     Route::get('/manage-users/', [AdminController::class, 'user_control_page'])->name('manage.user');
     Route::get('/manage-users/recover', [AdminController::class, 'user_recovery_page'])->name('recover.user');
     Route::get('/storage/', [AdminController::class, 'storage_page'])->name('storage');
