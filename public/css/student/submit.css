@@ -1,263 +1,169 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
-
-/* ================================
-   GENERAL PAGE LAYOUT
-   ================================ */
-.right {
-    background-color: #fdf9e9;
-    overflow: auto;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    /* Main Content */
+  html, body {
+  overflow: hidden;
 }
 
-header h2 {
-    letter-spacing: 5px;
-    margin-left: 35px;
-    padding: 0;
-    font-weight: bold;
-    color: #04128e;
-    text-align: left;
-}
+    .main {
+    flex: 1;
+    padding: 2rem;
+  }
 
-.ahh {
-    display: flex;
-    align-items: center;
-}
+  .main h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
 
-.error {
-    color: red;
-    font-size: 0.9em;
-    margin-bottom: 10px;
-}
+    color: #0a1444;
+  }
 
-/* ================================
-   FORM BASICS
-   ================================ */
-form#documentForm {
-    max-width: 100%;
-    width: 1000px;
-    margin-bottom: 40px;
-    box-sizing: border-box;
-    font-family: "Poppins", "Noto Sans", sans-serif;
-}
+      .upload-box {
+        border: 2px dashed #d1d5db;
+        border-radius: 10px;
+        padding: 2rem;
+        text-align: center;
+        background-color: #fff;
+      
+      }
 
-form#documentForm h1 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    color: #04128e;
-    font-weight: bolder;
-}
+      .upload-box a {
+        color: #0a1444;
+        font-weight: 600;
+        cursor: pointer;
+      }
 
-form#documentForm label {
-    font-weight: bold;
-    color: #000000;
-    display: block;
-}
+      form {
+        background: #f9fafb;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        height:78vh;
 
+      }
 
-/* ================================
-   INPUT FIELDS
-   ================================ */
-form#documentForm input[type="text"],
-form#documentForm input[type="date"],
-form#documentForm textarea,
-form#documentForm select {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    border: 1px solid black;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: bold;
-    box-sizing: border-box;
-}
+      .form-row {
+        display: flex;
+        gap: 1rem;
+        
+      }
 
-form#documentForm textarea {
-    height: 100px;
-    resize: vertical;
-}
-
-/* ================================
-   CHECKBOXES
-   ================================ */
-.checkboxes {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 15px;
-    justify-content: flex-start;
-    text-align: center;
-}
-
-.chkbx {
-    position: relative;
-    border: 1px solid #000000;
-    border-radius: 5px;
-    padding: 7px 20px;
-    font-weight: bold;
-    color: black;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    user-select: none;
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 172px;
-}
-
-.chkbx input[type="checkbox"] {
-    position: absolute;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.chkbx:hover {
-    background-color: #04128e;
-    color: #ffffff !important;
-}
-
-.chkbx.active {
-    background-color: #04128e;
-    color: white !important;
-    border-color: #ffffff;
-}
-
-.chkbx label {
-    cursor: pointer;
-    margin: 0;
-}
-
-/* ================================
-   FORM STRUCTURE
-   ================================ */
-form#documentForm .form-row {
-    display: flex;
-    gap: 30px;
-    align-items: flex-start;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-}
-
-form#documentForm .form-col {
-    flex: 1 1 45%;
-    min-width: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    box-sizing: border-box;
-}
-
-/* ================================
-   CARD + UPLOAD SECTION
-   ================================ */
-.container {
-    width: 100%;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    background-color: #fcfcfc;
-    margin-bottom: 20px;
-    box-sizing: border-box;
-}
-
-.card {
-    border-radius: 10px;
-    box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.3);
-    max-width: 600px;
-    width: 100%;
-    height: 350px;
-    background-color: #ffffff;
-    padding: 10px 30px 40px;
-    box-sizing: border-box;
-}
-
-.card h3 {
-    font-size: 18px;
-    font-weight: 600;
-    margin: 0 0 10px 0;
-}
-
-.drop_box {
-    margin: 10px 0;
-    padding: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    border: 3px dotted #a3a3a3;
-    border-radius: 5px;
-    box-sizing: border-box;
-}
-
-.drop_box h4 {
-    font-size: 16px;
-    font-weight: 400;
-    color: #2e2e2e;
-}
-
-.drop_box p {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    font-size: 12px;
-    color: #a3a3a3;
-}
-
-.btn {
-    text-decoration: none;
-    background-color: #8e0404;
-    color: #ffffff;
-    padding: 10px 20px;
-    border: none;
-    outline: none;
-    transition: 0.15s ease;
-    cursor: pointer;
-}
-
-.btn:hover {
-    background-color: #7a0303;
-}
-
-/* ================================
-   SUBMIT BUTTON
-   ================================ */
-.submission {
-    width: 100%;
-    padding: 12px 16px;
-    background-color: #ff4d4d;
-    color: white;
-    border-radius: 10px;
-    border: none;
-    font-size: 16px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.25s ease;
-}
-
-.submission:hover {
-    background-color: #071bcc !important;
-}
-
-/* ================================
-   RESPONSIVE DESIGN
-   ================================ */
-@media (max-width: 900px) {
-    form#documentForm .form-row {
+      .form-group {
+        flex: 1;
+        display: flex;
         flex-direction: column;
+      }
+
+      label {
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+      }
+
+      input, textarea, select {
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        font-size: 0.95rem;
+        outline: none;
+        background: #f9fafb;
+      }
+
+      input:focus, textarea:focus, select:focus {
+        border-color: #1e3a8a;
+        background: #fff;
+      }
+
+      textarea {
+        resize: none;
+        min-height: 120px;
+      }
+
+      .type-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      margin-top: 10px;
     }
 
-    form#documentForm .form-col {
-        min-width: 100%;
+    /* Hide the actual checkbox */
+    .type-buttons input[type="checkbox"] {
+      display: none;
     }
 
-    .chkbx {
-        width: 100%;
+    /* Style the labels as toggle buttons */
+    .type-buttons label {
+      padding: 0.5rem 1rem;
+      border: 1px solid #d1d5db;
+      background: white;
+      border-radius: 2rem;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      user-select: none;
     }
+
+    /* Hover effect */
+    .type-buttons label:hover {
+      background: #0a1444;
+      color: white;
+      border-color: #1e3a8a;
+    }
+
+    /* Active (selected) effect when checkbox is checked */
+    .type-buttons input[type="checkbox"]:checked + label {
+      background: #0a1444;
+      color: white;
+      border-color: #1e3a8a;
+    }
+      .submit-btn {
+        background: #0a1444;
+        color: white;
+        border: none;
+        padding: 0.75rem 2.5rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        cursor: pointer;
+        float: right;
+        transition: 0.3s;
+        margin-top: 10px;
+      }
+
+      .submit-btn:hover {
+        background: #10236b;
+      }
+      .error-message {
+    color: red;
+    font-size: 0.85rem;
+  
+  }
+.teacher-container {
+  display: flex;
+  flex-direction: column;
+  gap: 3px; /* space between Teacher 2 and Teacher 3 groups */
+  margin-top: -2px;
 }
+
+.teacher-group {
+  display: flex;
+  flex-direction: column;
+  gap: -10px; /* spacing between label and select */
+}
+
+.teacher-group label {
+  font-weight: 600;
+}
+
+.teacher-group .teacher-select {
+  width: 100%;
+  height: 43px;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  background: #f9fafb;
+  outline: none;
+}
+
+.teacher-group .teacher-select:focus {
+  border-color: #1e3a8a;
+  background: #fff;
+}
+
