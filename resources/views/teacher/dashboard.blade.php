@@ -6,7 +6,7 @@
     <title>D.A.R.A Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/sidenav.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/student/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/teacher/dashboard.css') }}">
 </head>
 <body>
 
@@ -28,7 +28,7 @@
                 <div class="profile-info">
                     <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
 
-                    <p>Student</p>
+                    <p>Teacher</p>
                 </div>
             </div>
         </div>
@@ -50,13 +50,13 @@
                             </svg>
                             Dashboard
                         </a>
-                        <a href="<?php echo e(url('/student/submission')); ?>">
+                        <a href="<?php echo e(url('/student/dashboard')); ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 24 24" stroke="currentColor">
+                                viewBox="0 0 24 24" stroke="currentColor" width="24" height="24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M12 4v16m8-8H4" />
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                             </svg>
-                            Submit Studies
+                            Search Studies
                         </a>
                         <a href="<?php echo e(url('/student/doc_status')); ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -64,7 +64,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                             </svg>
-                            Submitted Studies
+                            Review Studies
                         </a>
                     </div>
                 </div>
@@ -94,39 +94,33 @@
                 </div>
             </div>
         </aside>
+        
+        <!-- Main -->
+        <main class="main">
+            <h2>Welcome, <?php echo e(auth()->user()->first_name); ?>! You have</h2>
+            <div class="cards">
+                <!-- Top row -->
+                <div class="top-row">
+                    <a href="{{ route('student.doc_status', ['status' => 'approved']) }}" class="card blue">
+                        <p class="label">Approved Studies</p>
+                        <p class="number">{{ $approved }}</p>
+                        <?xml version="1.0"?><svg data-name="Layer 1" id="Layer_1" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><title/><path d="M22.41,10.59,20.36,8.54V5.63a2,2,0,0,0-2-2H15.46l-2.05-2a2,2,0,0,0-2.82,0L8.54,3.64H5.63a2,2,0,0,0-2,2V8.54l-2,2.05A2,2,0,0,0,1,12a2,2,0,0,0,.58,1.41l2.06,2.05v2.91a2,2,0,0,0,2,2H8.54l2.05,2.05A2,2,0,0,0,12,23a2,2,0,0,0,1.41-.58l2.05-2.06h2.91a2,2,0,0,0,2-2V15.46l2.05-2.05a2,2,0,0,0,0-2.82Zm-4.05,4.05v3.72H14.64L12,21,9.36,18.36H5.64V14.64L3,12,5.64,9.36V5.64H9.36L12,3l2.64,2.64h3.72V9.36L21,12Z"/><polygon points="11 12.73 8.71 10.44 7.29 11.85 11 15.56 16.71 9.85 15.29 8.44 11 12.73"/></svg>
+                    </a>
 
-        <div class="teacher-dashboard">
-            {{-- Welcome Message --}}
-            <h2 class="welcome-message">
-                Welcome, {{ $user->first_name }}! You Have
-            </h2>
+                    <a href="{{ route('student.doc_status', ['status' => 'pending']) }}" class="card orange">
+                        <p class="label">Pending Studies</p>
+                        <p class="number">{{ $pending }}</p>
+                        <?xml version="1.0"?><svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><defs><style>.cls-1{fill:none;stroke:#000;stroke-linecap:round;stroke-linejoin:round;stroke-width:2px;}</style></defs><title/><g data-name="83-book" id="_83-book"><path class="cls-1" d="M11,23H7.17A4.12,4.12,0,0,0,3,26.61,4,4,0,0,0,7,31h8"/><path class="cls-1" d="M3,27V5A4,4,0,0,1,7,1H29V13"/><circle class="cls-1" cx="23" cy="23" r="8"/><line class="cls-1" x1="27" x2="19" y1="23" y2="23"/></g></svg>  
+                    </a>
 
-            {{-- Stats Overview --}}
-            <div class="stats-overview">
-                {{-- Pending --}}
-                <div class="stat-box">
-                    <img src="{{ asset('images/book.png') }}" alt="Pending">
-                    <span class="count">{{ $pending }}</span>
-                    <p>Studies to Review</p>
-                </div>
-
-                {{-- Approved --}}
-                <div class="stat-box">
-                    <img src="{{ asset('images/approved.png') }}" alt="Approved">
-                    <span class="count">{{ $approved }}</span>
-                    <p>Approved Studies</p>
-                </div>
-
-                {{-- Rejected --}}
-                <div class="stat-box">
-                    <img src="{{ asset('images/reject.png') }}" alt="Rejected">
-                    <span class="count">{{ $rejected }}</span>
-                    <p>Rejected Studies</p>
+                    <a href="{{ route('student.doc_status', ['status' => 'rejected']) }}" class="card red">
+                        <p class="label">Rejected Studies</p>
+                        <p class="number">{{ $rejected }}</p>
+                        <?xml version="1.0"?><svg viewBox="0 0 96 96" xmlns="http://www.w3.org/2000/svg"><title/><g><path d="M48,0A48,48,0,1,0,96,48,48.0512,48.0512,0,0,0,48,0Zm0,84A36,36,0,1,1,84,48,36.0393,36.0393,0,0,1,48,84Z"/><path d="M64.2422,31.7578a5.9979,5.9979,0,0,0-8.4844,0L48,39.5156l-7.7578-7.7578a5.9994,5.9994,0,0,0-8.4844,8.4844L39.5156,48l-7.7578,7.7578a5.9994,5.9994,0,1,0,8.4844,8.4844L48,56.4844l7.7578,7.7578a5.9994,5.9994,0,0,0,8.4844-8.4844L56.4844,48l7.7578-7.7578A5.9979,5.9979,0,0,0,64.2422,31.7578Z"/></g></svg>
+                    </a>
                 </div>
             </div>
-        </div>
+        </main>
     </div>
 </body>
 </html>
-
-

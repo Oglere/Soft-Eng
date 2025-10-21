@@ -1,274 +1,146 @@
-@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+/* sidenav.css */
 
-html {
-  display: flex;
-  justify-content: center;
-  padding: 0;
-  margin: 0;
+/* General Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
 
-  body {
-    background-color:#0e100f;
-    max-width: 100%;
-    width: 1400px;
-    height: 100%;
-    position: absolute;
-    font-family: "rubik";
-    display: flex;
-    padding: 0;
-    margin: 0;
-    justify-content: center;
-
-    main {
-      max-width: 100%;
-      width: 1400px;
+    body {
+      background-color:  #fffce4;
+      color: #333;
       display: flex;
       flex-direction: column;
-
-      header {
-        height: 50px;
-        padding-left: 20px;
-        padding-right: 10px;
-        padding-bottom: 10px;
-        padding-top: 10px;
-        display: flex;
-        flex-direction: row-reverse;
-        align-items: center;
-      }
-
+      min-height: 100vh;
+      
     }
-  }
-}
 
-.ahh {
+   .navbar {
+      background: #f9fafb;
+     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* shadow on all sides */
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 20px;
+      margin: 20px 20px 0 20px;
+      
+    }
+
+
+    .navbar h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0a1444;
+    }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    /* 👇 Updated button with gray circular background */
+.navbar-right button {
+  background: #e5e7eb;        /* light gray background */
+  border: none;
+  border-radius: 50%;         /* makes it perfectly round */
+  width: 40px;
   height: 40px;
+  display: flex;              /* centers SVG */
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s;
+  color: #4b5563;             /* icon color */
 }
 
-input[type="text"]:focus {
-  outline: none;
+/* Hover effect */
+.navbar-right button:hover {
+  background: #d1d5db;        /* darker gray on hover */
+  color: #1f2937;             /* darker icon */
 }
-
-.main {
-  max-width: 100%;
-  width: 1400px;
-  display: flex;
-
-  .left {
-    height: 100vh;
-    overflow: auto;
-    width: 210px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
 
     .profile {
-      text-align: center;
-      margin-bottom: 30px;
-
-      h2 {
-        margin-bottom: 10px;
-        color: #ffffff;
-      }
-
-      .logout-btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 8px 15px;
-        text-decoration: none;
-        border-radius: 5px;
-      }
-
-      .logout-btn:hover {
-        background-color: #d8c5c5;
-      }
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    .nav-links {
+    .profile img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    .profile-info p:first-child {
+      font-weight: 600;
+    }
+
+    .profile-info p:last-child {
+      color: #6b7280;
+      font-size: 0.75rem;
+    }
+
+    /* Layout */
+    .layout {
+      display: flex;
+      flex: 1;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      background: #f9fafb;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+      padding: 1.5rem;
       display: flex;
       flex-direction: column;
-      width: 100%;
-      color: #ffffff;
-
-      a {
-        font-size: small;
-        font-weight: lighter;
-        display: flex;
-        align-items: center;
-        text-align: left;
-        padding: 10px 10px;
-        text-decoration: none;
-        border-radius: 5px;
-        transition: all 0.1s ease;
-        color: #bbbaa6;
-
-      }
-
-      .active-link {
-        color: #e0e40a !important;
-        font-weight: normal;
-
-      }
-
-      .active-sublink {
-        display: flex;
-        justify-content: center;
-        color: #e4480a !important;
-        font-weight: normal;
-      }
-
-      .dropdown:has(.active-sublink)  {
-        height: 80px;
-      }
-
-      .unq {
-        color: #bbbaa67e;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-      }
-
-      .unq:hover {
-        background-color: transparent;
-        color: #f0b49c;
-        font-weight: normal;
-      }
-
-      .trigger {
-        width: 100%;
-      }
-
-      .uou {
-        display: flex;
-        position: absolute;
-        top: -100px;
-        transition: all 0.3s ease;
-        opacity: 0;
-      }
-
-      .dropdown {
-        display: flex;
-        flex-direction: column;
-        transition: all 0.3s ease;
-        height: 45px;
-      }
-
-      .dropdown:hover .uou {
-        position: inherit;
-        opacity: 1;
-        transform: translateY(0);
-      }
-
-      .dropdown:hover {
-        height: 80px;
-      }
-
-      a:hover {
-        font-weight: normal;
-        color: #fffce4;
-      }
-    }
-  }
-
-    .right {
-        background-color: #fffce1 !important;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-        border-top: 1px #1e1e1e6e solid;
-        border-left: 1px #1e1e1e6e solid;
-        border-right: 1px #1e1e1e6e solid;
-        width: calc(100% - 40px);
-        padding: 20px;
-        overflow-y: auto;
+      justify-content: space-between;
+      height: 84vh;
+      position: sticky;
+      top: 20px;
+      border-radius: 20px;
+      margin-top: 20px;
+      margin-left: 20px;
     }
 
-    .tab-buttons {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 15px;
+    .menu-section {
+      margin-bottom: 2rem;
     }
 
-    .tab-btn {
-        padding: 8px 16px;
-        border: none;
-        border-radius: 6px;
-        background: rgb(186, 218, 255);
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
+    .menu-title {
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #9ca3af;
+      margin-bottom: 0.5rem;
     }
 
-    .tab-btn:hover {
-        background: rgb(150, 190, 250);
+    .menu a {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      color: #4b5563;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      transition: background 0.3s, color 0.3s;
+      margin-bottom: 0.3rem;
     }
 
-    .tab-btn.active {
-        background: #1e1e1e;
-        color: white;
+    .menu a svg {
+      width: 18px;
+      height: 18px;
     }
 
-    .code-block {
-        height: calc(100% - 150px);
-        position: relative;
-        background: #1e1e1e;
-        color: #f8f8f2;
-        padding: 15px;
-        border-radius: 10px;
-        font-family: "Fira Code", monospace;
-        font-size: 14px;
-        line-height: 1.4;
-        overflow-x: auto;
-        overflow-y: auto;
-        display: none;
+    .menu a:hover {
+      background: #f3f4f6;
     }
 
-    .code-block.active {
-    display: block;
+    .menu a.active {
+      background: #0a1444;
+      color: white;
     }
-
-    .copy-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background: rgb(186, 218, 255);
-        border: none;
-        padding: 6px 10px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 12px;
-        font-weight: bold;
-        transition: all 0.3s ease;
-    }
-
-    .copy-btn:hover {
-    background: rgb(150, 190, 250);
-  }
-
-}
-
-.lgt {
-    font-size: small;
-    margin-top: 0 !important;
-    width: 100%;
-    border: none;
-    display: flex;
-    align-items: center;
-    text-align: left;
-    padding: 10px 10px;
-    color: #bbbaa6;
-    border-radius: 5px;
-    transition: all 0.1s ease;
-    justify-content: left;
-    background-color: rgba(255, 255, 255, 0);
-    transition: all 0.3s ease;
-}
-
-.lgt:hover {
-    cursor: pointer;
-    font-weight: normal;
-    color: #ff6a83;
-}
-
-svg {
-    margin-right: 0.5rem;
-}
-
