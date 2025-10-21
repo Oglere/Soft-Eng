@@ -63,7 +63,7 @@ html {
                     letter-spacing: 3px;
                     text-decoration: none;
                 }
-
+                
                 .ahh {
                     height: 40px;
                 }
@@ -358,12 +358,14 @@ svg {
 
             <h4 style="margin: 0 0 10px 0; font-size: 16px;">Pending Studies</h4>
             @if($pendingList->count() > 0)
-                @foreach($pendingList as $item)
-                    <div style="padding: 8px 5px; border-bottom: 1px solid #eee;">
-                        <p style="margin: 0; font-weight: bold;">{{ $item->title }}</p>
-                        <small style="color: gray;">{{ $item->date_submitted }}</small>
-                    </div>
-                @endforeach
+               @foreach($pendingList as $item)
+    <a href="{{ url('/teacher/review-document') }}" 
+       style="display: block; text-decoration: none; color: black; padding: 8px 5px; border-bottom: 1px solid #eee;">
+        <p style="margin: 0; font-weight: bold;">{{ $item->title }}</p>
+        <small style="color: gray;">{{ $item->date_submitted }}</small>
+    </a>
+@endforeach
+
             @else
                 <p style="color: gray; text-align: center;">No new pending studies.</p>
             @endif
@@ -472,13 +474,30 @@ svg {
         <footer>
         </footer>
     </main>
-    <script>
+  <script>
     const bell = document.getElementById('notifBell');
     const popup = document.getElementById('notifPopup');
+    const notifBadge = document.getElementById('notifBadge'); // 👈 Get badge element
 
     bell.addEventListener('click', function() {
-        popup.style.display = (popup.style.display === 'none' || popup.style.display === '')
+        // Toggle popup visibility
+        popup.style.display = (popup.style.display === 'none' || popup.style.display === '') 
             ? 'block' : 'none';
+
+        // 👇 Hide red badge when clicked
+        if (notifBadge) {
+            notifBadge.style.display = 'none';
+        }
+
+        // OPTIONAL: tell Laravel that notifications were seen
+        fetch("{{ route('teacher.markNotifSeen') }}", {
+            method: "POST",
+            headers: {
+                "X-CSRF-TOKEN": "{{ csrf_token() }}",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({})
+        });
     });
 
     // Close popup when clicking outside
@@ -488,6 +507,7 @@ svg {
         }
     });
 </script>
+
 
 </body>
 </html>

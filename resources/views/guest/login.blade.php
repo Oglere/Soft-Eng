@@ -21,7 +21,7 @@
                 <div class="input-wrapper">
                     <div class="input-group">
                         <svg xmlns="http://www.w3.org/2000/svg"
-                            width="20" height="20" fill="none"
+                            width="25" height="20" fill="none"
                             stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round"
                             class="feather feather-user">
@@ -42,7 +42,7 @@
                 <div class="input-wrapper">
                     <div class="input-group">
                         <svg xmlns="http://www.w3.org/2000/svg"
-                            width="20" height="20" fill="none"
+                            width="25" height="20" fill="none"
                             stroke="currentColor" stroke-width="2"
                             stroke-linecap="round" stroke-linejoin="round"
                             class="feather feather-lock">

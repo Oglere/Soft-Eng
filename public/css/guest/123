@@ -7,6 +7,7 @@ body {
     min-height: 100vh;
     height: 100%;
 }
+
 header {
     position: sticky;
     top: 0;
@@ -19,11 +20,13 @@ header {
     color: #fffce4;
     z-index: 1000;
 }
+
 .header-left {
     display: flex;
     align-items: center;
     gap: 15px;
 }
+/* Nav for desktop */
 .header-nav {
     display: flex;
     align-items: center;
@@ -36,7 +39,7 @@ header {
     font-size: 22px;
     background: none;
     border: none;
-    color: black;
+    color: white;
     cursor: pointer;
 }
 
@@ -76,25 +79,24 @@ header {
 .loginbutton:hover {
     opacity: 0.8;
 }
-/* Main should grow to fill available space */
+
 main {
-    flex: 1; /* ✅ This ensures main takes all remaining height */
+    height: 100%;
     text-align: center;
+    min-height: calc(95vh - 140px);
     background-color: #fffce4 !important;
-    padding: 20px;
 }
 
-/* Footer always stays at the bottom */
 footer {
-    border-top: 1px solid #0e100f;
+    border-top: 1px #0e100f solid;
     padding: 10px;
     background-color: #fffce4;
     color: #0e100f;
-    text-align: center;
 }
+
 .brand {
     flex-direction: column;
-    margin-top: 00px;
+    margin-top: 80px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -190,19 +192,21 @@ footer {
     transform: translateY(-5px);
 }
 
-/* When checkbox is checked or card is active */
-.category-card:has(input:checked),
-.category-card.active {
-    background-color: #0c1c43;
-    color: white;
-    border-color: #0c1c43;
-    box-shadow: 0 4px 8px rgba(12, 28, 67, 0.15);
+/* When checkbox is checked */
+.category-card input:checked + img,
+.category-card input:checked + img + span {
+    filter: brightness(0.9);
 }
 
-/* Make the image turn white when active */
-.category-card:has(input:checked) img,
-.category-card.active img {
-    filter: brightness(0) invert(1);
+.category-card input:checked ~ * {
+    background-color: #e6f0ff;
+}
+
+.category-card:has(input:checked) {
+    background-color: #e6f0ff;
+    border-color: #00346b;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.15);
+    transform: translateY(-5px);
 }
 
 /* Image and text styling */
@@ -211,55 +215,19 @@ footer {
     height: 100px;
     object-fit: contain;
     pointer-events: none;
-    transition: 0.3s ease;
 }
 
-/* Smooth text color transition */
 .category-card span {
-    transition: color 0.3s ease;
+    font-size: 14px;
+    font-weight: bold;
+    color: #0c1c43;
+    pointer-events: none;
 }
 
-/* 📱 Mobile View: Keep card design, remove images */
-@media (max-width: 768px) {
-    .categories {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        flex-wrap: wrap;
-        padding: 10px;
-    }
-
-    .category-card {
-        width: 200px;
-        height: 20px;
-        border: 2px solid #0c1c43;
-        border-radius: 8px;
-        padding: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: white;
-        transition: 0.3s;
-        cursor: pointer;
-    }
-
-    .category-card:hover {
-        background-color: #e6f0ff;
-        transform: translateY(-5px);
-    }
-
-    /* Hide only the image */
-    .category-card img {
-        display: none;
-    }
-
-    /* Keep text nicely centered */
-    .category-card span {
-        font-size: 14px;
-        font-weight: bold;
-        color: #0c1c43;
-        text-align: center;
-    }
+/* Smooth transitions */
+.category-card,
+.category-card * {
+    transition: all 0.25s ease;
 }
 
 /* User Dropdown */
@@ -343,6 +311,40 @@ footer {
     transform: translateY(0);
 }
 
+/* Mobile */
+@media (max-width: 768px) {
+    .user-toggle span {
+        display: none;
+    }
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    header {
+        padding: 10px 20px;
+    }
+
+    .header-nav {
+        position: absolute;
+        top: 70px;
+        right: 0;
+        background: #0c1c43;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 200px;
+        display: none;
+        padding: 15px;
+    }
+
+    .header-nav.active {
+        display: flex;
+    }
+
+    .hamburger {
+        display: block;
+    }
+}
+
 .date-range {
     display: flex;
     justify-content: center;
@@ -379,5 +381,11 @@ footer {
 .date-field input[type="date"]:hover,
 .date-field input[type="date"]:focus {
     background-color: #e6f0ff;
+    border-color: #0e100f;
+}
+
+.category-card.active {
+    background-color: #e6f0ff;
+    transform: translateY(-5px);
     border-color: #0e100f;
 }

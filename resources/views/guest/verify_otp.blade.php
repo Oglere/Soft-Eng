@@ -55,6 +55,87 @@
     </div>
 </div>
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const inputs = document.querySelectorAll(".otp-box");
+
+    inputs.forEach((input, index) => {
+
+        // Handle typing individual digits
+        input.addEventListener("input", (e) => {
+            e.target.value = e.target.value.replace(/[^0-9]/g, "");
+
+            if (e.target.value && index < inputs.length - 1) {
+                const allPrevFilled = [...inputs].slice(0, index + 1).every(inp => inp.value);
+                if (allPrevFilled) {
+                    inputs[index + 1].focus();
+                }
+            }
+        });
+
+        // Prevent skipping ahead when earlier boxes are empty
+        input.addEventListener("focus", () => {
+            for (let i = 0; i < index; i++) {
+                if (!inputs[i].value) {
+                    inputs[i].focus();
+                    break;
+                }
+            }
+        });
+
+        // Handle Tab and Backspace behavior
+        input.addEventListener("keydown", (e) => {
+            if (e.key === "Tab") {
+                const allPrevFilled = [...inputs].slice(0, index).every(inp => inp.value);
+                if (!allPrevFilled) {
+                    e.preventDefault();
+                    for (let i = 0; i < index; i++) {
+                        if (!inputs[i].value) {
+                            inputs[i].focus();
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (e.key === "Backspace" && !e.target.value && index > 0) {
+                inputs[index - 1].focus();
+            }
+        });
+
+        // ✅ Handle pasting the entire 6-digit OTP
+        input.addEventListener("paste", (e) => {
+            e.preventDefault();
+            const pasteData = (e.clipboardData || window.clipboardData).getData("text");
+            const digits = pasteData.replace(/\D/g, "").slice(0, 6); // only numbers, max 6 digits
+
+            if (digits.length > 0) {
+                inputs.forEach((inp, i) => {
+                    inp.value = digits[i] || "";
+                });
+                // Focus on the last filled input
+                const lastFilledIndex = Math.min(digits.length - 1, inputs.length - 1);
+                inputs[lastFilledIndex].focus();
+            }
+        });
+    });
+});
+
+// ✅ Collect all digits into hidden input on form submit
+document.getElementById('otpForm').addEventListener('submit', function(e) {
+    const digits = Array.from(document.querySelectorAll('.otp-box')).map(i => i.value).join('');
+    document.getElementById('otpInput').value = digits;
+});
+</script>
+
+<script>
+document.getElementById('otpForm').addEventListener('submit', function(e) {
+    const digits = Array.from(document.querySelectorAll('.otp-box')).map(i => i.value).join('');
+    document.getElementById('otpInput').value = digits;
+});
+</script>
+@endsection
+
 {{-- Styles --}}
 <style>
     .recovery-wrapper {
@@ -167,63 +248,3 @@
     }
 
 </style>
-
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    const inputs = document.querySelectorAll(".otp-box");
-
-    inputs.forEach((input, index) => {
-
-
-        input.addEventListener("input", (e) => {
-            e.target.value = e.target.value.replace(/[^0-9]/g, "");
-
-
-            if (e.target.value && index < inputs.length - 1) {
-                const allPrevFilled = [...inputs].slice(0, index + 1).every(inp => inp.value);
-                if (allPrevFilled) {
-                    inputs[index + 1].focus();
-                }
-            }
-        });
-
-
-        input.addEventListener("focus", () => {
-            for (let i = 0; i < index; i++) {
-                if (!inputs[i].value) {
-                    inputs[i].focus();
-                    break;
-                }
-            }
-        });
-
-
-        input.addEventListener("keydown", (e) => {
-            if (e.key === "Tab") {
-                const allPrevFilled = [...inputs].slice(0, index).every(inp => inp.value);
-                if (!allPrevFilled) {
-                    e.preventDefault();
-                    for (let i = 0; i < index; i++) {
-                        if (!inputs[i].value) {
-                            inputs[i].focus();
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if (e.key === "Backspace" && !e.target.value && index > 0) {
-                inputs[index - 1].focus();
-            }
-        });
-    });
-});
-</script>
-
-<script>
-document.getElementById('otpForm').addEventListener('submit', function(e) {
-    const digits = Array.from(document.querySelectorAll('.otp-box')).map(i => i.value).join('');
-    document.getElementById('otpInput').value = digits;
-});
-</script>
-@endsection

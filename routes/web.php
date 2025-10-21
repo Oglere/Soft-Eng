@@ -67,6 +67,7 @@ Route::middleware('auth.session:teacher')->prefix('teacher')->group(function (){
     Route::post('/review-document/{id}/reject', [TeacherController::class, 'pdf_reject'])->name('teacher.reject');
     Route::post('/review-document/{id}/revert', [TeacherController::class, 'pdf_revert'])->name('teacher.revert');
 
+    Route::post('/mark-notif-seen', [TeacherController::class, 'markNotifSeen'])->name('teacher.markNotifSeen');
     Route::post('/account_setting/verify', [TeacherController::class, 'verify_identity'])->name('teacher.verify_identity');
     Route::post('/account_setting/update', [TeacherController::class, 'update_account'])->name('teacher.update_account');
     Route::post('/account_setting/cancel', [TeacherController::class, 'cancel_update'])->name('teacher.cancel_update');

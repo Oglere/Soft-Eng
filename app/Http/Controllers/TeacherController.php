@@ -7,29 +7,60 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
 use App\Models\DocumentRepository;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class TeacherController extends Controller
 {
-    public function dashboard_page() {
-        $user = User::where("user_id", auth()->id())->first();
 
-        $pending = DocumentRepository::where('teacher_id', $user->user_id)
-            ->where('status', 'pending')->count();
+    public function __construct()
+{
+    $this->middleware(function ($request, $next) {
+        $user = auth()->user();
 
-        $approved = DocumentRepository::where('teacher_id', $user->user_id)
-            ->where('status', 'approved')->count();
+        if ($user) {
+            $pending = \App\Models\DocumentRepository::where('teacher_id', $user->user_id)
+                ->where('status', 'pending')
+                ->count();
 
-        $rejected = DocumentRepository::where('teacher_id', $user->user_id)
-            ->where('status', 'rejected')->count();
+            $pendingList = \App\Models\DocumentRepository::where('teacher_id', $user->user_id)
+                ->where('status', 'pending')
+                ->orderBy('date_submitted', 'desc')
+                ->take(5)
+                ->get();
 
-        $pendingList = DocumentRepository::where('teacher_id', $user->user_id)
-            ->where('status', 'pending')
-            ->orderBy('date_submitted', 'desc')
-            ->take(5) // show last 5 pending
-            ->get();
+            view()->share([
+                'pending' => $pending,
+                'pendingList' => $pendingList,
+            ]);
+        }
 
-        return view('teacher.dashboard', compact('user', 'pending', 'approved', 'rejected', 'pendingList'));
-    }
+        return $next($request);
+    });
+}
+
+
+public function dashboard_page() {
+    $user = User::where("user_id", auth()->id())->first();
+
+    $pending = DocumentRepository::where('teacher_id', $user->user_id)
+        ->where('status', 'pending')->count();
+
+    $approved = DocumentRepository::where('teacher_id', $user->user_id)
+        ->where('status', 'approved')->count();
+
+    $rejected = DocumentRepository::where('teacher_id', $user->user_id)
+        ->where('status', 'rejected')->count();
+
+    $pendingList = DocumentRepository::where('teacher_id', $user->user_id)
+        ->where('status', 'pending')
+        ->orderBy('date_submitted', 'desc')
+        ->take(5)
+        ->get();
+
+    return view('teacher.dashboard', compact('user', 'pending', 'approved', 'rejected', 'pendingList'));
+}
+
+
 
     public function review_page(Request $request)
     {
@@ -168,4 +199,17 @@ class TeacherController extends Controller
     return redirect()->route('teacher.account_setting')
         ->with('cancel_message', 'Account update canceled.');
     }
+
+    public function markNotifSeen()
+{
+    $teacherId = auth()->id();
+
+    DB::table('document_repository')
+        ->where('teacher_id', $teacherId)
+        ->where('status', 'pending')
+        ->update(['archived' => 1]); // or create a 'seen' column if you prefer
+
+    return response()->json(['success' => true]);
+}
+
 }

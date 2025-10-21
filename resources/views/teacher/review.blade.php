@@ -1,3 +1,5 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
 @extends('layout.teacher')
 
 @section('right')
@@ -114,6 +116,31 @@
 
 .review-table a:hover {
     text-decoration: underline;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+}
+
+.status-pending {
+    background-color: #ffc107;
+}
+.status-approved {
+    background-color: #198754;
+}
+.status-rejected {
+    background-color: #dc3545;
+}
+.status-revision {
+    background-color: #0d6efd;
 }
 
 /* Action Buttons */
@@ -233,6 +260,7 @@
                     <th>Sent By</th>
                     <th>Date</th>
                     <th>Study Type</th>
+                    <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -248,21 +276,66 @@
                             {{ optional(\App\Models\User::where('user_id', $doc->student_id)->first())->first_name }}
                             {{ optional(\App\Models\User::where('user_id', $doc->student_id)->first())->last_name }}
                         </td>
-
                         <td>{{ \Carbon\Carbon::parse($doc->date_submitted)->format('d/m/y') }}</td>
                         <td>{{ $doc->study_type }}</td>
+
+                        {{-- Status --}}
+                        <td>
+                            @php
+                                $status = strtolower($doc->status);
+                            @endphp
+
+                            @if ($status === 'pending')
+                                <span class="status-badge status-pending"><i class="bi bi-hourglass-split"></i> Pending</span>
+                            @elseif ($status === 'approved')
+                                <span class="status-badge status-approved"><i class="bi bi-check-circle-fill"></i> Approved</span>
+                            @elseif ($status === 'rejected')
+                                <span class="status-badge status-rejected"><i class="bi bi-x-circle-fill"></i> Rejected</span>
+                            @elseif ($status === 'needs revision' || $status === 'revision')
+                                <span class="status-badge status-revision"><i class="bi bi-pencil-square"></i> Revision</span>
+                            @endif
+                        </td>
+
+                        {{-- Action --}}
                         <td class="action-buttons">
-                            <a href="{{ route('teacher.review.list', $doc->document_id) }}" class="btn btn-success"><i class="bi bi-eye"></i></a>
-                            <a href="{{ route('teacher.review.list', $doc->document_id) }}" class="btn btn-primary"><i class="bi bi-pencil-square"></i></a>
-                            <form method="POST" action="">
+                            <a href="{{ route('teacher.pdf.reader', $doc->document_id) }}" class="btn btn-outline-success btn-sm" title="View Document">
+                                <i class="bi bi-eye-fill"></i>
+                            </a>
+
+                            <form method="POST" action="{{ route('teacher.approve', $doc->document_id) }}">
                                 @csrf
-                                <button class="btn btn-danger"><i class="bi bi-x-lg"></i></button>
+                                <button type="submit" class="btn btn-success btn-sm" title="Approve">
+                                    <i class="bi bi-check-circle-fill"></i>
+                                </button>
                             </form>
+
+                            <form method="POST" action="{{ route('teacher.revise', $doc->document_id) }}">
+                                @csrf
+                                <button type="submit" class="btn btn-primary btn-sm" title="Mark for Revision">
+                                    <i class="bi bi-pencil-square"></i>
+                                </button>
+                            </form>
+
+                            <form method="POST" action="{{ route('teacher.reject', $doc->document_id) }}">
+                                @csrf
+                                <button type="submit" class="btn btn-danger btn-sm" title="Reject">
+                                    <i class="bi bi-x-circle-fill"></i>
+                                </button>
+                            </form>
+
+                            @if(in_array($doc->status, ['Approved', 'Rejected', 'Needs Revision']))
+                                <form method="POST" action="{{ route('teacher.revert', $doc->document_id) }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-warning btn-sm" title="Revert to Pending">
+                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                    </button>
+                                </form>
+                            @endif
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-muted">No studies found</td>
+                        <td colspan="6" class="text-muted">No studies found</td>
                     </tr>
                 @endforelse
             </tbody>

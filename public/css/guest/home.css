@@ -9,7 +9,7 @@
     background: #fff;
     border-radius: 16px;
     padding: 50px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
     text-align: center;
     max-width: 600px;
     width: 100%;
@@ -35,7 +35,8 @@
     flex-wrap: wrap;
 }
 
-.welcome-btn, .logout-btn {
+.welcome-btn,
+.logout-btn {
     padding: 12px 20px;
     border-radius: 8px;
     font-weight: 500;
