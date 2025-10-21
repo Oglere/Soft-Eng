@@ -1,213 +1,262 @@
-.right h1 {
-    font-weight: bold;
-    color: black;
-    font-size: 2rem;
-    text-align: center;
+
+    /* Main */
+    .main {
+      flex: 1;
+      padding: 1.5rem 2rem;
+    }
+
+    .main h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    /* Search bar + filters */
+    .search-filter {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .search-bar {
+  flex: 1;
+  position: relative;
+  max-width: 400px;
 }
 
-/* ─────────────────────────────
-   Message Cards
-────────────────────────────── */
-.message-card {
-    width: 1080px;   
-    height: 80px;
-    border-radius: 12px;
-    padding: 25px;
-    margin: 10px;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #f5f5f5;
-    color: #000000;
-    border: 1px solid black;
-    transition: box-shadow 0.8s ease;
+.search-bar .search-icon {
+  position: absolute;
+  left: 0.9rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  color: #9ca3af;
+  pointer-events: none;
 }
 
-.message-card:hover {
-    cursor: pointer;
-    box-shadow: 3px 3px 1px #04128e;
+.search-bar input {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem; /* ← left padding adjusted for icon */
+  border: 1px solid #d1d5db;
+  border-radius: 2rem;
+  outline: none;
+  background: #f9fafb;
+  font-size: 0.9rem;
 }
 
-.left-col, .right-col {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
 
-.left-col a {
-    font-weight: bold;
-    font-size: 14px;
-    color: #000;
-    text-decoration: underline;
-}
+    .filters {
+      display: flex;
+      gap: 0.5rem;
+    }
 
-.left-meta, .right-meta {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-    font-size: 12px;
-    color: #000;
-}
+    .filters button {
+      border: 1px solid #d1d5db;
+      background: white;
+      border-radius: 2rem;
+      padding: 0.5rem 1rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
 
-.study-sections {
-    margin-top: 50%;
-    padding: 0 20px;
-    text-align: center;
-}
+    .filters button.active, .filters button:hover {
+      background: #0a1444;
+      color: white;
+      border-color: #1e3a8a;
+    }
 
-.study-sections h2 {
-    font-weight: bold;
-    color: black;
-    margin: 40px 0;
-    font-size: 24px;
-}
+    /* Table */
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
 
-/* ─────────────────────────────
-   Table Controls Layout
-────────────────────────────── */
-.table-controls {
-    display: flex;
-    margin-bottom: 15px;
-}
+    .table thead {
+      background: #0a1444;
+      color: white;
+    }
 
-.filter-search-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    width: 100%;
-}
+    .table th, .table td {
+      text-align: left;
+      padding: 0.9rem 1rem;
+      font-size: 0.9rem;
+    }
 
-/* ─────────────────────────────
-   Search Box Styling
-────────────────────────────── */
-.search-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    height: 35px;
-}
+    .table tbody tr:nth-child(even) {
+      background: #fffce4;
+    }
 
-.search-wrapper input {
-    border: 1px solid #ccc;
-    border-radius: 6px 0 0 6px;
-    outline: none;
-    width: 220px;
-    padding: 8px 10px;
-    font-size: 0.95rem;
-    height: 100%;
-}
+    .table td .status {
+      padding: 0.3rem 0.8rem;
+      border-radius: 1rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-align: center;
+    }
 
-/* 🔍 Search icon background block */
-.search-icon {
-    background-color: #04128e; /* ✅ Changeable background */
-    width: 40px; /* ✅ Adjustable width */
-    height: 100%;
-    padding: 8px;
-    border-radius: 0 6px 6px 0;
-    box-sizing: border-box;
-    color: white;
-    transition: background-color 0.3s ease;
-}
-
-.search-icon:hover {
-    background-color: #2a3bd6;
-}
-
-/* ─────────────────────────────
-   Filter Dropdown
-────────────────────────────── */
-#statusFilter {
-    padding: 7px 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    outline: none;
-    height: 100%;
-}
-
-/* ─────────────────────────────
-   Table Styling
-────────────────────────────── */
-.table-container {
-    overflow-x: auto;
-    height: 100%;
-    background-color: #ffffff;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background: #f8f9ff;
-    border-radius: 10px;
-    overflow: hidden;
-}
-
-thead {
-    background: #04128e;
-    color: white;
-}
-
-th, td {
-    padding: 12px 16px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-td a {
-    color: #04128e;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-td a:hover {
-    text-decoration: underline;
-}
-
-/* ─────────────────────────────
-   Status Labels
-────────────────────────────── */
-.status {
-    display: inline-block;
-    min-width: 60px;
-    text-align: center;
-    border-radius: 5px;
-    font-size: 10px;
-    padding: 5px 10px;
-    color: white;
-}
-
-/* ✅ Easily changeable background colors */
-.status.pending  { background-color: #000000; }
-.status.approved { background-color: #00d407; }
-.status.rejected { background-color: #ff1900a9; }
-.status.revision { background-color: #17a2b8; }
-.status.unknown  { background-color: #6c757d; }
-
-/* ─────────────────────────────
-   Edit Button
-────────────────────────────── */
-.edit-btn {
-    display: inline-flex;
-    align-items: center;
+    .status.approved { background: #cbd5e1; color: #1e293b; }
+    .status.revision { background: #fef9c3; color: #92400e; }
+    .status.rejected { background: #fecaca; color: #7f1d1d; }
+    .status.pending { background: #fed7aa; color: #78350f; }
+.action-btn {
+    background-color: #f3f4f6;
+    border: none;        /* remove border */
+    border-radius: 4px;    /* remove rounded corners */
+    display: inline-flex;      /* keep it inline with other buttons */
+    align-items: center;       /* vertical center of SVG */
     justify-content: center;
-    padding: 5px;
-    background: #e8ebff;
-    border-radius: 6px;
-    transition: 0.2s;
+    padding: 2px 3px  /* horizontal center of SVG */
 }
 
-.edit-btn:hover {
-    background: #04128e;
-}
-
-.edit-icon {
+.action-btn svg {
     width: 20px;
     height: 20px;
-    color: #04128e;
-    transition: color 0.2s;
+    color: #1e3a8a;
+    display: block;            /* prevents inline spacing issues */
 }
 
-.edit-btn:hover .edit-icon {
+
+    /* Make title links plain text like submitted date */
+.table td a.plain-link {
+    text-decoration: none; /* removes underline */
+    color: #374151; /* same as table text color or adjust to match submitted date */
+}
+/* Status badges - consistent style with different colors */
+.status {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Status colors */
+.status.approved {
+    background-color: #d1fae5; /* light green */
+    color: #065f46; /* dark green */
+}
+.status.revision {
+    background-color: #fef3c7; /* light yellow */
+    color: #92400e; /* dark yellow/orange */
+}
+.status.rejected {
+    background-color: #fee2e2; /* light red */
+    color: #991b1b; /* dark red */
+}
+.status.pending {
+    background-color: #ffedd5; /* light orange */
+    color: #9a3412; /* dark orange */
+}
+.status.unknown {
+    background-color: #e5e7eb; /* gray */
+    color: #374151; /* dark gray */
+}
+
+.pagination-container {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: flex-end; /* move to the opposite side (right) */
+
+
+}
+
+.pagination-btn {
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.25rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    color: #1e3a8a;
+    background: white;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.pagination-btn:hover:not(.active):not(.disabled) {
+    background: #0a1444;
     color: white;
+    border-color: #1e3a8a;
+}
+
+.pagination-btn.active {
+    background: #0a1444;
+    color: white;
+
+    border-color: #1e3a8a;
+}
+
+.pagination-btn.disabled {
+    color: #9ca3af;
+    cursor: not-allowed;
+    background: #f9fafb;
+    border-color: #d1d5db;
+}
+/* Modal styling same as before */
+.modal {
+    display: none;
+    position: fixed;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index:1000;
+}
+
+.modal-content {
+    background:#fff;
+    border-radius:12px;
+    padding:2rem;
+    width:90%;
+    max-width:700px;
+    max-height:80%;
+    overflow-y:auto;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    position:relative;
+    animation: slideDown 0.4s ease;
+}
+
+.modal-close {
+    position:absolute;
+    top:10px;
+    right:10px;
+    background:#ff5e5e;
+    border:none;
+    color:white;
+    font-size:1.5rem;
+    font-weight:bold;
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    cursor:pointer;
+    transition:background 0.2s;
+}
+.modal-close:hover { background:#ff3b3b; }
+
+.scrollable-text {
+    max-height:150px;
+    overflow-y:auto;
+    background:#f5f5f5;
+    padding:0.5rem;
+    border-radius:6px;
+    margin-bottom:1rem;
+}
+
+.modal-body p { margin-bottom:0.8rem; line-height:1.5; }
+
+@keyframes slideDown {
+    from { transform:translateY(-50px); opacity:0; }
+    to { transform:translateY(0); opacity:1; }
 }

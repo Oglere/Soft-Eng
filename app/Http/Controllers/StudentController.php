@@ -6,8 +6,9 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\DocumentRepository;
 use App\Models\User;
 
-class StudentController extends Controller{
 
+class StudentController extends Controller
+{
     /**
      * Display the student dashboard page.
      */
@@ -46,7 +47,7 @@ class StudentController extends Controller{
     /**
      * Display the student submission page.
      */
-     public function submission()
+    public function submission()
     {
         // Fetch all teachers (assuming role field = 'teacher')
         $teachers = \App\Models\User::where('role', 'teacher')->get();
@@ -55,41 +56,52 @@ class StudentController extends Controller{
     }
 
 
-   public function submit_document(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'abstract' => 'required|string',
-            'teacher_id' => 'required|exists:users,user_id',
-            'publication_date' => 'nullable|date',
-            'document_types' => 'required|array',
-            'document_types.*' => 'string',
-            'file' => 'required|mimes:pdf|max:25600', // 25MB
-        ]);
+public function submit_document(Request $request)
+{
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'abstract' => 'required|string|max:10000',
+        'teacher_id' => 'required|exists:users,user_id',
+        'publication_date' => 'nullable|date',
+        'document_types' => 'required|array',
+        'document_types.*' => 'string',
+        'file' => 'required|mimes:pdf|max:25600', // 25MB
+    ]);
 
-        // Upload file to storage/app/public/documents
-        $filePath = $request->file('file')->store('documents', 'public');
+    // Check if title already exists for this student
+    $existing = \App\Models\DocumentRepository::where('title', $request->title)
+                ->where('student_id', Auth::id())
+                ->first();
 
-        // ✅ Save document with 'abstract' included in metadata
-        DocumentRepository::create([
-            'title' => $request->title,
-            'student_id' => Auth::id(),
-            'teacher_id' => $request->teacher_id,
-            'citation' => $request->citations,
-            'metadata' => json_encode([
-                'abstract' => $request->abstract, // 👈 added abstract here
-                'keywords' => $request->keywords,
-                'document_types' => $request->document_types,
-            ]),
-            'file' => $filePath,
-            'status' => 'pending',
-            'date_submitted' => now(),
-            'study_type' => implode(', ', $request->document_types),
-        ]);
-
-        return redirect()->route('student.submission')
-            ->with('success', 'Document submitted successfully!');
+    if ($existing) {
+        return back()->withInput()->withErrors(['title' => 'This title already exists. Please choose a different one.']);
     }
+
+    // Upload file to storage/app/public/documents
+    $filePath = $request->file('file')->store('documents', 'public');
+
+    // Save document
+    DocumentRepository::create([
+        'title' => $request->title,
+        'abstract' => $request->abstract,
+        'student_id' => Auth::id(),
+        'teacher_id' => $request->teacher_id,
+        'citation' => $request->citations,
+        'metadata' => json_encode([
+            'abstract' => $request->abstract,
+            'keywords' => $request->keywords,
+            'document_types' => $request->document_types,
+        ]),
+        'file' => $filePath,
+        'status' => 'pending',
+        'date_submitted' => now(),
+        'study_type' => implode(', ', $request->document_types),
+    ]);
+
+    return redirect()->route('student.submission')
+        ->with('success', 'Document submitted successfully!');
+}
+
 
 
 
@@ -116,25 +128,29 @@ class StudentController extends Controller{
         return response()->json(['exists' => false]);
     }
 
-
     /**
      * Display the student document status page.
+     * ✅ Updated to support filtering from dashboard (approved, pending, etc.)
      */
-    public function doc_status_page()
+    public function doc_status_page(Request $request)
     {
-    $studentId = Auth::id();
-    // Fetch all documents for the logged-in student
-    $submissions = DocumentRepository::where('student_id', $studentId)
-                    ->latest('date_submitted')
-                    ->get();
+        $studentId = Auth::id();
+        $filter = $request->query('status', 'all'); // get ?status= from URL
 
-    return view('student.doc_status', compact('submissions'));
+        $query = DocumentRepository::where('student_id', $studentId);
+
+        if ($filter !== 'all') {
+            $query->where('status', $filter);
+        }
+
+        $submissions = $query->latest('date_submitted')->paginate(8); // 8 per page
+
+        return view('student.doc_status', compact('submissions', 'filter'));
+
     }
 
-
     /**
-     * Display the Pending Document.
-     * @param int $id The PDF ID.
+     * Display the individual document view (PDF, metadata, etc.)
      */
     public function viewStatus($id)
     {
@@ -151,7 +167,6 @@ class StudentController extends Controller{
         return view('student.view_status', compact('document'));
     }
 
-
     public function abandon($id)
     {
         $document = DocumentRepository::findOrFail($id);
@@ -159,101 +174,163 @@ class StudentController extends Controller{
         // Option 1: delete completely
         $document->delete();
 
-        // Option 2: mark as abandoned (safer)
-        // $document->status = 'abandoned';
-        // $document->save();
-
         return redirect()->route('student.submission')->with('success', 'Document abandoned successfully.');
     }
 
-
     /**
      * Display the PDF reader page for a specific ID.
-     * @param int $id The PDF ID.
      */
     public function pdf_reader_page($id)
     {
-        // You can use the $id variable to fetch the correct PDF.
-        // For example, return view('pdf-reader', ['pdfId' => $id]);
         return view('student.pdf-reader');
     }
-
 
     /**
      * Display the student account setting page.
      */
     public function account_setting_page()
     {
-        // Assuming there is an account_setting.blade.php view file.
         return view('student.account_setting');
     }
-
 
     /**
      * Verify student identity (password check before editing).
      */
-    public function verify_identity(Request $request)
-    {
-        $request->validate([
-            'password' => 'required|string',
+public function verify_identity(Request $request)
+{
+    $request->validate([
+        'password' => 'required|string',
+    ]);
+
+    $user = Auth::user();
+
+    // Get session-based attempt tracking
+    $attempts = session('login_attempts', 0);
+    $locked_until = session('locked_until');
+
+    // 🔒 Check if user is temporarily locked out
+    if ($locked_until && now()->lt($locked_until)) {
+        return back()->withErrors([
+            'login_error' => 'Please wait a few seconds before trying again.'
         ]);
+    }
 
-        $user = Auth::user();
+    // ❌ Incorrect password handling
+    if (!\Illuminate\Support\Facades\Hash::check($request->password, $user->password_hash)) {
+        $attempts++;
 
-        if (!\Illuminate\Support\Facades\Hash::check($request->password, $user->password_hash)) {
-            return back()->withErrors(['login_error' => 'Incorrect password. Please try again.']);
+        if ($attempts >= 3) {
+            // Lock user for 1 minute (60 seconds)
+            session([
+                'locked_until' => now()->addSeconds(60),
+                'login_attempts' => 0
+            ]);
+
+            return back()->withErrors([
+                'login_error' => ''
+            ]);
         }
 
-        // Store in session that user has verified identity
-        session(['account_verified' => true]);
+        // Save current attempt count
+        session(['login_attempts' => $attempts]);
 
-        return redirect()->route('student.account_setting');
+        return back()->withErrors([
+            'login_error' => "Incorrect password. Attempt $attempts of 3."
+        ]);
     }
+
+    // ✅ Correct password
+    session(['account_verified' => true]);
+    session()->forget(['login_attempts', 'locked_until']);
+
+    return redirect()->route('student.account_setting')->with('success', 'Identity verified successfully.');
+}
 
 
     /**
      * Update student account after verification.
      */
-    public function update_account(Request $request)
-    {
-        $user = Auth::user();
+public function update_account(Request $request)
+{
+    $user = Auth::user();
 
-        if (!session('account_verified')) {
-            return redirect()->route('student.account_setting')
-                ->withErrors(['login_error' => 'You must verify your identity before updating your account.']);
-        }
-
-        $request->validate([
-            'usn' => 'required|string|max:255',
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'password' => 'nullable|string|min:6',
-        ]);
-
-        $user->usn = $request->usn;
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->email = $request->email;
-
-        if ($request->filled('password')) {
-            $user->password_hash = \Illuminate\Support\Facades\Hash::make($request->password);
-        }
-
-        $user->save();
-
-        // Remove verification session after update
-        session()->forget('account_verified');
-
+    if (!session('account_verified')) {
         return redirect()->route('student.account_setting')
-            ->with('success', 'Account updated successfully!');
+            ->withErrors(['login_error' => 'You must verify your identity before updating your account.']);
     }
+
+    // Validate input
+    $validator = \Validator::make($request->all(), [
+        'email' => [
+            'nullable',
+            'string',
+            'email',
+            'max:255',
+            function ($attribute, $value, $fail) {
+                if ($value && !preg_match('/^[A-Za-z0-9._%+-]{1,15}@gmail\.com$/', $value)) {
+                    $fail('Email must be a Gmail address and max 15 characters before @.');
+                }
+            },
+        ],
+        'phone_number' => 'nullable|string|max:20',
+        'password' => 'nullable|string|min:6',
+    ]);
+
+    $validator->after(function ($validator) use ($request) {
+        $missing = [];
+        if (empty($request->first_name)) $missing[] = 'first name';
+        if (empty($request->last_name)) $missing[] = 'last name';
+        if (empty($request->email)) $missing[] = 'email';
+        if (empty($request->phone_number)) $missing[] = 'phone number';
+
+        if (!empty($missing)) {
+            $last = array_pop($missing);
+            $message = 'The ' . (empty($missing) ? $last : implode(', ', $missing) . ' and ' . $last) . ' fields are required.';
+            $validator->errors()->add('required', $message);
+        }
+    });
+
+    $validator->validate();
+
+    // ✅ Check if user changed anything
+    $noChanges =
+        $user->first_name === $request->first_name &&
+        $user->last_name === $request->last_name &&
+        $user->email === $request->email &&
+        $user->phone_number === $request->phone_number &&
+        !$request->filled('password');
+
+    if ($noChanges) {
+        return back()->withErrors(['no_changes' => 'No changes detected. Please update at least one field.']);
+    }
+
+    // ✅ Apply updates
+    $user->first_name = $request->first_name;
+    $user->last_name = $request->last_name;
+    $user->email = $request->email;
+    $user->phone_number = $request->phone_number;
+
+    if ($request->filled('password')) {
+        $user->password_hash = \Illuminate\Support\Facades\Hash::make($request->password);
+    }
+
+    $user->save();
+
+    session()->forget('account_verified');
+
+    return redirect()->route('student.account_setting')
+        ->with('success', 'Account updated successfully!');
+}
 
 
     public function cancel_update(Request $request)
-    {
-    // Just redirect back to account settings without triggering success SweetAlert
+{
+    // Forget verification session to go back to verify form
+    session()->forget('account_verified');
+
+    // Redirect with a SweetAlert message
     return redirect()->route('student.account_setting')
         ->with('cancel_message', 'Account update canceled.');
-    }
+}
+
 }

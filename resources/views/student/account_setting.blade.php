@@ -1,146 +1,209 @@
-@extends('layout.student')
-<link rel="stylesheet" href="{{ asset('') }}">
-<style>
-    .right h1 {
-        text-align: center;
-    }
-    .login-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: auto;
-    }
-    .login-box {
-        background: #e9e9e9;
-        padding: 40px;
-        border-radius: 20px;
-        text-align: center;
-        width: 400px;
-    }
-    .login-box h2 {
-        color: #0a0099;
-        margin-bottom: 20px;
-        font-weight: 800;
-    }
-    .login-box label {
-        display: block;
-        text-align: left;
-        font-weight: bold;
-        margin-bottom: 8px;
-    }
-    .login-box input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 18px;
-        border: none;
-        border-radius: 6px;
-        font-size: 16px;
-    }
-    .login-box button {
-        background: #0a0099;
-        color: white;
-        border: none;
-        padding: 12px 25px;
-        border-radius: 6px;
-        font-size: 16px;
-        cursor: pointer;
-    }
-    .login-box button:hover {
-        background: #05005c;
-    }
-    .error {
-        color: red;
-        margin-bottom: 15px;
-        font-size: 14px;
-    }
-    .register-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: auto;
-    }
-    .register-box {
-        background: #e9e9e9;
-        padding: 40px;
-        border-radius: 20px;
-        width: 450px;
-    }
-    .register-box h2 {
-        color: #0a0099;
-        margin-bottom: 20px;
-        font-weight: 800;
-        text-align: center;
-    }
-    .register-box label {
-        display: block;
-        font-weight: bold;
-        margin-top: 12px;
-        margin-bottom: 5px;
-    }
-    .register-box input {
-        width: 100%;
-        padding: 10px;
-        border: none;
-        border-radius: 6px;
-        font-size: 15px;
-        margin-bottom: 10px;
-    }
-    .register-box a, button {
-        background: #0a0099;
-        color: white;
-        border: none;
-        width: 100%;
-        padding: 12px;
-        border-radius: 6px;
-        font-size: 16px;
-        margin-top: 15px;
-        cursor: pointer;
-        text-align: center
-    }
-    .register-box button:hover {
-        background: #05005c;
-    }
-    .error {
-        color: red;
-        font-size: 14px;
-        margin-bottom: 8px;
-    }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D.A.R.A Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="{{ asset('css/sidenav.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/student/std_control.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-@section('right')
+</head>
+<body>
+  <div class="navbar">
+    <h1>D.A.R.A</h1>
 
-   <h1 style="font-weight: bold; color: black; font-size: 40px;">
-        ACCOUNT SETTINGS
-    </h1>
+    <div class="navbar-right">
+      <button>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+      </button>
 
-    <!-- Login Form -->
-    @if (!session('account_verified'))
-        <div class="login-container">
-            <div class="login-box" style="box-shadow: 5px 5px 1px #04128e;">
-                <h2>VERIFY YOUR IDENTITY</h2>
-                
-                @if ($errors->has('login_error'))
-                    <div class="error">{{ $errors->first('login_error') }}</div>
-                @endif
+      <div class="profile">
+        <div class="profile-info">
+          <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
 
-                <form method="POST" action="{{ route('student.verify_identity') }}">
-                    @csrf
-                    <label for="password">Enter your password</label>
-                    <input type="password" name="password" id="password" required>
-                    <button type="submit">Verify</button>
-                </form>
-            </div>
+          <p>Student</p>
         </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="layout">
+     <!-- Sidebar -->
+    <aside class="sidebar">
+      <div>
+        <div class="menu-section">
+          <p class="menu-title">Menu</p>
+          <div class="menu">
+            <a href="<?php echo e(url('/student/dashboard')); ?>">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M3 10h4v11H3zM10 3h4v18h-4zM17 6h4v15h-4z" />
+              </svg>
+              Dashboard
+            </a>
+            <a href="<?php echo e(url('/student/submission')); ?>" >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 4v16m8-8H4" />
+              </svg>
+              Submit Studies
+            </a>
+            <a href="<?php echo e(url('/student/doc_status')); ?>">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+              </svg>
+              Submitted Studies
+            </a>
+          </div>
+        </div>
+
+        <div class="menu-section">
+          <p class="menu-title">Settings</p>
+          <div class="menu">
+            <a href="<?php echo e(url('/student/account_setting')); ?>" class="active">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M5.121 17.804A1 1 0 015 17V7a1 1 0 011-1h3.382a1 1 0 01.894.553l1.382 2.764a1 1 0 00.894.553H19a1 1 0 011 1v6a1 1 0 01-.121.496l-2.382 4.764a1 1 0 01-.894.553H6a1 1 0 01-.879-.496z" />
+              </svg>
+              Account
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+  @csrf
+</form>
+
+<a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="inline-flex items-center gap-2">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
+  </svg>
+  Log out
+</a>
+
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  <!-- Main -->
+<main class="main">
+    <h2>Account Setting</h2>
+
+@if (session('success'))
+<script>
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: '{{ session('success') }}',
+        confirmButtonColor: '#0a0099'
+    });
+</script>
+@endif
+
+@if (session('cancel_message'))
+<script>
+    Swal.fire({
+        icon: 'info',
+        title: 'Canceled',
+        text: '{{ session('cancel_message') }}',
+        confirmButtonColor: '#b30000'
+    });
+</script>
+@endif
+
+
+    @php
+        $attempts = session('login_attempts', 0);
+        $locked_until = session('locked_until', null);
+    @endphp
+
+    {{-- If account is not verified, show verify form --}}
+@if (!session('account_verified'))
+<div class="verify-wrapper">
+  <form class="verify-form" id="verifyForm" method="POST" action="{{ route('student.verify_identity') }}">
+      @csrf
+      <div class="verify-card">
+          <h1>Verify Your Identity</h1>
+
+          {{-- Error Message --}}
+          @if ($errors->has('login_error'))
+              <div class="error">{{ $errors->first('login_error') }}</div>
+          @endif
+
+          {{-- Lockout Message --}}
+          @if ($locked_until && now()->lt($locked_until))
+              <div class="error" id="lockout-message">
+                  Too many failed attempts.<br>
+                  Please wait <span id="countdown">60</span> seconds before trying again.
+              </div>
+          @endif
+
+          <div class="input-group">
+              <label for="password">Enter your password</label>
+              <input
+                  type="password"
+                  id="password"
+                  name="password"
+                  @if ($locked_until && now()->lt($locked_until)) disabled @endif
+              >
+              <!-- Custom error message placeholder -->
+              <div id="passwordError" class="error-message"></div>
+          </div>
+
+          <button type="submit"
+                  @if ($locked_until && now()->lt($locked_until)) disabled @endif>
+              Verify
+          </button>
+      </div>
+  </form>
+</div>
+
+
+{{-- Countdown Script --}}
+@if ($locked_until && now()->lt($locked_until))
+<script>
+    const countdownElement = document.getElementById('countdown');
+
+    if (!localStorage.getItem('lockoutEndTime')) {
+        const endTime = Date.now() + 60000; // 60 seconds
+        localStorage.setItem('lockoutEndTime', endTime);
+    }
+
+    const endTime = parseInt(localStorage.getItem('lockoutEndTime'));
+
+    const timer = setInterval(() => {
+        const now = Date.now();
+        const remaining = Math.max(0, Math.floor((endTime - now) / 1000));
+        countdownElement.textContent = remaining;
+
+        if (remaining <= 0) {
+            clearInterval(timer);
+            localStorage.removeItem('lockoutEndTime');
+            location.reload();
+        }
+    }, 1000);
+</script>
+@endif
     @else
-        <div class="register-container">
-            <div class="register-box" style="box-shadow: 5px 5px 1px #04128e;">
-                <h2 style="color: #0a0099; font-weight: 800; text-align: center; margin-bottom: 25px;">
-                    Edit Your Account
-                </h2>
+        {{-- If verified, show edit account form --}}
+       <div class="edit-account-wrapper">
+  <div class="edit-account-card">
+
 
                 @if ($errors->any())
-                    <div class="error">
-                        <ul>
+                    <div class="error" style="color: red;margin-top:5px">
+                        <ul style="list-style: none; padding: 0; text-align: center;">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
@@ -148,113 +211,166 @@
                     </div>
                 @endif
 
+
                 <form method="POST" action="{{ route('student.update_account') }}">
                     @csrf
+<h2 style="color: #0a0099; font-weight: 800; text-align: center; margin-bottom: 10px;">
+                    Edit Your Account
+                </h2>
 
-                <!-- Username -->
-                <label for="usn">Username</label>
-                <input type="text" name="usn" id="usn" value="{{ old('usn', Auth::user()->usn ?? '') }}">
+                    <!-- Username -->
+                    <label for="usn">Username</label>
+<input
+  type="text"
+  name="usn"
+  id="usn"
+  value="{{ old('usn', Auth::user()->usn ?? '') }}"
+  disabled
+>
 
-                <!-- First + Last Name (side by side) -->
-                <div style="display: flex; gap: 40px; margin-bottom: 15px;">
-                    <div style="flex: 1;">
-                        <label for="first_name">Edit First Name</label>
-                        <input type="text" name="first_name" id="first_name"
-                            value="{{ old('first_name', Auth::user()->first_name ?? '') }}">
-                    </div>
-                    <div style="flex: 1;">
-                        <label for="last_name">Edit Last Name</label>
-                        <input type="text" name="last_name" id="last_name"
-                            value="{{ old('last_name', Auth::user()->last_name ?? '') }}">
-                    </div>
-                </div>
+                    <!-- First + Last Name -->
+                   <div style="display: flex; gap: 40px; margin-bottom: 15px;">
+    <div style="flex: 1;">
+        <label for="first_name">First Name</label>
+        <input
+            type="text"
+            name="first_name"
+            id="first_name"
+            value="{{ old('first_name', Auth::user()->first_name ?? '') }}"
+            maxlength="30"
+        >
+    </div>
+    <div style="flex: 1;">
+        <label for="last_name">Last Name</label>
+        <input
+            type="text"
+            name="last_name"
+            id="last_name"
+            value="{{ old('last_name', Auth::user()->last_name ?? '') }}"
+            maxlength="30"
+        >
+    </div>
+</div>
 
-                <!-- Email -->
-                <label for="email">Edit Email Address</label>
-                <input type="email" name="email" id="email" value="{{ old('email', Auth::user()->email ?? '') }}">
 
-                <!-- Password -->
-                <label for="password">
-                    New Password <span style="font-weight: normal; font-size: 13px; color: #333;">
-                        (leave blank to keep current password)
-                    </span>
-                </label>
-                <input type="password" name="password" id="password">
+                    <!-- Email -->
+                    <label style="margin-top:-15px" for="email">Email Address</label>
+<input type="email"
+       name="email"
+       id="email"
+       value="{{ old('email', Auth::user()->email ?? '') }}"
+       pattern="^[A-Za-z0-9._%+-]{1,15}@gmail\.com$"
+       title="Email must be Gmail and max 15 characters before @">
 
-                <!-- Buttons Row -->
-                <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
-                    <!-- Update Account (inside main form) -->
-                    <button type="submit"
-                        style="background-color: #0a0099; color: white; border: none;
-                            padding: 12px 20px; border-radius: 8px; font-size: 16px;
-                            font-weight: bold; cursor: pointer;">
-                        Update Account
-                    </button>
 
-                    <!-- Cancel (separate form but inline with flex) -->
-                    <form method="POST" action="{{ route('student.cancel_update') }}">
-                        @csrf
-                        <button type="submit"
-                            style="background-color: #b30000; color: white; border: none;
-                                padding: 12px 20px; border-radius: 8px; font-size: 16px;
-                                font-weight: bold; cursor: pointer;">
-                            Cancel
-                        </button>
-                    </form>
-                </div>
+                           <!-- Phone Number -->
+<label for="phone_number">Phone Number</label>
+<input
+    type="text"
+    name="phone_number"
+    id="phone_number"
+    value="{{ old('phone_number', Auth::user()->phone_number ?? '') }}"
+    oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+    maxlength="10"
+    placeholder="9XXXXXXXXX"
+/>
+
+                    <!-- Password -->
+                    <label for="password">
+                        New Password
+                        <span style="font-weight: normal; font-size: 13px; color: #333;">
+                            (leave blank to keep current password)
+                        </span>
+                    </label>
+                    <input
+    type="password"
+    name="password"
+    id="password"
+    minlength="6"
+    pattern="^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{6,}$"
+    title="Password must be at least 6 characters long and include at least one number and one special character (!@#$%^&*)."
+    placeholder="Enter new password"
+/>
+
+
+                    <!-- Buttons -->
+                    <!-- Wrap both forms in a flex container -->
+<div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 15px;">
+
+    <!-- Update button -->
+    <form method="POST" action="{{ route('student.update_account') }}">
+        @csrf
+        <button type="submit"
+                style="background-color: #0a0099; color: white; border: none;
+                       padding: 12px 30px; border-radius: 8px; font-size: 16px;
+                       font-weight: bold; cursor: pointer; transition: 0.3s;">
+            Update Account
+        </button>
+    </form>
+
+    <!-- Cancel button -->
+    <form method="POST" action="{{ route('student.cancel_update') }}">
+        @csrf
+        <button type="submit"
+                style="background-color: #b30000; color: white; border: none;
+                       padding: 12px 30px; border-radius: 8px; font-size: 16px;
+                       font-weight: bold; cursor: pointer; transition: 0.3s;">
+            Cancel
+        </button>
+    </form>
+
+</div>
+
             </div>
         </div>
     @endif
-@endsection
+</main>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Home icon redirect
-        const homeIcon = document.querySelector(".home-icon");
-        if (homeIcon) {
-            homeIcon.addEventListener("click", function () {
-                window.location.href = "/student/dashboard"; 
-            });
-        }
 
-        // Logout confirmation
-        const logoutIcon = document.querySelector(".feather-log-in");
-        if (logoutIcon) {
-            logoutIcon.addEventListener("click", function () {
-                Swal.fire({
-                    title: "Are you sure?",
-                    text: "You will be logged out of your account.",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#3085d6",
-                    cancelButtonColor: "#d33",
-                    confirmButtonText: "Yes, log me out"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        document.getElementById("logout-form").submit();
-                    }
-                });
-            });
-        }
 
-        document.addEventListener("DOMContentLoaded", function () {
-            // ✅ Success alert after updating account
-            @if(session('success'))
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: "{{ session('success') }}",
-                    confirmButtonColor: '#0a0099'
-                });
-            @endif
 
-            // ❌ Do nothing for cancel_message (normal redirect only)
-            // @if(session('cancel_message'))
-            //     console.log("Cancel: {{ session('cancel_message') }}"); 
-            // @endif
-        });
-    });
+
+  </div>
+
+  <script>
+document.getElementById('verifyForm').addEventListener('submit', function(event) {
+  const passwordInput = document.getElementById('password');
+  const errorDiv = document.getElementById('passwordError');
+
+  // Clear old error
+  errorDiv.textContent = '';
+
+  // Check if password is empty
+  if (passwordInput.value.trim() === '') {
+    event.preventDefault(); // Stop form submission
+    errorDiv.textContent = 'Please enter your password.';
+    passwordInput.style.borderColor = '#dc2626'; // red border
+  } else {
+    passwordInput.style.borderColor = '#0a1444'; // reset to normal
+  }
+});
 </script>
 
-<script src="{{ asset('') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+</body>
+</html>
+<?php
+session_start();
+
+// Example password hash
+$stored_password_hash = password_hash("mypassword123", PASSWORD_DEFAULT);
+
+$message = "";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $entered_password = trim($_POST["password"] ?? "");
+
+    if (password_verify($entered_password, $stored_password_hash)) {
+        $message = "<p class='success'>Identity verified successfully.</p>";
+    } else {
+        $message = "<p class='error'>Incorrect password. Please try again.</p>";
+    }
+}
+?>

@@ -1,220 +1,407 @@
-@extends('layout.student')
-<link rel="stylesheet" href="{{ asset('css/student/submit.css') }}">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D.A.R.A - Submit a Document</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+   <link rel="stylesheet" href="{{ asset('css/sidenav.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/student/submit.css') }}">
+</head>
+<body>
+  <div class="navbar">
+    <h1>D.A.R.A</h1>
 
-@section('right')
-<div class="frbg">
-    <div class="notif">
-        <div class="imghere">
-            <img src="../../imgs/review.png" alt="" />
+    <div class="navbar-right">
+      <button>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+      </button>
+
+      <div class="profile">
+
+        <div class="profile-info">
+          <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
+
+          <p>Student</p>
         </div>
-        <div class="teksto" style="display: flex; margin-top: -16px; text-align: center"></div>
+      </div>
     </div>
-</div>
+  </div>
 
-<h1 style="font-weight: bolder;color: black;">SUBMIT A DOCUMENT</h1>
-@if(session('success'))
+
+  <div class="layout">
+     <!-- Sidebar -->
+    <aside class="sidebar">
+      <div>
+        <div class="menu-section">
+          <p class="menu-title">Menu</p>
+          <div class="menu">
+            <a href="<?php echo e(url('/student/dashboard')); ?>">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M3 10h4v11H3zM10 3h4v18h-4zM17 6h4v15h-4z" />
+              </svg>
+              Dashboard
+            </a>
+            <a href="<?php echo e(url('/student/submission')); ?>" class="active">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M12 4v16m8-8H4" />
+              </svg>
+              Submit Studies
+            </a>
+            <a href="<?php echo e(url('/student/doc_status')); ?>">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+              </svg>
+              Submitted Studies
+            </a>
+          </div>
+        </div>
+
+        <div class="menu-section">
+          <p class="menu-title">Settings</p>
+          <div class="menu">
+            <a href="<?php echo e(url('/student/account_setting')); ?>">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                   viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M5.121 17.804A1 1 0 015 17V7a1 1 0 011-1h3.382a1 1 0 01.894.553l1.382 2.764a1 1 0 00.894.553H19a1 1 0 011 1v6a1 1 0 01-.121.496l-2.382 4.764a1 1 0 01-.894.553H6a1 1 0 01-.879-.496z" />
+              </svg>
+              Account
+            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+  @csrf
+</form>
+
+<a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="inline-flex items-center gap-2">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
+  </svg>
+  Log out
+</a>
+
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <h2>Submit a Document</h2>
+      @if(session('success'))
     <div style="color: green; text-align: center; margin-bottom: 15px;">
         {{ session('success') }}
     </div>
 @endif
-
-<form id="documentForm" method="post" enctype="multipart/form-data"
-      action="{{ route('student.submit') }}"
-      style="background-color: #f5f5f5; padding: 40px; border-radius: 10px; box-shadow: 5px 5px 1px #04128e;">
+      <form id="documentForm" method="POST" enctype="multipart/form-data" action="{{ route('student.submit') }}">
     @csrf
-
-    <div id="globalError" class="error" style="display:none; font-weight:bold; text-align:center; margin-bottom:15px;">
-        Please fill out all required fields before submitting.
+   {{-- File Upload Box --}}
+    <div class="upload-box">
+      <p>📤 <a id="chooseFileBtn" style="cursor:pointer;">Click to Upload</a> File Supported: PDF (Max 25MB)</p>
+      <input type="file" name="file" accept=".pdf" id="fileID" style="display:none;">
+      <p id="fileNameDisplay" style="color: red; text-align:center;"></p>
     </div>
 
+    {{-- Type of Studies --}}
+    <p style="margin-top: 5px;"><strong>Type of Studies:</strong></p>
+    <div class="type-buttons">
+  <input type="checkbox" id="case" name="document_types[]" value="Case Study">
+  <label for="case">Case Study</label>
+
+  <input type="checkbox" id="thesis" name="document_types[]" value="Thesis">
+  <label for="thesis">Thesis</label>
+
+  <input type="checkbox" id="proposal" name="document_types[]" value="Proposal">
+  <label for="proposal">Proposal</label>
+
+  <input type="checkbox" id="capstone" name="document_types[]" value="Capstone">
+  <label for="capstone">Capstone</label>
+
+  <input type="checkbox" id="system" name="document_types[]" value="System Studies">
+  <label for="system">System Studies</label>
+</div>
+
+    {{-- Form Fields --}}
     <div class="form-row">
-        <!-- LEFT COLUMN -->
-        <div class="form-col left-col">
-            <div class="container">
-                <div class="card">
-                    <h3>Upload File</h3>
-                    <div class="drop_box">
-                        <div class="header"><h4>Select File here</h4></div>
-                        <p>Files Supported: PDF (max 25MB)</p>
-                        <input type="file" name="file" accept=".pdf" id="fileID" style="display:none;">
-                        <button type="button" class="btn" id="chooseFileBtn">Choose File</button>
-                        <p id="fileNameDisplay" style="color: red;"></p>
-                        <div id="fileError" class="error" style="margin-bottom: 0"></div>
-                    </div>
-                </div>
-            </div>
+      <div class="form-group">
+        <label>Title</label>
+  <input type="text" id="title" name="title" placeholder="Enter title" value="{{ old('title') }}">
+  @error('title')
+    <p class="error-message">{{ $message }}</p>
+  @enderror
+      </div>
 
-            <label for="keywords">Type of Studies:</label><div id="typeError" class="error"></div>
-            <div class="checkboxes">
-                <div class="chkbx"><input type="checkbox" name="document_types[]" value="Case Study"><label>Case Study</label></div>
-                <div class="chkbx"><input type="checkbox" name="document_types[]" value="Thesis"><label>Thesis</label></div>
-                <div class="chkbx"><input type="checkbox" name="document_types[]" value="Proposal"><label>Proposal</label></div>
-                <div class="chkbx"><input type="checkbox" name="document_types[]" value="Capstone"><label>Capstone</label></div>
-                <div class="chkbx"><input type="checkbox" name="document_types[]" value="System Studies"><label>System Studies</label></div>
-            </div>
-        </div>
 
-        <!-- RIGHT COLUMN -->
-        <div class="form-col right-col">
-            <label for="title">Title:</label>
-            <input id="title" type="text" name="title">
-            <div id="titleError" class="error"></div>
-
-            <label for="abstract">Abstract:</label>
-            <textarea id="abstract" name="abstract"></textarea>
-            <div id="abstractError" class="error"></div>
-
-            <label for="keywords">Keywords:</label>
-            <input id="keywords" type="text" name="keywords">
-            <div id="keywordsError" class="error"></div>
-
-            <label for="teacher_id">Teacher:</label>
-            <select id="teacher_id" name="teacher_id">
-                <option value="">-- Select Teacher --</option>
-                @foreach($teachers as $teacher)
-                    <option value="{{ $teacher->user_id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
-                @endforeach
-            </select>
-            <div id="teacherError" class="error"></div>
-
-            <label for="publication_date">Submission Date:</label>
-            <input id="publication_date" type="date" name="publication_date">
-            <div id="dateError" class="error"></div>
-
-            <label for="citations">Citations (comma-separated):</label>
-            <input id="citations" type="text" name="citations">
-            <div id="citationsError" class="error"></div>
-        </div>
+      <div class="form-group">
+        <label>Keywords</label>
+        <input type="text" id="keywords" name="keywords" placeholder="Comma-separated keywords">
+      </div>
     </div>
 
-    <button class="submission" type="submit" id="submitButton"
-            style="background-color: #04128e; border-radius: 10px; border: none; padding: 15px;">
-        Submit
-    </button>
-</form>
+<div class="form-row">
+  <div class="form-group">
+    <label>Abstract</label>
+    <textarea id="abstract" name="abstract" placeholder="Write abstract here..."></textarea>
 
-<div id="alrt" style="color: black; margin-top: 10px; text-align: center;"></div>
-@endsection
+    <label style="margin-top: 1rem;">Citations (comma-separated)</label>
+    <input id="citations" type="text" name="citations" placeholder="e.g., Author 2023, Research 2022">
+  </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-@if(session('success'))
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            Swal.fire({
-                icon: 'success',
-                title: 'Success!',
-                text: "{{ session('success') }}",
-                confirmButtonColor: '#04128e',
-            });
-        });
-    </script>
-@endif
+  <div class="form-group">
+   <label id="mainTeacherLabel">Teacher</label>
+<select id="teacher_id" name="teacher_id" class="teacher-select">
+  <option value="">-- Select Teacher --</option>
+  @foreach($teachers as $teacher)
+    <option value="{{ $teacher->user_id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
+  @endforeach
+</select>
 
+<!-- Additional Teachers (Hidden by default) -->
+<div id="extraTeachers" class="teacher-container" style="display:none;">
+  <div class="teacher-group">
+    <label>Teacher 2</label>
+    <select name="teacher_id_2" class="teacher-select">
+      <option value="">-- Select Teacher --</option>
+      @foreach($teachers as $teacher)
+        <option value="{{ $teacher->user_id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
+      @endforeach
+    </select>
+  </div>
+
+  <div class="teacher-group">
+    <label>Teacher 3</label>
+    <select name="teacher_id_3" class="teacher-select">
+      <option value="">-- Select Teacher --</option>
+      @foreach($teachers as $teacher)
+        <option value="{{ $teacher->user_id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
+      @endforeach
+    </select>
+  </div>
+</div>
+
+
+<label class="submit-date">Submission Date</label>
+<input type="date" id="submission_date" name="submission_date">
+
+  </div>
+</div>
+
+
+    <button class="submit-btn" type="submit">Submit</button>
+  </form>
+</main>
+
+{{-- JavaScript --}}
 <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        const form = document.getElementById("documentForm");
-        const fileInput = document.getElementById("fileID");
-        const chooseFileBtn = document.getElementById("chooseFileBtn");
-        const fileNameDisplay = document.getElementById("fileNameDisplay");
-        const checkboxes = document.querySelectorAll(".chkbx input[type='checkbox']");
-        const dateField = document.getElementById('publication_date');
-        const titleField = document.getElementById('title');
+  // Trigger hidden file input
+  const chooseFileBtn = document.getElementById('chooseFileBtn');
+  const fileInput = document.getElementById('fileID');
+  const fileNameDisplay = document.getElementById('fileNameDisplay');
+  const titleInput = document.getElementById('title');
 
-        // ✅ Set min date to today
-        const today = new Date().toISOString().split('T')[0];
-        dateField.setAttribute('min', today);
+  chooseFileBtn.addEventListener('click', () => fileInput.click());
 
-        // ✅ Checkbox UI toggle
-        document.querySelectorAll(".chkbx").forEach(wrapper => {
-            const checkbox = wrapper.querySelector('input');
-            wrapper.addEventListener("click", () => {
-                checkbox.checked = !checkbox.checked;
-                wrapper.classList.toggle("active", checkbox.checked);
-            });
-        });
+  // Show selected file name + auto-fill title
+  fileInput.addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+      const fileName = file.name;
+      const baseName = fileName.replace(/\.[^/.]+$/, ""); // remove extension
+      fileNameDisplay.textContent = `Selected: ${fileName}`;
+      if (!titleInput.value.trim()) {
+        titleInput.value = baseName; // auto-fill only if empty
+      }
+    } else {
+      fileNameDisplay.textContent = '';
+    }
+  });
 
-        // ✅ File selection
-        chooseFileBtn.addEventListener("click", () => fileInput.click());
-        fileInput.addEventListener("change", () => {
-            const file = fileInput.files[0];
-            if (file) {
-                if (file.type !== "application/pdf") {
-                    fileNameDisplay.textContent = "Only PDF files are allowed.";
-                    fileNameDisplay.style.color = "red";
-                    fileInput.value = "";
-                } else if (file.size > 25 * 1024 * 1024) { // 25MB
-                    fileNameDisplay.textContent = "File exceeds 25MB limit.";
-                    fileNameDisplay.style.color = "red";
-                    fileInput.value = "";
-                } else {
-                    fileNameDisplay.textContent = file.name;
-                    fileNameDisplay.style.color = "green";
-                }
-            }
-        });
+  document.getElementById('documentForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // stop form submission temporarily
 
-        // ✅ Frontend validation & duplicate check before submit
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
-            let valid = true;
-            document.querySelectorAll(".error").forEach(el => el.textContent = "");
+    // Remove previous errors
+    document.querySelectorAll('.error-text').forEach(el => el.remove());
 
-            const abstract = document.getElementById("abstract");
-            const keywords = document.getElementById("keywords");
-            const teacher = document.getElementById("teacher_id");
-            const citations = document.getElementById("citations");
-            const file = fileInput.files[0];
-            const checkedTypes = Array.from(checkboxes).some(c => c.checked);
+    let isValid = true;
 
-            // Validate fields
-            if (!titleField.value.trim()) { document.getElementById("titleError").textContent = "Title is required."; valid = false; }
-            if (!abstract.value.trim()) { document.getElementById("abstractError").textContent = "Abstract is required."; valid = false; }
-            if (!keywords.value.trim()) { document.getElementById("keywordsError").textContent = "Keywords are required."; valid = false; }
-            if (!teacher.value) { document.getElementById("teacherError").textContent = "Please select a teacher."; valid = false; }
-            if (!checkedTypes) { document.getElementById("typeError").textContent = "Select at least one type of study."; valid = false; }
-            if (!file) { document.getElementById("fileError").textContent = "Please upload a PDF file."; valid = false; }
-            if (!citations.value.trim()) { document.getElementById("citationsError").textContent = "Citations are required."; valid = false; }
+    // Helper function to show error
+    function showError(input, message) {
+      const error = document.createElement('p');
+      error.className = 'error-text';
+      error.textContent = message;
+      error.style.color = 'red';
+      error.style.fontSize = '0.85rem';
+      error.style.marginTop = '4px';
+      if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('error-text')) {
+        input.insertAdjacentElement('afterend', error);
+      }
+    }
 
-            if (!valid) {
-                document.getElementById("globalError").style.display = "block";
-                window.scrollTo({ top: 0, behavior: "smooth" });
-                return;
-            }
+    // Get inputs
+    const fileInput = document.getElementById('fileID');
+    const typeChecks = document.querySelectorAll('input[name="document_types[]"]:checked');
+    const title = document.getElementById('title');
+    const keywords = document.getElementById('keywords');
+    const abstract = document.getElementById('abstract');
+    const teacher = document.getElementById('teacher_id');
+    const date = document.getElementById('submission_date');
 
-            // ✅ Check if title already exists before submitting
-            fetch("{{ route('student.checkTitle') }}", {
-                method: "POST",
-                headers: {
-                    "X-CSRF-TOKEN": "{{ csrf_token() }}",
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ title: titleField.value })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.exists) {
-                    Swal.fire({
-                        title: "Duplicate Title Found",
-                        text: "The title already exists. Would you like to proceed with '" + data.next_title + "'?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonText: "Proceed",
-                        cancelButtonText: "Cancel",
-                        confirmButtonColor: "#04128e"
-                    }).then(result => {
-                        if (result.isConfirmed) {
-                            titleField.value = data.next_title;
-                            form.submit(); // Proceed to submit with new title
-                        }
-                    });
-                } else {
-                    form.submit(); // Proceed normally
-                }
-            })
-            .catch(err => {
-                console.error(err);
-                Swal.fire("Error", "Something went wrong. Try again.", "error");
-            });
-        });
+    // ---- File Validation ----
+    if (fileInput.files.length === 0) {
+      showError(document.querySelector('.upload-box p'), 'Please upload a PDF file.');
+      isValid = false;
+    } else {
+      const file = fileInput.files[0];
+      if (file.size > 25 * 1024 * 1024) {
+        showError(document.querySelector('.upload-box p'), 'File size must not exceed 25MB.');
+        isValid = false;
+      }
+      if (!file.name.toLowerCase().endsWith('.pdf')) {
+        showError(document.querySelector('.upload-box p'), 'Only PDF files are allowed.');
+        isValid = false;
+      }
+    }
+
+    // ---- Type of Study ----
+    if (typeChecks.length === 0) {
+      const typeContainer = document.querySelector('.type-buttons');
+      const error = document.createElement('p');
+      error.className = 'error-text';
+      error.textContent = 'Please select at least one study type.';
+      error.style.color = 'red';
+      error.style.fontSize = '0.85rem';
+      error.style.marginTop = '-20px';
+      if (!typeContainer.nextElementSibling || !typeContainer.nextElementSibling.classList.contains('error-text')) {
+        typeContainer.insertAdjacentElement('afterend', error);
+      }
+      isValid = false;
+    }
+
+    // ---- Title ----
+    const titleTrim = title.value.trim();
+    if (titleTrim === '') {
+      showError(title, 'Title is required.');
+      isValid = false;
+    } else if (titleTrim.length < 5 || titleTrim.length > 255) {
+      showError(title, 'Title must be between 5 and 255 characters.');
+      isValid = false;
+    }
+
+    // ---- Keywords ----
+    const keywordsTrim = keywords.value.trim();
+    if (keywordsTrim === '') {
+      showError(keywords, 'Keywords are required.');
+      isValid = false;
+    } else {
+      const keywordArray = keywordsTrim.split(',').map(k => k.trim()).filter(k => k !== '');
+      if (keywordArray.length === 0) {
+        showError(keywords, 'Please enter at least one valid keyword.');
+        isValid = false;
+      }
+    }
+
+    // ---- Abstract ----
+    const abstractTrim = abstract.value.trim();
+    if (abstractTrim === '') {
+      showError(abstract, 'Abstract is required.');
+      isValid = false;
+    } else {
+      const wordCount = abstractTrim.split(/\s+/).length;
+      if (wordCount < 10) {
+        showError(abstract, 'Abstract must be at least 10 words.');
+        isValid = false;
+      }
+    }
+
+    // ---- Teacher ----
+    if (teacher.value.trim() === '') {
+      showError(teacher, 'Please select a teacher.');
+      isValid = false;
+    }
+
+    // ---- Submission Date ----
+    if (date.value.trim() === '') {
+      showError(date, 'Submission date is required.');
+      isValid = false;
+    }
+
+    // Submit if valid
+    if (isValid) {
+      this.submit();
+    }
+  });
+
+  // Prevent past date selection
+  const dateInput = document.getElementById('submission_date');
+  const today = new Date().toISOString().split('T')[0];
+  dateInput.min = today;
+
+const capstoneCheckbox = document.getElementById('capstone');
+const extraTeachersDiv = document.getElementById('extraTeachers');
+const mainTeacherLabel = document.getElementById('mainTeacherLabel');
+
+// All teacher selects
+const teacherSelects = [
+  document.getElementById('teacher_id'),
+  document.querySelector('select[name="teacher_id_2"]'),
+  document.querySelector('select[name="teacher_id_3"]')
+];
+
+// Show/hide extra teachers based on Capstone
+function updateTeacherDisplay() {
+  if (capstoneCheckbox.checked) {
+    extraTeachersDiv.style.display = 'block';
+    mainTeacherLabel.textContent = 'Teacher 1';
+  } else {
+    extraTeachersDiv.style.display = 'none';
+    mainTeacherLabel.textContent = 'Teacher';
+    // Reset extra selects
+    teacherSelects.slice(1).forEach(select => select.value = '');
+  }
+}
+
+capstoneCheckbox.addEventListener('change', updateTeacherDisplay);
+updateTeacherDisplay(); // ensure correct state on load
+
+// Prevent duplicate selection
+function preventDuplicateTeachers() {
+  const selectedValues = teacherSelects.map(s => s.value);
+
+  teacherSelects.forEach((select, idx) => {
+    Array.from(select.options).forEach(option => {
+      // Don't disable empty option
+      if (option.value === '') return;
+
+      // Disable option if it's selected in another dropdown
+      option.disabled = selectedValues.includes(option.value) && option.value !== select.value;
     });
+  });
+}
+
+// Add event listeners to all selects
+teacherSelects.forEach(select => {
+  select.addEventListener('change', preventDuplicateTeachers);
+});
+
+// Run on page load in case old values exist
+preventDuplicateTeachers();
+
+
+
+
 </script>
+
+  </div>
+
+
+</body>
+</html>

@@ -1,89 +1,363 @@
-.right {
-	background-color: #fdf9e9;
-	display: flex;
-	align-items: center;
-	flex-wrap: wrap;
-	justify-content: center;
-	width: 100%;
-	align-content: flex-start;
 
-	h1 {
-	font-weight: lighter;
-	font-size: 80px;
-	text-align: center;
-	}
+/* Main Content */
+    .main {
+      flex: 1;
+      padding: 2rem;
+    }
 
-	.cardco {
-		display: flex;
-		align-items: center;
-		flex-wrap: wrap;
-		justify-content: center;
-		width: 100%;
-		align-content: center;
-		padding-left: 20px;
+    .main h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
 
-    .cards {
-		color: #0e100f !important;
-		display: flex;
-		height: 120px;
-		width: 220px;
-		margin-bottom: 10px;
-      	margin-right: 140px;
+    .upload-box {
+      border: 2px dashed #d1d5db;
+      border-radius: 10px;
+      padding: 2rem;
+      text-align: center;
+      background-color: #fff;
 
-		.svg {
-			height: 100%;
-			color: #0e100f !important;
-		}
+    }
 
-		.count {
-			font-size: 100px;
-			color: #0e100f !important;
-		}
+    .upload-box a {
+      color: #1e3a8a;
+      font-weight: 600;
+      cursor: pointer;
+    }
 
-		.count:last-child {
-			margin-left: -10px;
-		}
 
-		.text {
-			align-content: center;
+  label {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
 
-			p {
-				margin-left: 10px;
-				font-size: 25px;
-				color: #0e100f;
-			}
-		}
-			
-			p {
-				font-size: 25px;
-			}
-		}
+    input, textarea, select {
+      padding: 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 0.95rem;
+      outline: none;
+      background: #f9fafb;
+    }
 
-		.svg1, .svg2, .svg3, .svg4, .svg5 {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
+    input:focus, textarea:focus, select:focus {
+      border-color: #1e3a8a;
+      background: #fff;
+    }
 
-		.svg1 {
-			color: rgb(0, 0, 0);
-		}
+    textarea {
+      resize: none;
+      min-height: 120px;
+    }
 
-		.svg2 {
-			color: green;
-		}
+    .type-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+    margin-top: 10px;
+  }
 
-		.svg3 {
-			color: blue;
-		}
+  /* Hide the actual checkbox */
+  .type-buttons input[type="checkbox"] {
+    display: none;
+  }
 
-		.svg4 {
-			color: orange;
-		}
+  /* Style the labels as toggle buttons */
+  .type-buttons label {
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    background: white;
+    border-radius: 2rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.3s;
+    user-select: none;
+  }
 
-		.svg5 {
-			color: red;
-		}
-	}
+  /* Hover effect */
+  .type-buttons label:hover {
+    background: #1e3a8a;
+    color: white;
+    border-color: #1e3a8a;
+  }
+
+  /* Active (selected) effect when checkbox is checked */
+  .type-buttons input[type="checkbox"]:checked + label {
+    background: #1e3a8a;
+    color: white;
+    border-color: #1e3a8a;
+  }
+    .submit-btn {
+      background: #1e3a8a;
+      color: white;
+      border: none;
+      padding: 0.75rem 2.5rem;
+      border-radius: 0.5rem;
+      font-weight: 600;
+      cursor: pointer;
+      float: right;
+      transition: 0.3s;
+      margin-top: -1.5rem;
+    }
+     .submit-btn:hover {
+      background: #10236b;
+    }
+    .error-message {
+  color: red;
+  font-size: 0.85rem;
+
+}
+.card {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+        }
+       label {
+      display: block;
+      text-align: left;
+      font-size: 14px;
+      color: #374151;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="password"]:focus {
+      border-color: #2563eb;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s ease-in-out;
+    }
+
+    button:hover {
+      background-color: #1d4ed8;
+    }
+
+
+    .error {
+      color: #dc2626;
+      font-weight: 500;
+      margin-top: -5px;
+    }
+    /* Center the verify form */
+/* Center the verify form */
+.verify-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75vh;
+  background-color: #f9fafb;
 }
 
+/* Square and wide card */
+.verify-card {
+  background: #ffffff;
+  padding: 2.5rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  width: 420px;       /* wider */
+  height: 420px;      /* same as width */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: -100px;
+  text-align: center;
+}
+
+/* Heading */
+.verify-card h1 {
+  color: #0a1444;
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+}
+
+/* Input group */
+.input-group {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+/* Label */
+.input-group label {
+  display: block;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.4rem;
+}
+
+/* Input field */
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #0a1444;
+  border-radius: 10px;
+  font-size: 15px;
+  background-color: #f9fafb;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.input-group input:focus {
+  border-color: #0a1444;
+  background-color: #fff;
+}
+
+/* Button */
+.verify-card button {
+  width: 100%;
+  padding: 12px;
+  background-color: #0a1444; /* ✅ Your color */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.verify-card button:hover {
+  background-color: #122066; /* ✅ Slightly lighter hover effect */
+}
+
+
+
+.success {
+  color: #16a34a;
+  font-weight: 500;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Optional: center the card vertically and horizontally */
+body {
+  overflow: hidden; /* ✅ Ensures no scroll bar appears */
+}
+/* --- Edit Account Card --- */
+.edit-account-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  background-color: #f9fafb;
+}
+
+.edit-account-card {
+  background: #ffffff;
+  width: 700px; /* ✅ Wider card */
+  height: 630px; /* ✅ Same height as width for balance */
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.1);
+  display: flex;
+  margin-top: -80px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  text-align: left;
+  overflow: hidden;
+}
+
+.edit-account-card h2 {
+  color: #0a1444;
+  font-size: 1.8rem;
+  font-weight: 800;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.edit-account-card label {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+  display: block;
+  font-size: 14px;
+}
+
+.edit-account-card input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 15px;
+  background-color: #f9fafb;
+  margin-bottom: 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.edit-account-card input:focus {
+  border-color: #0a1444;
+  background-color: #ffffff;
+}
+
+.edit-account-card .name-group {
+  display: flex;
+  gap: 20px;
+}
+
+.edit-account-card .button-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 2rem;
+}
+
+.edit-account-card button {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 15px;
+  transition: 0.3s;
+}
+
+.edit-account-card button[type="submit"] {
+  background-color: #0a1444;
+  color: #ffffff;
+}
+
+.edit-account-card button[type="submit"]:hover {
+  background-color: #122066;
+}
+
+.edit-account-card button.cancel-btn {
+  background-color: #b30000;
+  color: #ffffff;
+}
+
+.edit-account-card button.cancel-btn:hover {
+  background-color: #990000;
+}
+/* Disabled input (username) */
+.edit-account-card input[disabled] {
+  background-color: #e5e7eb; /* light gray */
+  color: #6b7280; /* soft text */
+  cursor: not-allowed;
+}
