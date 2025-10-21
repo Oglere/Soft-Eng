@@ -78,14 +78,17 @@
               </svg>
               Account
             </a>
-            <a href="<?php echo e(url('/auth/login')); ?>">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M17 16l4-4m0 0l-4-4m4 4H7" />
-              </svg>
-              Log out
-            </a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+  @csrf
+</form>
+
+<a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="inline-flex items-center gap-2">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
+  </svg>
+  Log out
+</a>
+
           </div>
         </div>
       </div>
