@@ -1,4 +1,4 @@
-// Chart.js (line chart)
+// Example for Chart.js (line chart)
 const ctx1 = document.getElementById('chart1').getContext('2d');
 new Chart(ctx1, {
     type: 'line',
@@ -10,7 +10,6 @@ new Chart(ctx1, {
         ]
     }
 });
-// Chart.js (pie chart)
 const ctx2 = document.getElementById('chart2').getContext('2d');
 
 const data = {

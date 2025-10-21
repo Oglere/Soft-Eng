@@ -1,0 +1,27 @@
+.right h1 {
+    font-size: 40px;
+    font-weight: bold;
+    color: #0c1c43;
+}
+.home-icon,
+.feather-log-in {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.home-icon:hover,
+.feather-log-in:hover {
+    transform: scale(1.2);
+}
+
+.ahh {
+    display: flex;
+    align-items: center;
+}
+.cardco .text {
+    margin-left: 15px;
+}
+.cardco .count {
+    margin: none;
+    font-size: 80px;
+}

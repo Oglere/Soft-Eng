@@ -77,10 +77,14 @@ class OtpController extends Controller
             return back()->withErrors(['otp' => 'OTP expired. Please request again.']);
         }
 
-        // OTP is correct → proceed to reset password
         return redirect()
             ->route('password.reset.form')
             ->with('success', 'OTP verified. You may now reset your password.');
+    }
+
+
+    public function showResetForm() {
+        return view('guest.reset_password');
     }
 
     public function resetPassword(Request $request)

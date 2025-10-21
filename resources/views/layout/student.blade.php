@@ -6,15 +6,15 @@
 
     <title>
         DARA -
-        @if (request()->is('student'))
+        @if (request()->is('student/dashboard'))
             Student
         @elseif (request()->is('student/submission*'))
             Student | Submission
-        @elseif (request()->is('student/doc-status*'))
+        @elseif (request()->is('student/doc_status*'))
             Student | Documen Status
         @elseif (request()->is('student/pdf-reader*'))
             Student | Read
-        @elseif (request()->is('student/account-setting*'))
+        @elseif (request()->is('student/account_setting*'))
             Student | Account Setting
         @else
             Student | Page
@@ -27,7 +27,16 @@
     <main>
         <header>
             <div class="ahh">
-                <img src="../../Imgs/DARA.png" alt="DARA Logo" class="ahh">
+                <img
+                    src="{{ asset('images/DARA.png') }}"
+                    alt="DARA Logo"
+                    style=" width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            object-fit: cover;
+                            background: white;
+                            border: 2px solid white;
+                    ">
             </div>
         </header>
 
@@ -38,7 +47,7 @@
                 </div>
                 <nav class="nav-links">
                     <div class="dropdown">
-                        <a href="{{ url('/student/dashboard') }}" class="{{ request()->is('student') ? 'active-link' : '' }}">
+                        <a href="{{ url('/student/dashboard') }}" class="{{ request()->is('student/dashboard') ? 'active-link' : '' }}">
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="24"
@@ -98,7 +107,7 @@
                         Submit Studies
                     </a>
 
-                    <a href="{{ url('/student/doc_status') }}" class="{{ request()->is('student/doc-status') ? 'active-link' : '' }}">
+                    <a href="{{ url('/student/doc_status') }}" class="{{ request()->is('student/doc_status') ? 'active-link' : '' }}">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="24"
@@ -115,14 +124,16 @@
                             <circle cx="12" cy="12" r="3" />
                         </svg>
 
-                        Document Status
+                        Submitted Studies
                     </a>
 
                     <div class="asd2" style=" width: 100%; margin-top: 10px; display: flex; justify-content: center;">
                         <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
                     </div>
 
-                    <a href="{{ url('/student/account-setting') }}" class=" {{ request()->is('student/account-setting') ? 'active-sublink' : 'unq' }}">Edit Account</a>
+                    <a href="{{ url('/student/account_setting') }}" class=" {{ request()->is('student/account_setting') ? 'active-sublink' : 'unq' }}">
+                        Account Settings
+                    </a>
 
                     <div class="asd2" style=" width: 100%; display: flex; justify-content: center;">
                         <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>

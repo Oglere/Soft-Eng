@@ -21,6 +21,11 @@ table.table thead th {
     color: white;
 }
 
+#card-3{
+    background-color: #b9b7b7;
+    color: white;
+}
+
 #card1{
     background: rgba(3, 209, 3, 0.74);
 }
@@ -30,8 +35,9 @@ table.table thead th {
 }
 
 #card3{
-    background: rgb(192, 191, 191);
+    background: rgb(138, 137, 137);
 }
+
 
 #dashtable{
     padding: 5px;
@@ -67,7 +73,7 @@ table.table thead th {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-        
+/*         
 input[type="text"],
 input[type="password"],
 select,
@@ -121,6 +127,6 @@ input[type="checkbox"]:hover {
     color: red;
     font-size: 14px;
     margin-top: 5px;
-}
+} */
 
 /* End of Edit acc */

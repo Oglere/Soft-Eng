@@ -4,29 +4,12 @@
     .right h1 {
         font-size: 40px;
         font-weight: bold;
-        color: #0c1c43;
+        color: #0e100f;
     }
     .home-icon,
     .feather-log-in {
         cursor: pointer;
         transition: transform 0.2s ease;
-    }
-
-    .home-icon:hover,
-    .feather-log-in:hover {
-        transform: scale(1.2);
-    }
-
-    .ahh {
-        display: flex;
-        align-items: center;
-    }
-    .cardco .text {
-        margin-left: 15px;
-    }
-    .cardco .count {
-        margin: none;
-        font-size: 80px;
     }
 </style>
 
@@ -61,8 +44,8 @@
         </div>
         </a>
 
-        <a href="doc-status#approved-studies" style="text-decoration: none; color: inherit;" class="cards published">
-            <div class="svg2">
+        <a href="doc-status#approved-studies" style="text-decoration: none; color: inherit" class="cards published">
+            <div class="svg2" style="color: #0ae41c;">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="100"
@@ -86,7 +69,7 @@
         </a>
 
         <a href="doc-status#pending-studies" style="text-decoration: none; color: inherit;"  class="cards pending">
-            <div class="svg3">
+            <div class="svg3" style="color: #0a56e4;">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="100"
@@ -117,7 +100,7 @@
         </a>
 
         <a href="doc-status#revisions-studies" style="text-decoration: none; color: inherit;"  class="cards revisions">
-            <div class="svg4">
+            <div class="svg4" style="color: #e4bc0a;">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="100"
@@ -140,9 +123,9 @@
                 <p>REVISION(S) TO DO</p>
             </div>
         </a>
-        
+
         <a href="doc-status#rejected-studies" style="text-decoration: none; color: inherit;"  class="cards rejected">
-            <div class="svg5">
+            <div class="svg5" style="color: #e40a0a;">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="120"

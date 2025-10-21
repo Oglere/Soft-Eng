@@ -18,7 +18,6 @@ namespace App\Models {
      * @property mixed $file
      * @property string|null $metadata
      * @property string|null $citation
-     * @property string|null $authors
      * @property mixed $approved_by
      * @property mixed $teacher_id
      * @property mixed $student_id
@@ -32,7 +31,6 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<DocumentRepository>|DocumentRepository whereStudentId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<DocumentRepository>|DocumentRepository whereTeacherId($value)
      * @method static \Illuminate\Database\Eloquent\Builder<DocumentRepository>|DocumentRepository whereApprovedBy($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<DocumentRepository>|DocumentRepository whereAuthors($value)
      * @method static \Illuminate\Database\Eloquent\Builder<DocumentRepository>|DocumentRepository whereCitation($value)
      * @method static \Illuminate\Database\Eloquent\Builder<DocumentRepository>|DocumentRepository whereMetadata($value)
      * @method static \Illuminate\Database\Eloquent\Builder<DocumentRepository>|DocumentRepository whereFile($value)
@@ -669,9 +667,10 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
-     * @property bool $is_active
-     * @property string|null $last_login
-     * @property string|null $profile_picture
+     * @property boolean $is_active
+     * @property \Illuminate\Support\Carbon|null $last_login
+     * @property mixed $attempts
+     * @property \Illuminate\Support\Carbon|null $locked_until
      * @property string $role
      * @property string|null $phone_number
      * @property string $email
@@ -696,7 +695,8 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereEmail($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User wherePhoneNumber($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereRole($value)
-     * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereProfilePicture($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereLockedUntil($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereAttempts($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereLastLogin($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereIsActive($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereCreatedAt($value)

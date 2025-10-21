@@ -5,6 +5,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    height: 100%;
 }
 
 header {
@@ -13,11 +14,13 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 40px; /* smaller default */
-    background-color: #0c1c43;
-    color: white;
+    padding: 10px 40px;
+    background-color: #fffce4 !important;
+    box-shadow: 0 1px 8px #00000081;
+    color: #fffce4;
     z-index: 1000;
 }
+
 .header-left {
     display: flex;
     align-items: center;
@@ -54,14 +57,14 @@ header {
     font-size: 22px;
     font-weight: bold;
     letter-spacing: 1px;
-    color: white;
+    color: #fffce4;
 }
 .loginbutton {
     display: flex;
     align-items: center;
     gap: 5px;
     text-decoration: none;
-    color: inherit;
+    color: #0e100f;
     padding: 8px 12px;
     border-radius: 6px;
     transition: background 0.2s;
@@ -78,19 +81,23 @@ header {
 }
 
 main {
+    height: 100%;
     text-align: center;
-    padding: 40px 20px;
     min-height: calc(95vh - 140px);
+    background-color: #fffce4 !important;
 }
 
 footer {
+    border-top: 1px #0e100f solid;
     padding: 10px;
-    background-color: #0c1c43;
-    color: white;
+    background-color: #fffce4;
+    color: #0e100f;
     text-align: center;
 }
 
 .brand {
+    flex-direction: column;
+    margin-top: 80px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -103,18 +110,19 @@ footer {
     height: 200px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #0c1c43;
+    border: 3px solid #0e100f;
     background-color: white;
 }
 
 .brand-text {
-    text-align: left;
+    color: #0c1c43;
+    font-size: 40px;
 }
 
 .site-name {
     font-size: 36px;
     font-weight: bold;
-    color: #0c1c43;
+    color: #0e100f;
     margin: 0;
     letter-spacing: 2px;
 }
@@ -130,7 +138,7 @@ footer {
     justify-content: center;
     align-items: center;
     margin: 0 auto 40px auto;
-    max-width: 700px;
+    max-width: 990px;
     border-radius: 8px;
     overflow: hidden;
     border: 2px solid #0c1c43;
@@ -162,6 +170,7 @@ footer {
     flex-wrap: wrap;
 }
 
+/* Base card style */
 .category-card {
     width: 150px;
     height: 150px;
@@ -174,23 +183,52 @@ footer {
     align-items: center;
     background-color: white;
     transition: 0.3s;
+    cursor: pointer;
+    position: relative;
 }
 
+/* Hover style */
 .category-card:hover {
     background-color: #e6f0ff;
     transform: translateY(-5px);
 }
 
+/* When checkbox is checked */
+.category-card input:checked + img,
+.category-card input:checked + img + span {
+    filter: brightness(0.9);
+}
+
+.category-card input:checked ~ * {
+    background-color: #e6f0ff;
+}
+
+.category-card:has(input:checked) {
+    background-color: #e6f0ff;
+    border-color: #00346b;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.15);
+    transform: translateY(-5px);
+}
+
+/* Image and text styling */
 .category-card img {
     width: 100px;
     height: 100px;
     object-fit: contain;
+    pointer-events: none;
 }
 
 .category-card span {
     font-size: 14px;
     font-weight: bold;
     color: #0c1c43;
+    pointer-events: none;
+}
+
+/* Smooth transitions */
+.category-card,
+.category-card * {
+    transition: all 0.25s ease;
 }
 
 /* User Dropdown */
@@ -205,7 +243,7 @@ footer {
     gap: 8px;
     background: none;
     border: none;
-    color: white;
+    color: #0e100f;
     cursor: pointer;
     font-size: 16px;
     padding: 6px 12px;
@@ -308,3 +346,49 @@ footer {
         display: block;
     }
 }
+
+.date-range {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 20px auto;
+    flex-wrap: nowrap;
+    flex-direction: row;
+}
+
+.date-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: bold;
+    color: #0c1c43;
+}
+
+.date-field label {
+    margin-bottom: 5px;
+    font-size: 14px;
+    color: #0c1c43;
+}
+
+.date-field input[type="date"] {
+    padding: 8px 10px;
+    border: 2px solid #0c1c43;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.date-field input[type="date"]:hover,
+.date-field input[type="date"]:focus {
+    background-color: #e6f0ff;
+    border-color: #0e100f;
+}
+
+.category-card.active {
+    background-color: #e6f0ff;
+    transform: translateY(-5px);
+    border-color: #0e100f;
+}
+

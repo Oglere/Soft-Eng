@@ -6,21 +6,22 @@
 
     <title>DARA Main Page</title>
     <link rel="stylesheet" href="{{ asset('css/guest/main.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/guest/main.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
 <header>
     <div class="header-left">
-        <img src="{{ asset('storage/images/DARA.png') }}" alt="DARA Logo">
-        <h2>D A R A</h2>
+        <a href="/">
+            <img src="{{ asset('images/DARA.png') }}" alt="DARA Logo">
+        </a>
     </div>
 
     <!-- Hamburger for mobile -->
     <button class="hamburger" id="hamburger">
         <i class="fa-solid fa-bars"></i>
     </button>
+
 
     <nav class="header-nav" id="headerNav">
         @guest
@@ -39,12 +40,12 @@
 
                 <ul class="user-menu">
                     <li>
-                        <a href="{{ url('/profile') }}">
-                            <i class="fa-solid fa-user-graduate"></i> Profile
+                        <a href="{{ url('/' . $role) . '/dashboard'}}">
+                            <i class="fa-solid fa-user-graduate"></i> Dashboard
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('/settings') }}">
+                        <a href="{{ url('/' . $role) . '/account-setting' }}">
                             <i class="fa-solid fa-gear"></i> Settings
                         </a>
                     </li>

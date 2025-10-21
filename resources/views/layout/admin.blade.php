@@ -1,26 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>@yield('title', 'Admin Panel')</title>
-        <link rel="stylesheet" href="{{ asset('css/admin/layout.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/admin/AdminDash.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/admin/components.css') }}">
-        <link rel="stylesheet" href="{{ asset('css/admin/chart.css') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>
+        DARA -
+        @if (request()->is('admin/dashboard'))
+            Admin
+        @elseif (request()->is('admin/storage*'))
+            Admin | Storage
+        @elseif (request()->is('admin/manage-users*'))
+            Admin | Manage Users
+        @elseif (request()->is('admin/account-setting*'))
+            Admin | Account Setting
+        @else
+            Admin | Page
+        @endif
+    </title>
 
-    </head>
-    <body>
-        <!-- Top Nav -->
+    <link rel="stylesheet" href="{{ asset('css/admin/Dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/chart.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/components.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/sidenav.css') }}">
+</head>
+<body style="overflow: hidden; height: calc(100% - 61px)">
+    <main>
         <header>
-            <button class="menu-toggle">☰</button> <!-- hamburger -->
-            <div class="spacer"></div>
-            <h1>DARA</h1>
-
+            <div class="ahh">
+                <img
+                    src="{{ asset('images/DARA.png') }}"
+                    alt="DARA Logo"
+                    style=" width: 40px;
+                            height: 40px;
+                            border-radius: 50%;
+                            object-fit: cover;
+                            background: white;
+                            border: 2px solid white;
+                    ">
+            </div>
         </header>
 
         <!-- Side Nav + Main Content -->
@@ -30,15 +51,142 @@
                 <div class="menu-wrapper">
                     <h2>Profile</h2>
                 </div>
-                <ul>
-                    <li><a href="{{ route('admin.dashboard') }}"><i class="fas fa-house"></i> <span class="sidenav_name">Dashboard</span></a></li>
-                    <li><a href="{{ route('manage.user') }}"><i class="fas fa-users"></i> <span class="sidenav_name">Manage Users</span></a></li>
-                    <li><a href="{{ route('storage') }}"><i class="fas fa-database"></i> <span class="sidenav_name">Storage</span></a></li>
-                    <li><a href="{{ route('recover.user') }}" class="disabled"><i class="fas fa-cog"></i> <span class="sidenav_name">Account Settings</span></a></li>
-                    <li><a href="{{ route('admin.dashboard') }}"><i class="fas fa-sign-out-alt"></i> <span class="sidenav_name">Logout</span></a></li>
-                </ul>
+                <nav class="nav-links">
+                    <div class="dropdown">
+                        <a href="{{ url('/admin/dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active-link' : '' }}">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="feather feather-home"
+                                >
+                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                                <polyline points="9 22 9 12 15 12 15 22" />
+                            </svg>
+
+                            Dashboard
+
+                            <div class="dropdown-content">
+                                    <svg
+                                        style="margin-left: auto; opacity: 100%;"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="12"
+                                        height="12"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="feather
+                                        feather-chevron-down">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </a>
+                                <a href="/" class="unq uou">Search Studies</a>
+                            </div>
+                    </div>
+
+                    <div class="dropdown">
+                        <a href="{{ url('/admin/manage-users') }}" class="{{ request()->is('admin/manage-users') ? 'active-link' : '' }}">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="feather feather-users"
+                                >
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
+
+                            Manage Users
+
+                            <svg
+                                style=" opacity: 100%;"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="12"
+                                height="12"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="feather
+                                feather-chevron-down">
+                                <polyline points="6 9 12 15 18 9"/>
+                            </svg>
+                        </a>
+                        <a href="{{ url('/admin/manage-users/recover') }}" class="  {{ request()->is('admin/manage-users/recover') ? 'active-sublink' : 'unq uou' }}">
+                            Recovery
+                        </a>
+                    </div>
+
+                    <a href="{{ url('/admin/storage') }}" class="{{ request()->is('admin/storage') ? 'active-link' : '' }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-database">
+                            <ellipse cx="12" cy="5" rx="9" ry="3"/>
+                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+                        </svg>
+
+                        Storage
+                    </a>
+
+                    <div class="asd2" style=" width: 100%; margin-top: 10px; display: flex; justify-content: center;">
+                        <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
+                    </div>
+
+                    <a href="{{ url('/admin/account-setting') }}" class=" {{ request()->is('admin/account-setting') ? 'active-sublink' : 'unq' }}">Edit Account</a>
+
+                    <div class="asd2" style=" width: 100%; display: flex; justify-content: center;">
+                        <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
+                    </div>
+
+                    <form action="/logout" method="POST">
+                        @csrf
+                        <button class="lgt">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="feather feather-log-in"
+                                >
+                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                                <polyline points="10 17 15 12 10 7" />
+                                <line x1="15" y1="12" x2="3" y2="12" />
+                            </svg>
+
+                            Logout
+                        </button>
+                    </form>
+                </nav>
             </div>
 
+            <div class="right">
+                @yield('right')
+                {{-- @yield('modals') --}}
+
+            </div>
 
             <!-- Main -->
             <main>
@@ -46,21 +194,14 @@
             </main>
         </div>
 
-        <script>
-            const toggleBtn = document.querySelector('.menu-toggle');
-            const sidebar = document.querySelector('.sidebar');
-            const contentArea = document.querySelector('.content-area');
+        <footer>
+        </footer>
+    </main>
+</body>
+<script 
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
 
-            toggleBtn.addEventListener('click', () => {
-                sidebar.classList.toggle('active');
-                contentArea.classList.toggle('shift');
-            });
-        </script>
-
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="{{ asset('js/admin/chart.js') }}"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" 
-            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-
-    </body>
 </html>
