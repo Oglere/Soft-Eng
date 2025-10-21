@@ -42,7 +42,7 @@
                 <div class="menu-section">
                     <p class="menu-title">Menu</p>
                     <div class="menu">
-                        <a href="<?php echo e(url('/student/dashboard')); ?>" class="active">
+                        <a href="<?php echo e(url('/teacher/dashboard')); ?>" class="active">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -50,7 +50,7 @@
                             </svg>
                             Dashboard
                         </a>
-                        <a href="<?php echo e(url('/student/dashboard')); ?>">
+                        <a href="<?php echo e(url('/teacher/dashboard')); ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" width="24" height="24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -58,7 +58,7 @@
                             </svg>
                             Search Studies
                         </a>
-                        <a href="<?php echo e(url('/student/doc_status')); ?>">
+                        <a href="<?php echo e(url('/teacher/review')); ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
