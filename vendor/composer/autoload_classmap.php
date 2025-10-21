@@ -7,12 +7,15 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'App\\Http\\Controllers\\AdminController' => $baseDir . '/app/Http/Controllers/AdminController.php',
+    'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Controllers\\LoginController' => $baseDir . '/app/Http/Controllers/LoginController.php',
     'App\\Http\\Controllers\\OtpController' => $baseDir . '/app/Http/Controllers/OtpController.php',
     'App\\Http\\Controllers\\PdfController' => $baseDir . '/app/Http/Controllers/PdfController.php',
     'App\\Http\\Controllers\\QueryController' => $baseDir . '/app/Http/Controllers/QueryController.php',
     'App\\Http\\Controllers\\StudentController' => $baseDir . '/app/Http/Controllers/StudentController.php',
     'App\\Http\\Controllers\\TeacherController' => $baseDir . '/app/Http/Controllers/TeacherController.php',
+    'App\\Http\\Middleware\\EnsureUserIsAuthenticated' => $baseDir . '/app/Http/Middleware/EnsureUserIsAuthenticated.php',
+    'App\\Http\\Middleware\\PreventBackHistory' => $baseDir . '/app/Http/Middleware/PreventBackHistory.php',
     'App\\Models\\DocumentRepository' => $baseDir . '/app/Models/DocumentRepository.php',
     'App\\Models\\Otp' => $baseDir . '/app/Models/Otp.php',
     'App\\Models\\User' => $baseDir . '/app/Models/User.php',
@@ -136,6 +139,7 @@ return array(
     'Cron\\MonthField' => $vendorDir . '/dragonmantank/cron-expression/src/Cron/MonthField.php',
     'Database\\Factories\\UserFactory' => $baseDir . '/database/factories/UserFactory.php',
     'Database\\Seeders\\DatabaseSeeder' => $baseDir . '/database/seeders/DatabaseSeeder.php',
+    'Database\\Seeders\\UserSeeder' => $baseDir . '/database/seeders/UserSeeder.php',
     'DateError' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateError.php',
     'DateException' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateException.php',
     'DateInvalidOperationException' => $vendorDir . '/symfony/polyfill-php83/Resources/stubs/DateInvalidOperationException.php',

@@ -1,0 +1,10 @@
+.chart{
+    width: 100%;
+}
+.chart2 {
+    /* display: block;
+    box-sizing: border-box;  */
+    max-width: 555px; 
+    max-height: 555px;
+}
+    

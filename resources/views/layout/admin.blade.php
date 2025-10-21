@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <title>
         DARA -
@@ -19,7 +22,9 @@
         @endif
     </title>
 
-
+    <link rel="stylesheet" href="{{ asset('css/admin/Dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/chart.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/components.css') }}">
     <link rel="stylesheet" href="{{ asset('css/sidenav.css') }}">
 </head>
 <body style="overflow: hidden; height: calc(100% - 61px)">
@@ -65,23 +70,25 @@
 
                             Dashboard
 
-                            <svg
-                                style="margin-left: auto; opacity: 50%;"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="12"
-                                height="12"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="feather
-                                feather-chevron-down">
-                                <polyline points="6 9 12 15 18 9"/>
-                            </svg>
-                        </a>
-                        <a href="/" class="unq uou">Search Studies</a>
+                            <div class="dropdown-content">
+                                    <svg
+                                    style="margin-left: auto; opacity: 100%;"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        width="12"
+                                        height="12"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        class="feather
+                                        feather-chevron-down">
+                                        <polyline points="6 9 12 15 18 9"/>
+                                    </svg>
+                                </a>
+                                <a href="/" class="unq uou">Search Studies</a>
+                            </div>
                     </div>
 
                     <div class="dropdown">
@@ -107,7 +114,7 @@
                             Manage Users
 
                             <svg
-                                style="margin-left: auto; opacity: 50%;"
+                                style=" opacity: 100%;"
                                 xmlns="http://www.w3.org/2000/svg"
                                 width="12"
                                 height="12"
@@ -175,6 +182,8 @@
 
             <div class="right">
                 @yield('right')
+                {{-- @yield('modals') --}}
+
             </div>
 
         </div>
@@ -183,6 +192,12 @@
         </footer>
     </main>
 </body>
+<script 
+  src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="{{ asset('js/admin/chart.js') }}"></script>
 </html>
 
 <script>

@@ -19,6 +19,11 @@ class AdminController extends Controller
     public function user_recovery_page() {
         return view ('admin.recovery');
     }
+    
+    public function addManageUsersForm() 
+    {
+        return view('admin.manage_users_crud.add_manage_users');
+    }
 
     public function storage_page() {
         return view ('admin.storage');
