@@ -116,39 +116,6 @@
     text-decoration: underline;
 }
 
-@media (max-width: 768px) {
-    .page-layout {
-        flex-direction: column;
-    }
-
-    .sidebar {
-        width: 100%;
-        height: auto;
-        border-right: none;
-        border-bottom: 2px solid black;
-    }
-
-    .login-wrapper {
-        margin-left: 0;
-        padding: 20px;
-    }
-}
-
-@media (max-width: 480px) {
-    .login-card {
-        padding: 20px;
-    }
-
-    .input-group input {
-        font-size: 13px;
-    }
-
-    .login-btn {
-        font-size: 14px;
-        padding: 8px;
-    }
-}
-
 .role-title {
     font-weight: bold;
     color: #0c1c43;
