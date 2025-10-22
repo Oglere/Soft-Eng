@@ -6,7 +6,7 @@
     <title>D.A.R.A Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/sidenav.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/teacher/std_controls .css') }}">
+    <link rel="stylesheet" href="{{ asset('css/teacher/std_controls.css') }}">
 </head>
 <body>
 
@@ -24,7 +24,7 @@
             </button>
 
             <div class="profile">
-        
+
                 <div class="profile-info">
                     <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
 
@@ -64,7 +64,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                             </svg>
-                            Review Studies
+                            Submitted Studies
                         </a>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                 </div>
             </div>
         </aside>
-        
+
         <!-- Main -->
         <main class="main">
             <h2>Account Setting</h2>
