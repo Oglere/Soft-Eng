@@ -24,7 +24,7 @@
             </button>
 
             <div class="profile">
-
+        
                 <div class="profile-info">
                     <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
 
@@ -94,7 +94,7 @@
                 </div>
             </div>
         </aside>
-
+        
         <!-- Main -->
         <main class="main">
         <h2>Review Submitted Studies</h2>
@@ -108,10 +108,10 @@
                 @php
                     $status = strtolower($document->status ?? 'pending');
                 @endphp
-                <p><strong>Submitted by:</strong>
+                <p><strong>Submitted by:</strong> 
                     {{ optional($document->student)->first_name . ' ' . optional($document->student)->last_name ?? 'Unknown' }}
                 </p>
-                <p><strong>Date Submitted:</strong>
+                <p><strong>Date Submitted:</strong> 
                     {{ $document->date_submitted ? $document->date_submitted->format('F d, Y') : 'N/A' }}
                 </p>
                 <p><strong>Status:</strong>
@@ -144,9 +144,9 @@
         {{-- PDF Viewer --}}
         <div class="pdfview">
             @if(!empty($document->file) && file_exists(public_path('storage/documents/' . $document->file)))
-                <embed src="{{ asset('storage/documents/' . $document->file) }}"
-                    type="application/pdf"
-                    width="100%" height="600px"
+                <embed src="{{ asset('storage/documents/' . $document->file) }}" 
+                    type="application/pdf" 
+                    width="100%" height="600px" 
                     style="border-radius: 20px;">
             @else
                 <div class="no-file">
@@ -156,7 +156,7 @@
         </div>
     </main>
     </div>
-
+    
 {{-- SweetAlert Dialog --}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>

@@ -1,30 +1,30 @@
+    
+/* Main */
+.main {
+    flex: 1;
+    padding: 1.5rem 2rem;
+}
 
-    /* Main */
-    .main {
-      flex: 1;
-      padding: 1.5rem 2rem;
-    }
+.main h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
 
-    .main h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-    }
+/* Search bar + filters */
+.search-filter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
 
-    /* Search bar + filters */
-    .search-filter {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .search-bar {
-  flex: 1;
-  position: relative;
-  max-width: 400px;
+.search-bar {
+    flex: 1;
+    position: relative;
+    max-width: 400px;
 }
 
 .search-bar .search-icon {
@@ -113,7 +113,7 @@
     border-radius: 4px;    /* remove rounded corners */
     display: inline-flex;      /* keep it inline with other buttons */
     align-items: center;       /* vertical center of SVG */
-    justify-content: center;
+    justify-content: center; 
     padding: 2px 3px  /* horizontal center of SVG */
 }
 
@@ -166,8 +166,8 @@
     margin-top: 1rem;
     display: flex;
     justify-content: flex-end; /* move to the opposite side (right) */
-
-
+    
+   
 }
 
 .pagination-btn {
@@ -260,3 +260,19 @@
     from { transform:translateY(-50px); opacity:0; }
     to { transform:translateY(0); opacity:1; }
 }
+
+.review-btn {
+    display: inline-block;
+    background-color: #0a1444;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.review-btn:hover {
+    background-color: #1e3a8a;
+}
+

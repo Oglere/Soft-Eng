@@ -12,9 +12,9 @@
 
 .viewContainer {
     width: 100% !important;
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
+    display:flex; 
+    justify-content:space-between; 
+    align-items:flex-start; 
     margin-bottom: 20px;
 }
 
@@ -92,3 +92,4 @@
     color: #383d41;
     border: 1px solid #d6d8d9;
 }
+
