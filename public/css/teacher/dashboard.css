@@ -1,0 +1,84 @@
+.main {
+  flex: 1;
+  padding: 2rem;
+}
+
+.main h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #0a1444;
+}
+
+/* Main card layout */
+.cards {
+  display: flex;
+  flex-direction: column;
+  gap: 30px; /* vertical gap between rows */
+}
+
+/* Top and bottom rows */
+.top-row,
+.bottom-row {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 50px; /* space between cards */
+  position: relative;
+}
+
+/* --- Position bottom cards centered under top --- */
+.bottom-row {
+  margin-left: 120px; /* shifts both bottom cards rightward */
+  margin-top: 20px;
+}
+
+/* Individual cards */
+.card {
+  width: 289px;
+  height: 209px;
+  border-radius: 0.75rem;
+ box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  color: #0a1444;
+  font-family: sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  position: relative;
+}
+
+/* SVG icons positioned to the right side */
+.card svg {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  right: 20px;
+  bottom: 50px; /* 👈 moved up by 10px */
+  opacity: 0.15;
+}
+
+/* Text styles */
+.label {
+  font-size: 18px;
+  font-weight: 600;
+  color: #0a1444;
+}
+
+.number {
+  font-size: 48px;
+  font-weight: 700;
+  color: #000;
+  display: inline-block;            /* ensure transform applies predictably */
+  transform: translateY(-30px);     /* move up by 10px */
+  transition: transform .15s ease;  /* optional smoothness */
+}
+
+
+/* Custom colors */
+.green { background: #98f3c9; }
+.blue { background: #b8d4ff; }
+.orange { background: #ffd9a0; }
+.yellow { background: #fef9c3; }
+.red { background: #fecaca; }

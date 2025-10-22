@@ -27,7 +27,7 @@
         <div class="profile-info">
           <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
 
-          <p>Student</p>
+          <p>Teacher</p>
         </div>
       </div>
     </div>
@@ -38,75 +38,66 @@
   <div class="layout">
      <!-- Sidebar -->
     <aside class="sidebar">
-      <div>
-        <div class="menu-section">
-          <p class="menu-title">Menu</p>
-          <div class="menu">
-            <a href="<?php echo e(url('/student/dashboard')); ?>">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M3 10h4v11H3zM10 3h4v18h-4zM17 6h4v15h-4z" />
-              </svg>
-              Dashboard
-            </a>
-            <a href="/">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" width="24" height="24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                Search Studies
-            </a>
-            <a href="<?php echo e(url('/student/submission')); ?>" >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 4v16m8-8H4" />
-              </svg>
-              Submit Studies
-            </a>
-            <a href="<?php echo e(url('/student/doc_status')); ?>">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-              </svg>
-              Submitted Studies
-            </a>
-          </div>
-        </div>
+            <div>
+                <div class="menu-section">
+                    <p class="menu-title">Menu</p>
+                    <div class="menu">
+                        <a href="<?php echo e(url('/teacher/dashboard')); ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 10h4v11H3zM10 3h4v18h-4zM17 6h4v15h-4z" />
+                            </svg>
+                            Dashboard
+                        </a>
+                        <a href="/">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" width="24" height="24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            Search Studies
+                        </a>
+                        <a href="<?php echo e(url('/teacher/submitted')); ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                            </svg>
+                            Submitted Studies
+                        </a>
+                    </div>
+                </div>
 
-        <div class="menu-section">
-          <p class="menu-title">Settings</p>
-          <div class="menu">
-            <a href="<?php echo e(url('/student/account_setting')); ?>" class="active">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M5.121 17.804A1 1 0 015 17V7a1 1 0 011-1h3.382a1 1 0 01.894.553l1.382 2.764a1 1 0 00.894.553H19a1 1 0 011 1v6a1 1 0 01-.121.496l-2.382 4.764a1 1 0 01-.894.553H6a1 1 0 01-.879-.496z" />
-              </svg>
-              Account Settings
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
-  @csrf
-</form>
+                <div class="menu-section">
+                    <p class="menu-title">Settings</p>
+                        <div class="menu">
+                            <a href="<?php echo e(url('/teacher/account_setting')); ?>" class="active">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5.121 17.804A1 1 0 015 17V7a1 1 0 011-1h3.382a1 1 0 01.894.553l1.382 2.764a1 1 0 00.894.553H19a1 1 0 011 1v6a1 1 0 01-.121.496l-2.382 4.764a1 1 0 01-.894.553H6a1 1 0 01-.879-.496z" />
+                                </svg>
+                                Account Settings
+                            </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+                            @csrf
+                        </form>
 
-<a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="inline-flex items-center gap-2">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
-  </svg>
-  Log out
-</a>
-
-          </div>
-        </div>
-      </div>
-    </aside>
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="inline-flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
+                            </svg>
+                            Log out
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </aside>
 
   <!-- Main -->
 <main class="main">
-    <h2>Account Setting</h2>
+    <h2>Account Settings</h2>
 
 @if (session('success'))
 <script>
@@ -139,7 +130,7 @@
     {{-- If account is not verified, show verify form --}}
 @if (!session('account_verified'))
 <div class="verify-wrapper">
-  <form class="verify-form" id="verifyForm" method="POST" action="{{ route('student.verify_identity') }}">
+  <form class="verify-form" id="verifyForm" method="POST" action="{{ route('teacher.verify_identity') }}">
       @csrf
       <div class="verify-card">
           <h1>Verify Your Identity</h1>
@@ -220,7 +211,7 @@
                 @endif
 
 
-                <form method="POST" action="{{ route('student.update_account') }}">
+                <form method="POST" action="{{ route('teacher.update_account') }}">
                     @csrf
 <h2 style="color: #0a0099; font-weight: 800; text-align: center; margin-bottom: 10px;">
                     Edit Your Account
@@ -306,7 +297,7 @@
 <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 15px;">
 
     <!-- Update button -->
-    <form method="POST" action="{{ route('student.update_account') }}">
+    <form method="POST" action="{{ route('teacher.update_account') }}">
         @csrf
         <button type="submit"
                 style="background-color: #0a0099; color: white; border: none;
@@ -317,7 +308,7 @@
     </form>
 
     <!-- Cancel button -->
-    <form method="POST" action="{{ route('student.cancel_update') }}">
+    <form method="POST" action="{{ route('teacher.cancel_update') }}">
         @csrf
         <button type="submit"
                 style="background-color: #b30000; color: white; border: none;

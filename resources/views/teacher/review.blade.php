@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D.A.R.A Dashboard</title>
+    <title>D.A.R.A Review</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/sidenav.css') }}">
     <link rel="stylesheet" href="{{ asset('css/teacher/review.css') }}">
@@ -50,7 +50,7 @@
                             </svg>
                             Dashboard
                         </a>
-                        <a href="<?php echo e(url('/teacher/dashboard')); ?>">
+                        <a href="/">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" width="24" height="24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -64,7 +64,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                             </svg>
-                            Review Studies
+                            Submitted Studies
                         </a>
                     </div>
                 </div>
@@ -72,13 +72,13 @@
                 <div class="menu-section">
                     <p class="menu-title">Settings</p>
                         <div class="menu">
-                            <a href="<?php echo e(url('/student/account_setting')); ?>">
+                            <a href="<?php echo e(url('/teacher/account_setting')); ?>">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M5.121 17.804A1 1 0 015 17V7a1 1 0 011-1h3.382a1 1 0 01.894.553l1.382 2.764a1 1 0 00.894.553H19a1 1 0 011 1v6a1 1 0 01-.121.496l-2.382 4.764a1 1 0 01-.894.553H6a1 1 0 01-.879-.496z" />
                                 </svg>
-                                Account
+                                Account Settings
                             </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
                             @csrf
@@ -97,7 +97,7 @@
 
     <!-- Main -->
     <main class="main">
-    <h2>Review Studies</h2>
+    <h2>Submitted Studies</h2>
         <div class="search-filter">
             <!-- Search Bar -->
             <div class="search-bar">
@@ -134,7 +134,7 @@
                 @forelse($documents as $doc)
                 <tr data-status="{{ strtolower($doc->status ?? 'pending') }}">
                     <td>
-                    <a href="{{ url('/teacher/review-document/' . $doc->document_id) }}" class="plain-link">
+                    <a href="{{ url('/teacher/review/' . $doc->document_id) }}" class="plain-link">
                         {{ $doc->title ?? 'Untitled Study' }}
                     </a>
                     </td>
