@@ -56,14 +56,22 @@
                           </svg>
                           Search Studies
                       </a>
-                      <a href="{{ url('/student/submitted') }}" class="active">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                              viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                          </svg>
-                          Submitted Studies
-                      </a>
+                      <a href="<?php echo e(url('/student/submission')); ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4v16m8-8H4" />
+                            </svg>
+                            Submit Studies
+                        </a>
+                        <a href="{{ url('/student/submitted') }}" class="active">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                            </svg>
+                            Submitted Studies
+                        </a>
                   </div>
               </div>
 

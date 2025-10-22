@@ -6,7 +6,7 @@
     <title>D.A.R.A Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/sidenav.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/teacher/std_controls.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/teacher/std_controls .css') }}">
 </head>
 <body>
 
