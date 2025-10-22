@@ -224,7 +224,7 @@
     const form = document.getElementById('documentForm');
 
     // Disable typing in title input
-    titleInput.readOnly = true;
+    titleInput.readOnly = false;
 
     // Trigger hidden file input
     chooseFileBtn.addEventListener('click', () => fileInput.click());
