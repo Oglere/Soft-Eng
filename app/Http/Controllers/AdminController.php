@@ -36,14 +36,46 @@ class AdminController extends Controller
 
         $user = Auth::user();
 
-        if (!\Illuminate\Support\Facades\Hash::check($request->password, $user->password_hash)) {
-            return back()->withErrors(['login_error' => 'Incorrect password. Please try again.']);
+        // Get session-based attempt tracking
+        $attempts = session('login_attempts', 0);
+        $locked_until = session('locked_until');
+
+        // 🔒 Check if user is temporarily locked out
+        if ($locked_until && now()->lt($locked_until)) {
+            return back()->withErrors([
+                'login_error' => 'Please wait a few seconds before trying again.'
+            ]);
         }
 
-        // Store in session that user has verified identity
-        session(['account_verified' => true]);
+        // ❌ Incorrect password handling
+        if (!\Illuminate\Support\Facades\Hash::check($request->password, $user->password_hash)) {
+            $attempts++;
 
-        return redirect()->route('admin.account_setting');
+            if ($attempts >= 3) {
+                // Lock user for 1 minute (60 seconds)
+                session([
+                    'locked_until' => now()->addSeconds(60),
+                    'login_attempts' => 0
+                ]);
+
+                return back()->withErrors([
+                    'login_error' => ''
+                ]);
+            }
+
+            // Save current attempt count
+            session(['login_attempts' => $attempts]);
+
+            return back()->withErrors([
+                'login_error' => "Incorrect password. Attempt $attempts of 3."
+            ]);
+        }
+
+        // ✅ Correct password
+        session(['account_verified' => true]);
+        session()->forget(['login_attempts', 'locked_until']);
+
+        return redirect()->route('admin.account_setting')->with('success', 'Identity verified successfully.');
     }
 
     public function update_account(Request $request)
@@ -55,18 +87,56 @@ class AdminController extends Controller
                 ->withErrors(['login_error' => 'You must verify your identity before updating your account.']);
         }
 
-        $request->validate([
-            'usn' => 'required|string|max:255',
-            'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+        // Validate input
+        $validator = \Validator::make($request->all(), [
+            'email' => [
+                'nullable',
+                'string',
+                'email',
+                'max:255',
+                function ($attribute, $value, $fail) {
+                    if ($value && !preg_match('/^[A-Za-z0-9._%+-]{1,15}@gmail\.com$/', $value)) {
+                        $fail('Email must be a Gmail address and max 15 characters before @.');
+                    }
+                },
+            ],
+            'phone_number' => 'nullable|string|max:20',
             'password' => 'nullable|string|min:6',
         ]);
 
-        $user->usn = $request->usn;
+        $validator->after(function ($validator) use ($request) {
+            $missing = [];
+            if (empty($request->first_name)) $missing[] = 'first name';
+            if (empty($request->last_name)) $missing[] = 'last name';
+            if (empty($request->email)) $missing[] = 'email';
+            if (empty($request->phone_number)) $missing[] = 'phone number';
+
+            if (!empty($missing)) {
+                $last = array_pop($missing);
+                $message = 'The ' . (empty($missing) ? $last : implode(', ', $missing) . ' and ' . $last) . ' fields are required.';
+                $validator->errors()->add('required', $message);
+            }
+        });
+
+        $validator->validate();
+
+        // ✅ Check if user changed anything
+        $noChanges =
+            $user->first_name === $request->first_name &&
+            $user->last_name === $request->last_name &&
+            $user->email === $request->email &&
+            $user->phone_number === $request->phone_number &&
+            !$request->filled('password');
+
+        if ($noChanges) {
+            return back()->withErrors(['no_changes' => 'No changes detected. Please update at least one field.']);
+        }
+
+        // ✅ Apply updates
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
         $user->email = $request->email;
+        $user->phone_number = $request->phone_number;
 
         if ($request->filled('password')) {
             $user->password_hash = \Illuminate\Support\Facades\Hash::make($request->password);
@@ -74,7 +144,6 @@ class AdminController extends Controller
 
         $user->save();
 
-        // Remove verification session after update
         session()->forget('account_verified');
 
         return redirect()->route('admin.account_setting')

@@ -45,7 +45,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="{{ url('/' . $role) . '/account-setting' }}">
+                        <a href="{{ url('/' . $role) . '/account_setting' }}">
                             <i class="fa-solid fa-gear"></i> Settings
                         </a>
                     </li>
