@@ -102,7 +102,7 @@
               </div>
           </div>
       </aside>
-      
+
       <!-- Main -->
       <main class="main">
           <h2>Review Submitted Study</h2>
@@ -113,7 +113,7 @@
                   <p><strong>Title:</strong> {{ $document->title ?? 'N/A' }}</p>
                   <p><strong>Abstract:</strong> {{ $document->abstract ?? 'No abstract provided.' }}</p>
                   <p><strong>Study Type:</strong> {{ $document->study_type ?? 'N/A' }}</p>
-                  
+
                   <p><strong>Date Submitted:</strong>
                       {{ $document->date_submitted ? $document->date_submitted->format('F d, Y') : 'N/A' }}
                   </p>
@@ -145,10 +145,10 @@
 
           {{-- PDF Viewer --}}
           <div class="pdfview">
-              @if(!empty($document->file) && file_exists(public_path('storage/documents/' . $document->file)))
-                  <embed src="{{ asset('storage/documents/' . $document->file) }}" 
-                      type="application/pdf" 
-                      width="100%" height="600px" 
+              @if(!empty($document->file) && file_exists(public_path('storage/' . $document->file)))
+                  <embed src="{{ asset('storage/' . $document->file) }}"
+                      type="application/pdf"
+                      width="100%" height="600px"
                       style="border-radius: 20px;">
               @else
                   <div class="no-file">
