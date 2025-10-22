@@ -9,28 +9,34 @@
   <link rel="stylesheet" href="{{ asset('css/student/submit.css') }}">
 </head>
 <body>
-  <div class="navbar">
-    <h1>D.A.R.A</h1>
+    <div class="navbar">
+        <h1>D.A.R.A</h1>
 
-    <div class="navbar-right">
-      <button>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-             viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-        </svg>
-      </button>
+        <div class="navbar-right">
+            <div class="notification-wrapper">
+                <button id="notifBtn" class="notif-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                    <span id="notifBadge" class="notif-badge">0</span>
+                </button>
 
-      <div class="profile">
+                <div id="notifDropdown" class="notif-dropdown hidden">
+                    <h4>Notifications</h4>
+                    <ul id="notifList"></ul>
+                </div>
+            </div>
 
-        <div class="profile-info">
-          <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
-
-          <p>Student</p>
+            <div class="profile">
+                <div class="profile-info">
+                    <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
+                    <p>Student</p>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 
 
   <div class="layout">
@@ -210,30 +216,30 @@
 
 {{-- JavaScript --}}
 <script>
-  // Trigger hidden file input
-  const chooseFileBtn = document.getElementById('chooseFileBtn');
-  const fileInput = document.getElementById('fileID');
-  const fileNameDisplay = document.getElementById('fileNameDisplay');
-  const titleInput = document.getElementById('title');
+    // Trigger hidden file input
+    const chooseFileBtn = document.getElementById('chooseFileBtn');
+    const fileInput = document.getElementById('fileID');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+    const titleInput = document.getElementById('title');
 
-  chooseFileBtn.addEventListener('click', () => fileInput.click());
+    chooseFileBtn.addEventListener('click', () => fileInput.click());
 
-  // Show selected file name + auto-fill title
-  fileInput.addEventListener('change', function () {
-    const file = this.files[0];
-    if (file) {
-      const fileName = file.name;
-      const baseName = fileName.replace(/\.[^/.]+$/, ""); // remove extension
-      fileNameDisplay.textContent = `Selected: ${fileName}`;
-      if (!titleInput.value.trim()) {
-        titleInput.value = baseName; // auto-fill only if empty
-      }
-    } else {
-      fileNameDisplay.textContent = '';
-    }
-  });
+    // Show selected file name + auto-fill title
+    fileInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (file) {
+        const fileName = file.name;
+        const baseName = fileName.replace(/\.[^/.]+$/, ""); // remove extension
+        fileNameDisplay.textContent = `Selected: ${fileName}`;
+        if (!titleInput.value.trim()) {
+            titleInput.value = baseName; // auto-fill only if empty
+        }
+        } else {
+            fileNameDisplay.textContent = '';
+        }
+    });
 
-  document.getElementById('documentForm').addEventListener('submit', function (e) {
+    document.getElementById('documentForm').addEventListener('submit', function (e) {
     e.preventDefault(); // stop form submission temporarily
 
     // Remove previous errors
@@ -243,15 +249,15 @@
 
     // Helper function to show error
     function showError(input, message) {
-      const error = document.createElement('p');
-      error.className = 'error-text';
-      error.textContent = message;
-      error.style.color = 'red';
-      error.style.fontSize = '0.85rem';
-      error.style.marginTop = '4px';
-      if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('error-text')) {
-        input.insertAdjacentElement('afterend', error);
-      }
+        const error = document.createElement('p');
+        error.className = 'error-text';
+        error.textContent = message;
+        error.style.color = 'red';
+        error.style.fontSize = '0.85rem';
+        error.style.marginTop = '4px';
+        if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('error-text')) {
+            input.insertAdjacentElement('afterend', error);
+        }
     }
 
     // Get inputs
@@ -265,151 +271,216 @@
 
     // ---- File Validation ----
     if (fileInput.files.length === 0) {
-      showError(document.querySelector('.upload-box p'), 'Please upload a PDF file.');
-      isValid = false;
+        showError(document.querySelector('.upload-box p'), 'Please upload a PDF file.');
+        isValid = false;
     } else {
-      const file = fileInput.files[0];
-      if (file.size > 25 * 1024 * 1024) {
-        showError(document.querySelector('.upload-box p'), 'File size must not exceed 25MB.');
-        isValid = false;
-      }
-      if (!file.name.toLowerCase().endsWith('.pdf')) {
-        showError(document.querySelector('.upload-box p'), 'Only PDF files are allowed.');
-        isValid = false;
-      }
+        const file = fileInput.files[0];
+        if (file.size > 25 * 1024 * 1024) {
+            showError(document.querySelector('.upload-box p'), 'File size must not exceed 25MB.');
+            isValid = false;
+        }
+        if (!file.name.toLowerCase().endsWith('.pdf')) {
+            showError(document.querySelector('.upload-box p'), 'Only PDF files are allowed.');
+            isValid = false;
+        }
     }
 
     // ---- Type of Study ----
     if (typeChecks.length === 0) {
-      const typeContainer = document.querySelector('.type-buttons');
-      const error = document.createElement('p');
-      error.className = 'error-text';
-      error.textContent = 'Please select at least one study type.';
-      error.style.color = 'red';
-      error.style.fontSize = '0.85rem';
-      error.style.marginTop = '-20px';
-      if (!typeContainer.nextElementSibling || !typeContainer.nextElementSibling.classList.contains('error-text')) {
-        typeContainer.insertAdjacentElement('afterend', error);
-      }
-      isValid = false;
+        const typeContainer = document.querySelector('.type-buttons');
+        const error = document.createElement('p');
+        error.className = 'error-text';
+        error.textContent = 'Please select at least one study type.';
+        error.style.color = 'red';
+        error.style.fontSize = '0.85rem';
+        error.style.marginTop = '-20px';
+        if (!typeContainer.nextElementSibling || !typeContainer.nextElementSibling.classList.contains('error-text')) {
+            typeContainer.insertAdjacentElement('afterend', error);
+        }
+        isValid = false;
     }
 
     // ---- Title ----
     const titleTrim = title.value.trim();
     if (titleTrim === '') {
-      showError(title, 'Title is required.');
-      isValid = false;
+        showError(title, 'Title is required.');
+        isValid = false;
     } else if (titleTrim.length < 5 || titleTrim.length > 255) {
-      showError(title, 'Title must be between 5 and 255 characters.');
-      isValid = false;
+        showError(title, 'Title must be between 5 and 255 characters.');
+        isValid = false;
     }
 
     // ---- Keywords ----
     const keywordsTrim = keywords.value.trim();
     if (keywordsTrim === '') {
-      showError(keywords, 'Keywords are required.');
-      isValid = false;
-    } else {
-      const keywordArray = keywordsTrim.split(',').map(k => k.trim()).filter(k => k !== '');
-      if (keywordArray.length === 0) {
-        showError(keywords, 'Please enter at least one valid keyword.');
+        showError(keywords, 'Keywords are required.');
         isValid = false;
-      }
+    } else {
+        const keywordArray = keywordsTrim.split(',').map(k => k.trim()).filter(k => k !== '');
+        if (keywordArray.length === 0) {
+            showError(keywords, 'Please enter at least one valid keyword.');
+            isValid = false;
+        }
     }
 
     // ---- Abstract ----
     const abstractTrim = abstract.value.trim();
-    if (abstractTrim === '') {
-      showError(abstract, 'Abstract is required.');
-      isValid = false;
-    } else {
-      const wordCount = abstractTrim.split(/\s+/).length;
-      if (wordCount < 10) {
-        showError(abstract, 'Abstract must be at least 10 words.');
+        if (abstractTrim === '') {
+            showError(abstract, 'Abstract is required.');
+            isValid = false;
+        } else {
+        const wordCount = abstractTrim.split(/\s+/).length;
+        if (wordCount < 10) {
+                showError(abstract, 'Abstract must be at least 10 words.');
+                isValid = false;
+            }
+        }
+
+        // ---- Teacher ----
+        if (teacher.value.trim() === '') {
+        showError(teacher, 'Please select a teacher.');
         isValid = false;
-      }
-    }
+        }
 
-    // ---- Teacher ----
-    if (teacher.value.trim() === '') {
-      showError(teacher, 'Please select a teacher.');
-      isValid = false;
-    }
+        // ---- Submission Date ----
+        if (date.value.trim() === '') {
+        showError(date, 'Submission date is required.');
+        isValid = false;
+        }
 
-    // ---- Submission Date ----
-    if (date.value.trim() === '') {
-      showError(date, 'Submission date is required.');
-      isValid = false;
-    }
-
-    // Submit if valid
-    if (isValid) {
-      this.submit();
-    }
-  });
-
-  // Prevent past date selection
-  const dateInput = document.getElementById('submission_date');
-  const today = new Date().toISOString().split('T')[0];
-  dateInput.min = today;
-
-const capstoneCheckbox = document.getElementById('capstone');
-const extraTeachersDiv = document.getElementById('extraTeachers');
-const mainTeacherLabel = document.getElementById('mainTeacherLabel');
-
-// All teacher selects
-const teacherSelects = [
-  document.getElementById('teacher_id'),
-  document.querySelector('select[name="teacher_id_2"]'),
-  document.querySelector('select[name="teacher_id_3"]')
-];
-
-// Show/hide extra teachers based on Capstone
-function updateTeacherDisplay() {
-  if (capstoneCheckbox.checked) {
-    extraTeachersDiv.style.display = 'block';
-    mainTeacherLabel.textContent = 'Teacher 1';
-  } else {
-    extraTeachersDiv.style.display = 'none';
-    mainTeacherLabel.textContent = 'Teacher';
-    // Reset extra selects
-    teacherSelects.slice(1).forEach(select => select.value = '');
-  }
-}
-
-capstoneCheckbox.addEventListener('change', updateTeacherDisplay);
-updateTeacherDisplay(); // ensure correct state on load
-
-// Prevent duplicate selection
-function preventDuplicateTeachers() {
-  const selectedValues = teacherSelects.map(s => s.value);
-
-  teacherSelects.forEach((select, idx) => {
-    Array.from(select.options).forEach(option => {
-      // Don't disable empty option
-      if (option.value === '') return;
-
-      // Disable option if it's selected in another dropdown
-      option.disabled = selectedValues.includes(option.value) && option.value !== select.value;
+        // Submit if valid
+        if (isValid) {
+        this.submit();
+        }
     });
-  });
-}
 
-// Add event listeners to all selects
-teacherSelects.forEach(select => {
-  select.addEventListener('change', preventDuplicateTeachers);
-});
+    // Prevent past date selection
+    const dateInput = document.getElementById('submission_date');
+    const today = new Date().toISOString().split('T')[0];
+    dateInput.min = today;
 
-// Run on page load in case old values exist
-preventDuplicateTeachers();
+    const capstoneCheckbox = document.getElementById('capstone');
+    const extraTeachersDiv = document.getElementById('extraTeachers');
+    const mainTeacherLabel = document.getElementById('mainTeacherLabel');
 
+    // All teacher selects
+    const teacherSelects = [
+    document.getElementById('teacher_id'),
+    document.querySelector('select[name="teacher_id_2"]'),
+    document.querySelector('select[name="teacher_id_3"]')
+    ];
 
+    // Show/hide extra teachers based on Capstone
+    function updateTeacherDisplay() {
+        if (capstoneCheckbox.checked) {
+            extraTeachersDiv.style.display = 'block';
+            mainTeacherLabel.textContent = 'Teacher 1';
+        } else {
+            extraTeachersDiv.style.display = 'none';
+            mainTeacherLabel.textContent = 'Teacher';
+            // Reset extra selects
+            teacherSelects.slice(1).forEach(select => select.value = '');
+        }
+    }
 
+    capstoneCheckbox.addEventListener('change', updateTeacherDisplay);
+        updateTeacherDisplay(); // ensure correct state on load
 
+        // Prevent duplicate selection
+        function preventDuplicateTeachers() {
+        const selectedValues = teacherSelects.map(s => s.value);
+
+        teacherSelects.forEach((select, idx) => {
+            Array.from(select.options).forEach(option => {
+            // Don't disable empty option
+            if (option.value === '') return;
+
+            // Disable option if it's selected in another dropdown
+            option.disabled = selectedValues.includes(option.value) && option.value !== select.value;
+            });
+        });
+    }
+
+    // Add event listeners to all selects
+    teacherSelects.forEach(select => {
+    select.addEventListener('change', preventDuplicateTeachers);
+    });
+
+    // Run on page load in case old values exist
+    preventDuplicateTeachers();
 </script>
+</div>
 
-  </div>
+<script>
+    async function loadNotifications(saveToStorage = true) {
+    const notifBadge = document.getElementById('notifBadge');
+    const notifList = document.getElementById('notifList');
 
+    try {
+        const res = await fetch('{{ route("student.notifications") }}');
+        const data = await res.json();
+
+        notifList.innerHTML = '';
+
+        if (data.length === 0) {
+            notifBadge.style.display = 'none';
+            notifList.innerHTML = '<li>No new notifications.</li>';
+            if (saveToStorage) localStorage.setItem('notifCount', 0);
+            return;
+        }
+
+        notifBadge.style.display = 'inline-block';
+        notifBadge.textContent = data.length;
+
+        // store count so it persists across pages
+        if (saveToStorage) localStorage.setItem('notifCount', data.length);
+
+        data.forEach(n => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                ${n.icon}
+                <a href="${n.link}" class="notif-link">${n.message}</a>
+                <br>
+                <small>${n.time}</small>
+            `;
+            notifList.appendChild(li);
+            });
+        } catch (error) {
+            console.error('Error loading notifications:', error);
+        }
+    }
+
+    // --- INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+    const notifBadge = document.getElementById('notifBadge');
+
+    // Load saved count from localStorage (keep number after page change)
+    const savedCount = localStorage.getItem('notifCount');
+    if (savedCount && parseInt(savedCount) > 0) {
+        notifBadge.textContent = savedCount;
+        notifBadge.style.display = 'inline-block';
+    } else {
+        notifBadge.style.display = 'none';
+    }
+
+    // Fetch new notifications immediately
+    loadNotifications();
+
+    // Refresh notifications every 10 seconds
+    setInterval(() => {
+        loadNotifications();
+    }, 10000); // 10 seconds
+    });
+
+    // Toggle dropdown on bell click
+    document.getElementById('notifBtn').addEventListener('click', async () => {
+        const dropdown = document.getElementById('notifDropdown');
+        dropdown.classList.toggle('hidden');
+        if (!dropdown.classList.contains('hidden')) {
+            await loadNotifications(false); // don’t overwrite saved count every click
+        }
+    });
+</script>
 
 </body>
 </html>

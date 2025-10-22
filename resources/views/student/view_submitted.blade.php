@@ -15,13 +15,21 @@
       <h1>D.A.R.A</h1>
 
       <div class="navbar-right">
-          <button>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                  viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-              </svg>
-          </button>
+            <div class="notification-wrapper">
+                <button id="notifBtn" class="notif-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                    <span id="notifBadge" class="notif-badge">0</span>
+                </button>
+
+                <div id="notifDropdown" class="notif-dropdown hidden">
+                    <h4>Notifications</h4>
+                    <ul id="notifList"></ul>
+                </div>
+            </div>
 
           <div class="profile">
               <div class="profile-info">
@@ -56,14 +64,22 @@
                           </svg>
                           Search Studies
                       </a>
-                      <a href="{{ url('/student/submitted') }}" class="active">
-                          <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                              viewBox="0 0 24 24" stroke="currentColor">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                  d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-                          </svg>
-                          Submitted Studies
-                      </a>
+                      <a href="<?php echo e(url('/student/submission')); ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 4v16m8-8H4" />
+                            </svg>
+                            Submit Studies
+                        </a>
+                        <a href="{{ url('/student/submitted') }}" class="active">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                            </svg>
+                            Submitted Studies
+                        </a>
                   </div>
               </div>
 
@@ -94,7 +110,7 @@
               </div>
           </div>
       </aside>
-      
+
       <!-- Main -->
       <main class="main">
           <h2>Review Submitted Study</h2>
@@ -105,7 +121,7 @@
                   <p><strong>Title:</strong> {{ $document->title ?? 'N/A' }}</p>
                   <p><strong>Abstract:</strong> {{ $document->abstract ?? 'No abstract provided.' }}</p>
                   <p><strong>Study Type:</strong> {{ $document->study_type ?? 'N/A' }}</p>
-                  
+
                   <p><strong>Date Submitted:</strong>
                       {{ $document->date_submitted ? $document->date_submitted->format('F d, Y') : 'N/A' }}
                   </p>
@@ -137,10 +153,10 @@
 
           {{-- PDF Viewer --}}
           <div class="pdfview">
-              @if(!empty($document->file) && file_exists(public_path('storage/documents/' . $document->file)))
-                  <embed src="{{ asset('storage/documents/' . $document->file) }}" 
-                      type="application/pdf" 
-                      width="100%" height="600px" 
+              @if(!empty($document->file) && file_exists(public_path('storage/' . $document->file)))
+                  <embed src="{{ asset('storage/' . $document->file) }}"
+                      type="application/pdf"
+                      width="100%" height="600px"
                       style="border-radius: 20px;">
               @else
                   <div class="no-file">
@@ -197,5 +213,75 @@
           });
       });
   </script>
+  <script>
+        async function loadNotifications(saveToStorage = true) {
+        const notifBadge = document.getElementById('notifBadge');
+        const notifList = document.getElementById('notifList');
+
+        try {
+            const res = await fetch('{{ route("student.notifications") }}');
+            const data = await res.json();
+
+            notifList.innerHTML = '';
+
+            if (data.length === 0) {
+                notifBadge.style.display = 'none';
+                notifList.innerHTML = '<li>No new notifications.</li>';
+                if (saveToStorage) localStorage.setItem('notifCount', 0);
+                return;
+            }
+
+            notifBadge.style.display = 'inline-block';
+            notifBadge.textContent = data.length;
+
+            // store count so it persists across pages
+            if (saveToStorage) localStorage.setItem('notifCount', data.length);
+
+            data.forEach(n => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    ${n.icon}
+                    <a href="${n.link}" class="notif-link">${n.message}</a>
+                    <br>
+                    <small>${n.time}</small>
+                `;
+                notifList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error loading notifications:', error);
+            }
+        }
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+        const notifBadge = document.getElementById('notifBadge');
+
+        // Load saved count from localStorage (keep number after page change)
+        const savedCount = localStorage.getItem('notifCount');
+        if (savedCount && parseInt(savedCount) > 0) {
+            notifBadge.textContent = savedCount;
+            notifBadge.style.display = 'inline-block';
+        } else {
+            notifBadge.style.display = 'none';
+        }
+
+        // Fetch new notifications immediately
+        loadNotifications();
+
+        // Refresh notifications every 10 seconds
+        setInterval(() => {
+            loadNotifications();
+        }, 10000); // 10 seconds
+        });
+
+        // Toggle dropdown on bell click
+        document.getElementById('notifBtn').addEventListener('click', async () => {
+            const dropdown = document.getElementById('notifDropdown');
+            dropdown.classList.toggle('hidden');
+            if (!dropdown.classList.contains('hidden')) {
+                await loadNotifications(false); // don’t overwrite saved count every click
+            }
+        });
+    </script>
 </body>
 </html>
