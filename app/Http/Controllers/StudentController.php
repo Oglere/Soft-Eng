@@ -132,7 +132,7 @@ public function submit_document(Request $request)
      * Display the student document status page.
      * ✅ Updated to support filtering from dashboard (approved, pending, etc.)
      */
-    public function doc_status_page(Request $request)
+    public function submitted_studies_page(Request $request)
     {
         $studentId = Auth::id();
         $filter = $request->query('status', 'all'); // get ?status= from URL
@@ -145,14 +145,14 @@ public function submit_document(Request $request)
 
         $submissions = $query->latest('date_submitted')->paginate(8); // 8 per page
 
-        return view('student.doc_status', compact('submissions', 'filter'));
+        return view('student.submitted', compact('submissions', 'filter'));
 
     }
 
     /**
      * Display the individual document view (PDF, metadata, etc.)
      */
-    public function viewStatus($id)
+    public function view_submitted_page($id)
     {
         $document = DocumentRepository::findOrFail($id);
 
@@ -164,7 +164,7 @@ public function submit_document(Request $request)
         $document->document_types = $metadata['document_types'] ?? [];
         $document->keywords = $metadata['keywords'] ?? [];
 
-        return view('student.view_status', compact('document'));
+        return view('student.view_submitted', compact('document'));
     }
 
     public function abandon($id)

@@ -50,7 +50,7 @@
                             </svg>
                             Dashboard
                         </a>
-                        <a href="<?php echo e(url('/guest/main')); ?>">
+                        <a href="/">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" width="24" height="24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -161,28 +161,28 @@
                         <span class="status {{ $statusClass }}">{{ ucfirst($status) }}</span>
                     </td>
                     <td style="text-align: center;">
-                   <button 
-                        class="action-btn view-btn"
-                        data-id="{{ $doc->document_id }}"
-                        data-title="{{ $doc->title }}"
-                        data-sender="{{ $student?->first_name . ' ' . $student?->last_name }}"
-                        data-date="{{ \Carbon\Carbon::parse($doc->date_submitted)->format('M d, Y') }}"
-                        data-status="{{ ucfirst($doc->status ?? 'Pending') }}"
-                        data-study-type="{{ $doc->study_type ?? 'N/A' }}"
-                        data-abstract="{{ $doc->abstract ?? 'No abstract provided.' }}"
-                        data-file-url="{{ $doc->file ? asset('storage/documents/' . $doc->file) : '' }}"
-                    >
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M2.458 12C3.732 7.943 7.523 5 12 5
-                            c4.477 0 8.268 2.943 9.542 7
-                            -1.274 4.057-5.065 7-9.542 7
-                            -4.477 0-8.268-2.943-9.542-7z" />
-                        </svg>
-                    </button>
+                    <button 
+                            class="action-btn view-btn"
+                            data-id="{{ $doc->document_id }}"
+                            data-title="{{ $doc->title }}"
+                            data-sender="{{ $student?->first_name . ' ' . $student?->last_name }}"
+                            data-date="{{ \Carbon\Carbon::parse($doc->date_submitted)->format('M d, Y') }}"
+                            data-status="{{ ucfirst($doc->status ?? 'Pending') }}"
+                            data-study-type="{{ $doc->study_type ?? 'N/A' }}"
+                            data-abstract="{{ $doc->abstract ?? 'No abstract provided.' }}"
+                            data-file-url="{{ $doc->file ? asset('storage/documents/' . $doc->file) : '' }}"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5
+                                c4.477 0 8.268 2.943 9.542 7
+                                -1.274 4.057-5.065 7-9.542 7
+                                -4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
                     </td>
                 </tr>
                 @empty
@@ -194,9 +194,9 @@
         </table>
 
         <!-- Pagination -->
-        {{-- <div class="pagination-container">
+        <div class="pagination-container">
             {{ $documents->withQueryString()->links('vendor.pagination.custom') }}
-        </div> --}}
+        </div>
 
         <!-- Modal -->
         <div id="reviewModal" class="modal" style="display:none;">

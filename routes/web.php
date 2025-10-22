@@ -44,10 +44,9 @@ Route::middleware('auth.session:student')->prefix('student')->group(function (){
     Route::get('/submission', [StudentController::class, 'submission'])->name('student.submission');
     Route::post('/submit', [StudentController::class, 'submit_document'])->name('student.submit'); // ✅ NEW: Handles form submission
     Route::post('/student/check-title', [App\Http\Controllers\StudentController::class, 'checkTitle'])->name('student.checkTitle');
-    Route::get('/doc_status/', [StudentController::class, 'doc_status_page'])->name('student.doc_status');
-    Route::get('/view_status/{id}', [StudentController::class, 'viewStatus'])->name('student.view_status');
+    Route::get('/submitted/', [StudentController::class, 'submitted_studies_page'])->name('student.submitted');
+    Route::get('/view_submitted/{id}', [StudentController::class, 'view_submitted_page'])->name('student.view_submitted');
     Route::delete('/abandon/{id}', [StudentController::class, 'abandon'])->name('student.abandon');
-    Route::get('/pdf-reader/{id}', [StudentController::class, 'pdf_reader_page']);
     Route::get('/account_setting', [StudentController::class, 'account_setting_page'])->name('student.account_setting');
 
     Route::post('/account_setting/verify', [StudentController::class, 'verify_identity'])->name('student.verify_identity');

@@ -260,3 +260,19 @@
     from { transform:translateY(-50px); opacity:0; }
     to { transform:translateY(0); opacity:1; }
 }
+
+.review-btn {
+    display: inline-block;
+    background-color: #0a1444;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.review-btn:hover {
+    background-color: #1e3a8a;
+}
+

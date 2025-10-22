@@ -12,11 +12,10 @@
 
 /* Main card layout */
 .cards {
-  display: flex;
-  flex-direction: column;
-  margin-left: 130px;
-  margin-top: 40px;
-  gap: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    align-items: center;
 }
 
 /* Top and bottom rows */
@@ -31,7 +30,6 @@
 
 /* Bottom row alignment */
 .bottom-row {
-  margin-left: 120px;
   margin-top: 20px;
 }
 

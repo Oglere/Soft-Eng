@@ -64,7 +64,7 @@
               </svg>
               Submit Studies
             </a>
-            <a href="<?php echo e(url('/student/doc_status')); ?>">
+            <a href="<?php echo e(url('/student/submitted')); ?>">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                    viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

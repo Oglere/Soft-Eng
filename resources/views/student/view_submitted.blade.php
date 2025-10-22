@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D.A.R.A Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/sidenav.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/teacher/view_submitted.css') }}">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+      <h1>D.A.R.A</h1>
+
+      <div class="navbar-right">
+          <button>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+              </svg>
+          </button>
+
+          <div class="profile">
+              <div class="profile-info">
+                  <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
+                  <p>Student</p>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <!-- Layout -->
+  <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+          <div>
+              <div class="menu-section">
+                  <p class="menu-title">Menu</p>
+                  <div class="menu">
+                      <a href="{{ url('/student/dashboard') }}">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M3 10h4v11H3zM10 3h4v18h-4zM17 6h4v15h-4z" />
+                          </svg>
+                          Dashboard
+                      </a>
+                      <a href="{{ url('/student/dashboard') }}">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                          </svg>
+                          Search Studies
+                      </a>
+                      <a href="{{ url('/student/submitted') }}" class="active">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                          </svg>
+                          Submitted Studies
+                      </a>
+                  </div>
+              </div>
+
+              <div class="menu-section">
+                  <p class="menu-title">Settings</p>
+                  <div class="menu">
+                      <a href="{{ url('/student/account_setting') }}">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M5.121 17.804A1 1 0 015 17V7a1 1 0 011-1h3.382a1 1 0 01.894.553l1.382 2.764a1 1 0 00.894.553H19a1 1 0 011 1v6a1 1 0 01-.121.496l-2.382 4.764a1 1 0 01-.894.553H6a1 1 0 01-.879-.496z" />
+                          </svg>
+                          Account Settings
+                      </a>
+                      <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+                          @csrf
+                      </form>
+
+                      <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                              stroke="currentColor" class="w-5 h-5">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M17 16l4-4m0 0l-4-4m4 4H7" />
+                          </svg>
+                          Log out
+                      </a>
+                  </div>
+              </div>
+          </div>
+      </aside>
+      
+      <!-- Main -->
+      <main class="main">
+          <h2>Review Submitted Study</h2>
+
+          <div class="viewContainer">
+              <!-- Left: document info -->
+              <div class="par">
+                  <p><strong>Title:</strong> {{ $document->title ?? 'N/A' }}</p>
+                  <p><strong>Abstract:</strong> {{ $document->abstract ?? 'No abstract provided.' }}</p>
+                  <p><strong>Study Type:</strong> {{ $document->study_type ?? 'N/A' }}</p>
+                  
+                  <p><strong>Date Submitted:</strong>
+                      {{ $document->date_submitted ? $document->date_submitted->format('F d, Y') : 'N/A' }}
+                  </p>
+
+                  @php
+                      $status = strtolower($document->status ?? 'pending');
+                  @endphp
+                  <p><strong>Status:</strong>
+                      <span class="status-badge {{ $status }}">
+                          {{ ucfirst($status) }}
+                      </span>
+                  </p>
+              </div>
+
+              <!-- Right: Action buttons -->
+              <div>
+                  <form id="abandonForm" method="POST" action="{{ route('student.abandon', $document->document_id) }}">
+                      @csrf
+                      @method('DELETE')
+                      <button type="button" id="abandonBtn" class="par-btn" style="background-color:#ff4d4d;">
+                          ❌ Abandon Document
+                      </button>
+                      <a href="{{ url('/student/submitted') }}" class="par-btn">
+                          🔙 Go Back
+                      </a>
+                  </form>
+              </div>
+          </div>
+
+          {{-- PDF Viewer --}}
+          <div class="pdfview">
+              @if(!empty($document->file) && file_exists(public_path('storage/documents/' . $document->file)))
+                  <embed src="{{ asset('storage/documents/' . $document->file) }}" 
+                      type="application/pdf" 
+                      width="100%" height="600px" 
+                      style="border-radius: 20px;">
+              @else
+                  <div class="no-file">
+                      <p>No PDF file found for this document.</p>
+                  </div>
+              @endif
+          </div>
+      </main>
+  </div>
+
+  {{-- SweetAlert Dialog --}}
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const abandonBtn = document.getElementById('abandonBtn');
+          const abandonForm = document.getElementById('abandonForm');
+
+          abandonBtn.addEventListener('click', function() {
+              Swal.fire({
+                  title: 'Abandon Document?',
+                  text: 'This action cannot be undone.',
+                  icon: 'warning',
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Yes, abandon it',
+                  cancelButtonText: 'Revert'
+              }).then((result) => {
+                  if (result.isConfirmed) {
+                      fetch(abandonForm.action, {
+                          method: 'DELETE',
+                          headers: {
+                              'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                              'Accept': 'application/json',
+                          }
+                      })
+                      .then(res => {
+                          if (res.ok) {
+                              Swal.fire({
+                                  title: 'Abandoned!',
+                                  text: 'Your document has been deleted successfully.',
+                                  icon: 'success',
+                                  timer: 1800,
+                                  showConfirmButton: false
+                              }).then(() => {
+                                  window.location.href = "{{ route('student.submitted') }}";
+                              });
+                          } else {
+                              Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
+                          }
+                      });
+                  }
+              });
+          });
+      });
+  </script>
+</body>
+</html>

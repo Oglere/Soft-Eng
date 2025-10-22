@@ -1,0 +1,79 @@
+.viewContainer {
+    display:flex; 
+    justify-content:space-between; 
+    align-items:flex-start; 
+    padding: 0px 40px;
+    margin-bottom: 20px;
+}
+
+.pdfview {
+    padding: 0px 40px;
+}
+
+.par-btn {
+    background-color:#afafaf;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    border-radius:8px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    cursor:pointer;
+    text-decoration:none;
+    font-size: 13px;
+    margin: 15px 0px;
+}
+
+.no-file {
+    background: #f9f9f9;
+    color: #555;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    font-style: italic;
+}
+
+
+.status-badge {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: capitalize;
+}
+
+/* Colors based on status */
+.status-badge.approved {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.status-badge.revision,
+.status-badge.needs-revision {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
+.status-badge.rejected {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.status-badge.pending {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+.status-badge.unknown {
+    background-color: #e2e3e5;
+    color: #383d41;
+    border: 1px solid #d6d8d9;
+}
+
