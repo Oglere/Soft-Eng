@@ -52,6 +52,7 @@ Route::middleware('auth.session:student')->prefix('student')->group(function (){
     Route::post('/account_setting/verify', [StudentController::class, 'verify_identity'])->name('student.verify_identity');
     Route::post('/account_setting/update', [StudentController::class, 'update_account'])->name('student.update_account');
     Route::post('/account_setting/cancel', [StudentController::class, 'cancel_update'])->name('student.cancel_update');
+    Route::get('/notifications', [StudentController::class, 'get_notifications'])->name('student.notifications');
 
 });
 

@@ -10,29 +10,36 @@
 </head>
 <body>
 
-  <!-- Navbar -->
-  <div class="navbar">
-    <h1>D.A.R.A</h1>
+    <!-- Navbar -->
+    <div class="navbar">
+        <h1>D.A.R.A</h1>
 
-    <div class="navbar-right">
-      <button>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-             viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-        </svg>
-      </button>
+        <div class="navbar-right">
+            <div class="notification-wrapper">
+                <button id="notifBtn" class="notif-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                    <span id="notifBadge" class="notif-badge">0</span>
+                </button>
 
-      <div class="profile">
+                <div id="notifDropdown" class="notif-dropdown hidden">
+                    <h4>Notifications</h4>
+                    <ul id="notifList"></ul>
+                </div>
+            </div>
 
-        <div class="profile-info">
-          <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
+            <div class="profile">
+                <div class="profile-info">
+                    <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
 
-          <p>Student</p>
+                    <p>Student</p>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
   <div class="layout">
     <!-- Sidebar -->
     <aside class="sidebar">
@@ -136,7 +143,7 @@
             </thead>
             <tbody>
                 @forelse($submissions as $submission)
-                <tr data-status="{{ strtolower($submission->status) }}">
+                <tr data-status="{{ strtolower($submission->status) }}" data-id="{{ $submission->document_id }}">
                     <td>
                         <a href="{{ route('student.view_submitted', ['id' => $submission->document_id]) }}" class="plain-link">
                             {{ $submission->title ?? 'Untitled Document' }}
@@ -360,6 +367,100 @@
         if (e.target === modal) {
             modal.style.display = 'none';
             modalFilePdf.src = '';
+        }
+    });
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const notifStatus = urlParams.get('status'); // e.g. approved
+        const notifDocId = urlParams.get('doc_id');  // e.g. 5
+
+        if (notifStatus && notifDocId) {
+            // Find the exact row (status + doc_id must match)
+            const row = document.querySelector(
+                `tr[data-status="${notifStatus.toLowerCase()}"][data-id="${notifDocId}"]`
+            );
+
+            if (row) {
+                row.classList.add('highlight');
+                row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                // Remove highlight after 5 seconds
+                setTimeout(() => {
+                    row.classList.remove('highlight');
+                }, 5000);
+            }
+        }
+    });
+
+    async function loadNotifications(saveToStorage = true) {
+        const notifBadge = document.getElementById('notifBadge');
+        const notifList = document.getElementById('notifList');
+
+        try {
+            const res = await fetch('{{ route("student.notifications") }}');
+            const data = await res.json();
+
+            notifList.innerHTML = '';
+
+            if (data.length === 0) {
+            notifBadge.style.display = 'none';
+            notifList.innerHTML = '<li>No new notifications.</li>';
+            if (saveToStorage) localStorage.setItem('notifCount', 0);
+            return;
+        }
+
+        notifBadge.style.display = 'inline-block';
+        notifBadge.textContent = data.length;
+
+    // store count so it persists across pages
+    if (saveToStorage) localStorage.setItem('notifCount', data.length);
+        data.forEach(n => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            ${n.icon}
+            <a href="${n.link}" class="notif-link">${n.message}</a>
+            <br>
+            <small>${n.time}</small>
+        `;
+            notifList.appendChild(li);
+        });
+
+        } catch (error) {
+            console.error('Error loading notifications:', error);
+        }
+    }
+
+    // --- INITIALIZATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+    const notifBadge = document.getElementById('notifBadge');
+
+    // Load saved count from localStorage (keep number after page change)
+    const savedCount = localStorage.getItem('notifCount');
+    if (savedCount && parseInt(savedCount) > 0) {
+        notifBadge.textContent = savedCount;
+        notifBadge.style.display = 'inline-block';
+    } else {
+        notifBadge.style.display = 'none';
+    }
+
+        // Fetch new notifications immediately
+        loadNotifications();
+
+        // Refresh notifications every 10 seconds
+        setInterval(() => {
+
+            loadNotifications();
+        }, 10000); // 10 seconds
+    });
+
+    // Toggle dropdown on bell click
+    document.getElementById('notifBtn').addEventListener('click', async () => {
+        const dropdown = document.getElementById('notifDropdown');
+        dropdown.classList.toggle('hidden');
+        if (!dropdown.classList.contains('hidden')) {
+            await loadNotifications(false); // don’t overwrite saved count every click
         }
     });
 </script>

@@ -135,18 +135,18 @@ public function submit_document(Request $request)
     public function submitted_studies_page(Request $request)
     {
         $studentId = Auth::id();
-        $filter = $request->query('status', 'all'); // get ?status= from URL
+        $filter = $request->query('status', 'all');
+        $highlightId = $request->query('doc_id'); // ✅ new line
 
         $query = DocumentRepository::where('student_id', $studentId);
-
         if ($filter !== 'all') {
             $query->where('status', $filter);
         }
 
-        $submissions = $query->latest('date_submitted')->paginate(8); // 8 per page
+        $submissions = $query->latest('date_submitted')->paginate(8);
 
-        return view('student.submitted', compact('submissions', 'filter'));
-
+        // ✅ Pass highlightId to view
+        return view('student.submitted', compact('submissions', 'filter', 'highlightId'));
     }
 
     /**
@@ -324,13 +324,79 @@ public function update_account(Request $request)
 
 
     public function cancel_update(Request $request)
-{
-    // Forget verification session to go back to verify form
-    session()->forget('account_verified');
+    {
+        // Forget verification session to go back to verify form
+        session()->forget('account_verified');
 
-    // Redirect with a SweetAlert message
-    return redirect()->route('student.account_setting')
-        ->with('cancel_message', 'Account update canceled.');
-}
+        // Redirect with a SweetAlert message
+        return redirect()->route('student.account_setting')
+            ->with('cancel_message', 'Account update canceled.');
+    }
 
+    public function get_notifications()
+    {
+        $studentId = Auth::id();
+
+        $documents = DocumentRepository::where('student_id', $studentId)
+            ->latest('updated_at')
+            ->take(5)
+            ->get();
+
+        $notifications = [];
+
+        foreach ($documents as $doc) {
+            // Base route by status
+            $route = route('student.submitted', ['status' => $doc->status, 'doc_id' => $doc->document_id]);
+
+
+            switch ($doc->status) {
+                case 'pending':
+                    $notifications[] = [
+                        'message' => "Your study <b>{$doc->title}</b> is under review.",
+                        'icon' => '🕓',
+                        'time' => $doc->updated_at->diffForHumans(),
+                        'link' => $route,
+                    ];
+                    break;
+
+                case 'approved':
+                    $notifications[] = [
+                        'message' => "Your study <b>{$doc->title}</b> has been <b>approved</b>! 🎉",
+                        'icon' => '✅',
+                        'time' => $doc->updated_at->diffForHumans(),
+                        'link' => $route,
+                    ];
+                    break;
+
+                case 'revision':
+                    $notifications[] = [
+                        'message' => "Your study <b>{$doc->title}</b> requires <b>revisions</b>.",
+                        'icon' => '✏️',
+                        'time' => $doc->updated_at->diffForHumans(),
+                        'link' => $route,
+                    ];
+                    break;
+
+                case 'rejected':
+                    $notifications[] = [
+                        'message' => "Your study <b>{$doc->title}</b> was <b>rejected</b>.",
+                        'icon' => '❌',
+                        'time' => $doc->updated_at->diffForHumans(),
+                        'link' => $route,
+                    ];
+                    break;
+
+                default:
+                    $notifications[] = [
+                        'message' => "Your study <b>{$doc->title}</b> has been submitted successfully.",
+                        'icon' => '📄',
+                        'time' => $doc->created_at->diffForHumans(),
+                        'link' => route('student.dashboard'), // fallback
+                    ];
+                    break;
+            }
+        }
+        
+        return response()->json($notifications);
+    }
 }
