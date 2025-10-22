@@ -6,7 +6,7 @@
     <title>D.A.R.A Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/sidenav.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/teacher/review.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/teacher/submitted.css') }}">
 </head>
 <body>
 
@@ -50,7 +50,7 @@
                             </svg>
                             Dashboard
                         </a>
-                        <a href="<?php echo e(url('/teacher/dashboard')); ?>">
+                        <a href="<?php echo e(url('/guest/main')); ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor" width="24" height="24" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -64,7 +64,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M4 6h16M4 10h16M4 14h16M4 18h16" />
                             </svg>
-                            Review Studies
+                            Submitted Studies
                         </a>
                     </div>
                 </div>
@@ -72,13 +72,13 @@
                 <div class="menu-section">
                     <p class="menu-title">Settings</p>
                         <div class="menu">
-                            <a href="<?php echo e(url('/student/account_setting')); ?>">
+                            <a href="<?php echo e(url('/teacher/account_setting')); ?>">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M5.121 17.804A1 1 0 015 17V7a1 1 0 011-1h3.382a1 1 0 01.894.553l1.382 2.764a1 1 0 00.894.553H19a1 1 0 011 1v6a1 1 0 01-.121.496l-2.382 4.764a1 1 0 01-.894.553H6a1 1 0 01-.879-.496z" />
                                 </svg>
-                                Account
+                                Account Settings
                             </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
                             @csrf
@@ -127,6 +127,7 @@
                     <th>Sent By</th>
                     <th>Date Submitted</th>
                     <th>Study Type</th>
+                    <th>Status</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -146,9 +147,23 @@
                     </td>
                     <td>{{ \Carbon\Carbon::parse($doc->date_submitted)->format('M d, Y') }}</td>
                     <td>{{ $doc->study_type ?? 'N/A' }}</td>
+                    <td>
+                        @php
+                            $status = strtolower($doc->status ?? 'pending');
+                            $statusClass = match($status) {
+                                'approved' => 'approved',
+                                'needs revision', 'revision' => 'revision',
+                                'rejected' => 'rejected',
+                                'pending' => 'pending',
+                                default => 'unknown'
+                            };
+                        @endphp
+                        <span class="status {{ $statusClass }}">{{ ucfirst($status) }}</span>
+                    </td>
                     <td style="text-align: center;">
-                    <button 
+                   <button 
                         class="action-btn view-btn"
+                        data-id="{{ $doc->document_id }}"
                         data-title="{{ $doc->title }}"
                         data-sender="{{ $student?->first_name . ' ' . $student?->last_name }}"
                         data-date="{{ \Carbon\Carbon::parse($doc->date_submitted)->format('M d, Y') }}"
@@ -197,7 +212,11 @@
                     <p id="modalAbstract" class="scrollable-text"></p>
 
                     <div id="modalPdfContainer" style="height:400px;">
-                    <iframe id="modalFilePdf" src="" style="width:100%; height:100%; border:1px solid #ccc; border-radius:6px;"></iframe>
+                        <iframe id="modalFilePdf" src="" style="width:100%; height:100%; border:1px solid #ccc; border-radius:6px;"></iframe>
+                    </div>
+                    <!-- Review Button -->
+                    <div style="margin-top: 1rem; text-align: right;">
+                        <a id="reviewButton" href="#" class="review-btn">Review Submitted Studies</a>
                     </div>
                 </div>
             </div>
@@ -287,12 +306,16 @@
                 modalAbstract.innerText = btn.dataset.abstract;
 
                 if (btn.dataset.fileUrl) {
-                modalPdfContainer.style.display = 'block';
-                modalFilePdf.src = btn.dataset.fileUrl;
+                    modalPdfContainer.style.display = 'block';
+                    modalFilePdf.src = btn.dataset.fileUrl;
                 } else {
-                modalPdfContainer.style.display = 'none';
-                modalFilePdf.src = '';
+                    modalPdfContainer.style.display = 'none';
+                    modalFilePdf.src = '';
                 }
+
+                // Add dynamic route to the button
+                const reviewButton = document.getElementById('reviewButton');
+                reviewButton.href = `/teacher/view_submitted?document_id=${btn.dataset.id}`;
 
                 modal.style.display = 'flex';
             });

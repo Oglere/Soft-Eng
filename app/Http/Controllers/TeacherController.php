@@ -25,7 +25,7 @@ class TeacherController extends Controller
         return view('teacher.dashboard', compact('user', 'pending', 'approved', 'rejected'));
     }
 
-    public function review_page(Request $request)
+    public function submitted_page(Request $request)
     {
         $teacher = Auth::id();
         // ✅ Corrected query start
@@ -47,13 +47,18 @@ class TeacherController extends Controller
         // Paginate
         $documents = $query->orderBy('date_submitted', 'desc')->paginate(10);
 
-        return view('teacher.review', compact('documents'));
+        return view('teacher.submitted', compact('documents'));
     }
 
-    public function pdf_reader_page($id) {
-        $document = DocumentRepository::findOrFail($id);
-        return view('teacher.pdf_reader', compact('document'));
+    public function view_submitted_page(Request $request) {
+        
+        $document = null;
 
+        if ($request->has('document_id')) {
+            $document = DocumentRepository::with('student')->find($request->document_id);
+        }
+
+        return view('teacher.view_submitted', compact('document'));
     }
 
     public function pdf_approve($id) {
@@ -94,7 +99,7 @@ class TeacherController extends Controller
 
 
     public function account_setting_page() {
-        return view('teacher.accountsetting');
+        return view('teacher.account_setting');
 
     }
 

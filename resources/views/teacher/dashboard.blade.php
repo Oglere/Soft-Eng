@@ -58,7 +58,7 @@
                             </svg>
                             Search Studies
                         </a>
-                        <a href="<?php echo e(url('/teacher/review')); ?>">
+                        <a href="<?php echo e(url('/teacher/submitted')); ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -72,13 +72,13 @@
                 <div class="menu-section">
                     <p class="menu-title">Settings</p>
                         <div class="menu">
-                            <a href="<?php echo e(url('/student/account_setting')); ?>">
+                            <a href="<?php echo e(url('/teacher/account_setting')); ?>">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M5.121 17.804A1 1 0 015 17V7a1 1 0 011-1h3.382a1 1 0 01.894.553l1.382 2.764a1 1 0 00.894.553H19a1 1 0 011 1v6a1 1 0 01-.121.496l-2.382 4.764a1 1 0 01-.894.553H6a1 1 0 01-.879-.496z" />
                                 </svg>
-                                Account
+                                Account Settings
                             </a>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
                             @csrf
