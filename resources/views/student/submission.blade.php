@@ -39,182 +39,264 @@
     </div>
 
 
-  <div class="layout">
-     <!-- Sidebar -->
-    <aside class="sidebar">
-      <div>
-        <div class="menu-section">
-          <p class="menu-title">Menu</p>
-          <div class="menu">
-            <a href="<?php echo e(url('/student/dashboard')); ?>">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M3 10h4v11H3zM10 3h4v18h-4zM17 6h4v15h-4z" />
-              </svg>
-              Dashboard
-            </a>
-            <a href="/">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" width="24" height="24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                Search Studies
-            </a>
-            <a href="<?php echo e(url('/student/submission')); ?>" class="active">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 4v16m8-8H4" />
-              </svg>
-              Submit Studies
-            </a>
-            <a href="<?php echo e(url('/student/submitted')); ?>">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-              </svg>
-              Submitted Studies
-            </a>
-          </div>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div>
+                <div class="menu-section">
+                    <p class="menu-title">Menu</p>
+                    <div class="menu">
+                        <a href="<?php echo e(url('/student/dashboard')); ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 10h4v11H3zM10 3h4v18h-4zM17 6h4v15h-4z" />
+                            </svg>
+                            Dashboard
+                        </a>
+                        <a href="/">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" width="24" height="24" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            Search Studies
+                        </a>
+                        <a href="<?php echo e(url('/student/submission')); ?>" class="active">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4v16m8-8H4" />
+                            </svg>
+                            Submit Studies
+                        </a>
+                        <a href="<?php echo e(url('/student/submitted')); ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                            </svg>
+                            Submitted Studies
+                        </a>
+                    </div>
+                </div>
+
+                <div class="menu-section">
+                    <p class="menu-title">Settings</p>
+                    <div class="menu">
+                        <a href="<?php echo e(url('/student/account_setting')); ?>">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M5.121 17.804A1 1 0 015 17V7a1 1 0 011-1h3.382a1 1 0 01.894.553l1.382 2.764a1 1 0 00.894.553H19a1 1 0 011 1v6a1 1 0 01-.121.496l-2.382 4.764a1 1 0 01-.894.553H6a1 1 0 01-.879-.496z" />
+                        </svg>
+                        Account Settings
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+                            @csrf
+                        </form>
+
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="inline-flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
+                            </svg>
+                            Log out
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+            <h2>Submit a Document</h2>
+            @if(session('success'))
+                <div style="color: green; text-align: center; margin-bottom: 15px;">
+                    {{ session('success') }}
+                </div>
+            @endif
+            <form id="documentForm" method="POST" enctype="multipart/form-data" action="{{ route('student.submit') }}">
+            @csrf
+            {{-- File Upload Box --}}
+            <div class="upload-box">
+                <p>📤 <a id="chooseFileBtn" style="cursor:pointer;">Click to Upload</a> File Supported: PDF (Max 25MB)</p>
+                <input type="file" name="file" accept=".pdf" id="fileID" style="display:none;">
+                <p id="fileNameDisplay" style="color: red; text-align:center;"></p>
+            </div>
+
+            {{-- Type of Studies --}}
+            <p style="margin-top: 5px;"><strong>Type of Studies:</strong></p>
+            <div class="type-buttons">
+                <input type="checkbox" id="case" name="document_types[]" value="Case Study">
+                <label for="case">Case Study</label>
+
+                <input type="checkbox" id="thesis" name="document_types[]" value="Thesis">
+                <label for="thesis">Thesis</label>
+
+                <input type="checkbox" id="proposal" name="document_types[]" value="Proposal">
+                <label for="proposal">Proposal</label>
+
+                <input type="checkbox" id="capstone" name="document_types[]" value="Capstone">
+                <label for="capstone">Capstone</label>
+
+                <input type="checkbox" id="system" name="document_types[]" value="System Studies">
+                <label for="system">System Studies</label>
+            </div>
+
+            {{-- Form Fields --}}
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="title" name="title" placeholder="Enter title" value="{{ old('title') }}">
+                    @error('title')
+                        <p class="error-message">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="form-group">
+                    <label>Keywords</label>
+                    <input type="text" id="keywords" name="keywords" placeholder="Comma-separated keywords">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Abstract</label>
+                    <textarea id="abstract" name="abstract" placeholder="Write abstract here..."></textarea>
+
+                    <label style="margin-top: 1rem;">Citations (comma-separated)</label>
+                    <input id="citations" type="text" name="citations" placeholder="e.g., Author 2023, Research 2022">
+                </div>
+
+            <div class="form-group">
+                <label id="mainTeacherLabel">Teacher</label>
+                <select id="teacher_id" name="teacher_id" class="teacher-select">
+                    <option value="">-- Select Teacher --</option>
+                    @foreach($teachers as $teacher)
+                        <option value="{{ $teacher->user_id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
+                    @endforeach
+                </select>
+
+                <!-- Additional Teachers (Hidden by default) -->
+                <div id="extraTeachers" class="teacher-container" style="display:none;">
+                    <div class="teacher-group">
+                        <label>Teacher 2</label>
+                        <select name="teacher_id_2" class="teacher-select">
+                            <option value="">-- Select Teacher --</option>
+                            @foreach($teachers as $teacher)
+                                <option value="{{ $teacher->user_id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div class="teacher-group">
+                        <label>Teacher 3</label>
+                        <select name="teacher_id_3" class="teacher-select">
+                            <option value="">-- Select Teacher --</option>
+                            @foreach($teachers as $teacher)
+                                <option value="{{ $teacher->user_id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <label class="submit-date">Submission Date</label>
+                <input type="date" id="submission_date" name="submission_date">
+            </div>
         </div>
 
-        <div class="menu-section">
-          <p class="menu-title">Settings</p>
-          <div class="menu">
-            <a href="<?php echo e(url('/student/account_setting')); ?>">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M5.121 17.804A1 1 0 015 17V7a1 1 0 011-1h3.382a1 1 0 01.894.553l1.382 2.764a1 1 0 00.894.553H19a1 1 0 011 1v6a1 1 0 01-.121.496l-2.382 4.764a1 1 0 01-.894.553H6a1 1 0 01-.879-.496z" />
-              </svg>
-              Account Settings
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
-  @csrf
-</form>
-
-<a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="inline-flex items-center gap-2">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
-  </svg>
-  Log out
-</a>
-
-          </div>
-        </div>
-      </div>
-    </aside>
-
-    <!-- Main -->
-    <main class="main">
-      <h2>Submit a Document</h2>
-      @if(session('success'))
-    <div style="color: green; text-align: center; margin-bottom: 15px;">
-        {{ session('success') }}
-    </div>
-@endif
-      <form id="documentForm" method="POST" enctype="multipart/form-data" action="{{ route('student.submit') }}">
-    @csrf
-   {{-- File Upload Box --}}
-    <div class="upload-box">
-      <p>📤 <a id="chooseFileBtn" style="cursor:pointer;">Click to Upload</a> File Supported: PDF (Max 25MB)</p>
-      <input type="file" name="file" accept=".pdf" id="fileID" style="display:none;">
-      <p id="fileNameDisplay" style="color: red; text-align:center;"></p>
-    </div>
-
-    {{-- Type of Studies --}}
-    <p style="margin-top: 5px;"><strong>Type of Studies:</strong></p>
-    <div class="type-buttons">
-  <input type="checkbox" id="case" name="document_types[]" value="Case Study">
-  <label for="case">Case Study</label>
-
-  <input type="checkbox" id="thesis" name="document_types[]" value="Thesis">
-  <label for="thesis">Thesis</label>
-
-  <input type="checkbox" id="proposal" name="document_types[]" value="Proposal">
-  <label for="proposal">Proposal</label>
-
-  <input type="checkbox" id="capstone" name="document_types[]" value="Capstone">
-  <label for="capstone">Capstone</label>
-
-  <input type="checkbox" id="system" name="document_types[]" value="System Studies">
-  <label for="system">System Studies</label>
+        <button class="submit-btn" type="submit">Submit</button>
+        </form>
+    </main>
 </div>
-
-    {{-- Form Fields --}}
-    <div class="form-row">
-      <div class="form-group">
-        <label>Title</label>
-  <input type="text" id="title" name="title" placeholder="Enter title" value="{{ old('title') }}">
-  @error('title')
-    <p class="error-message">{{ $message }}</p>
-  @enderror
-      </div>
-
-
-      <div class="form-group">
-        <label>Keywords</label>
-        <input type="text" id="keywords" name="keywords" placeholder="Comma-separated keywords">
-      </div>
-    </div>
-
-<div class="form-row">
-  <div class="form-group">
-    <label>Abstract</label>
-    <textarea id="abstract" name="abstract" placeholder="Write abstract here..."></textarea>
-
-    <label style="margin-top: 1rem;">Citations (comma-separated)</label>
-    <input id="citations" type="text" name="citations" placeholder="e.g., Author 2023, Research 2022">
-  </div>
-
-  <div class="form-group">
-   <label id="mainTeacherLabel">Teacher</label>
-<select id="teacher_id" name="teacher_id" class="teacher-select">
-  <option value="">-- Select Teacher --</option>
-  @foreach($teachers as $teacher)
-    <option value="{{ $teacher->user_id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
-  @endforeach
-</select>
-
-<!-- Additional Teachers (Hidden by default) -->
-<div id="extraTeachers" class="teacher-container" style="display:none;">
-  <div class="teacher-group">
-    <label>Teacher 2</label>
-    <select name="teacher_id_2" class="teacher-select">
-      <option value="">-- Select Teacher --</option>
-      @foreach($teachers as $teacher)
-        <option value="{{ $teacher->user_id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
-      @endforeach
-    </select>
-  </div>
-
-  <div class="teacher-group">
-    <label>Teacher 3</label>
-    <select name="teacher_id_3" class="teacher-select">
-      <option value="">-- Select Teacher --</option>
-      @foreach($teachers as $teacher)
-        <option value="{{ $teacher->user_id }}">{{ $teacher->first_name }} {{ $teacher->last_name }}</option>
-      @endforeach
-    </select>
-  </div>
-</div>
-
-
-<label class="submit-date">Submission Date</label>
-<input type="date" id="submission_date" name="submission_date">
-
-  </div>
-</div>
-
-
-    <button class="submit-btn" type="submit">Submit</button>
-  </form>
-</main>
 
 {{-- JavaScript --}}
+
+<!-- Include SweetAlert -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    const chooseFileBtn = document.getElementById('chooseFileBtn');
+    const fileInput = document.getElementById('fileID');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+    const titleInput = document.getElementById('title');
+    const form = document.getElementById('documentForm');
+
+    // Disable typing in title input
+    titleInput.readOnly = true;
+
+    // Trigger hidden file input
+    chooseFileBtn.addEventListener('click', () => fileInput.click());
+
+    // Auto-fill title based on uploaded file
+    fileInput.addEventListener('change', function () {
+        const file = this.files[0];
+        if (file) {
+            const fileName = file.name;
+            const baseName = fileName.replace(/\.[^/.]+$/, ""); // remove .pdf
+            titleInput.value = baseName; 
+            fileNameDisplay.textContent = `Selected: ${fileName}`;
+        } else {
+            fileNameDisplay.textContent = '';
+        }
+    });
+
+    // Form submission with title check
+    form.addEventListener('submit', function (e) {
+        e.preventDefault(); // stop form from submitting
+
+        const title = titleInput.value.trim();
+        if (!title) {
+            Swal.fire('Missing Title', 'Please upload a PDF to auto-fill the title.', 'warning');
+            return;
+        }
+
+        // Check for duplicate titles before submission
+        fetch("{{ route('student.checkTitle') }}", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRF-TOKEN": "{{ csrf_token() }}"
+            },
+            body: JSON.stringify({ title: title })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.exists) {
+                // SweetAlert confirmation for duplicate title
+                Swal.fire({
+                    title: 'Duplicate Title Found',
+                    text: `A document with the same title already exists. Would you like to submit as "${data.next_title}"?`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, Proceed',
+                    cancelButtonText: 'Cancel',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        titleInput.value = data.next_title; // set new title with (2), (3), etc.
+                        form.submit();
+                    }
+                });
+            } else {
+                form.submit();
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    });
+
+    // SweetAlert success message (on redirect)
+    @if(session('success'))
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: "{{ session('success') }}",
+            showConfirmButton: false,
+            timer: 2500
+        });
+    @endif
+</script>
+
 <script>
     // Trigger hidden file input
     const chooseFileBtn = document.getElementById('chooseFileBtn');
@@ -409,7 +491,6 @@
     // Run on page load in case old values exist
     preventDuplicateTeachers();
 </script>
-</div>
 
 <script>
     async function loadNotifications(saveToStorage = true) {

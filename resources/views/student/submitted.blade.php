@@ -179,7 +179,7 @@
                             data-abstract="{{ $submission->abstract ?? 'No abstract provided.' }}"
                             data-citation="{{ $submission->citation ?? 'No citation provided.' }}"
                             data-study_type="{{ $submission->study_type ?? 'N/A' }}"
-                            data-file-url="{{ $submission->file ? asset('storage/documents/'.$submission->file) : '' }}"
+                            data-file-url="{{ $submission->file ? asset('storage/'.$submission->file) : '' }}"
                             data-approved-by="{{ $submission->approved_by ? $submission->approver->first_name.' '.$submission->approver->last_name : '' }}"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -225,7 +225,14 @@
                     <p id="modalAbstract" class="scrollable-text"></p>
 
                     <div id="modalPdfContainer" style="height:400px;">
-                        <iframe id="modalFilePdf" src="" style="width:100%; height:100%; border:1px solid #ccc; border-radius:6px;"></iframe>
+                        <iframe 
+                            id="modalFilePdf" 
+                            src="" 
+                            style="width:100%; height:100%; border:1px solid #ccc; border-radius:6px;">
+                        </iframe>
+                        <div id="noFileMessage" class="no-file" style="display:none; text-align:center; padding:20px; color:gray;">
+                            <p>No PDF file found for this document.</p>
+                        </div>
                     </div>
                     <!-- Review Button -->
                     <div style="margin-top: 1rem; text-align: right;">
@@ -331,12 +338,18 @@
             modalCitation.innerText = btn.dataset.citation;
 
             // ✅ Always display the PDF if file exists
-            if (btn.dataset.fileUrl) {
-                modalPdfContainer.style.display = 'block';
-                modalFilePdf.src = btn.dataset.fileUrl;
+            const pdfUrl = btn.dataset.fileUrl?.trim();
+
+            if (pdfUrl) {
+                console.log('Loading PDF:', pdfUrl); // Debug line
+                modalFilePdf.src = pdfUrl + `#toolbar=0`; // Disable PDF viewer toolbar
+                modalFilePdf.style.display = 'block';
+                document.getElementById('noFileMessage').style.display = 'none';
             } else {
-                modalPdfContainer.style.display = 'none';
+                console.warn('No PDF found for document:', btn.dataset.id); // Debug line
                 modalFilePdf.src = '';
+                modalFilePdf.style.display = 'none';
+                document.getElementById('noFileMessage').style.display = 'block';
             }
 
             // ✅ Only show “Approved By” if status is approved

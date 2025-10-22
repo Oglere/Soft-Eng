@@ -56,54 +56,45 @@ class StudentController extends Controller
     }
 
 
-public function submit_document(Request $request)
-{
-    $request->validate([
-        'title' => 'required|string|max:255',
-        'abstract' => 'required|string|max:10000',
-        'teacher_id' => 'required|exists:users,user_id',
-        'publication_date' => 'nullable|date',
-        'document_types' => 'required|array',
-        'document_types.*' => 'string',
-        'file' => 'required|mimes:pdf|max:25600', // 25MB
-    ]);
+    public function submit_document(Request $request)
+    {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'abstract' => 'required|string|max:10000',
+            'teacher_id' => 'required|exists:users,user_id',
+            'document_types' => 'required|array',
+            'document_types.*' => 'string',
+            'file' => 'required|mimes:pdf|max:25600',
+        ]);
 
-    // Check if title already exists for this student
-    $existing = \App\Models\DocumentRepository::where('title', $request->title)
-                ->where('student_id', Auth::id())
-                ->first();
+        $baseTitle = $request->title;
+        $existing = DocumentRepository::where('title', $baseTitle)->where('student_id', Auth::id())->count();
 
-    if ($existing) {
-        return back()->withInput()->withErrors(['title' => 'This title already exists. Please choose a different one.']);
-    }
+        // If duplicate exists, create numbered version automatically (Title (2), etc.)
+        $finalTitle = $existing > 0 ? $baseTitle . ' (' . ($existing + 1) . ')' : $baseTitle;
 
-    // Upload file to storage/app/public/documents
-    $filePath = $request->file('file')->store('documents', 'public');
+        $filePath = $request->file('file')->store('documents', 'public');
 
-    // Save document
-    DocumentRepository::create([
-        'title' => $request->title,
-        'abstract' => $request->abstract,
-        'student_id' => Auth::id(),
-        'teacher_id' => $request->teacher_id,
-        'citation' => $request->citations,
-        'metadata' => json_encode([
+        DocumentRepository::create([
+            'title' => $finalTitle,
             'abstract' => $request->abstract,
-            'keywords' => $request->keywords,
-            'document_types' => $request->document_types,
-        ]),
-        'file' => $filePath,
-        'status' => 'pending',
-        'date_submitted' => now(),
-        'study_type' => implode(', ', $request->document_types),
-    ]);
+            'student_id' => Auth::id(),
+            'teacher_id' => $request->teacher_id,
+            'citation' => $request->citations,
+            'metadata' => json_encode([
+                'abstract' => $request->abstract,
+                'keywords' => $request->keywords,
+                'document_types' => $request->document_types,
+            ]),
+            'file' => $filePath,
+            'status' => 'pending',
+            'date_submitted' => now(),
+            'study_type' => implode(', ', $request->document_types),
+        ]);
 
-    return redirect()->route('student.submission')
-        ->with('success', 'Document submitted successfully!');
-}
-
-
-
+        return redirect()->route('student.submission')
+            ->with('success', 'Document submitted successfully!');
+    }
 
     /**
      * Confirmation if a duplicate title exists.
