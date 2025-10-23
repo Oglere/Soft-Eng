@@ -84,18 +84,16 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>John Doe</td>
-                                    <td>5 minutes ago</td>
-                                </tr>
-                                <tr>
-                                    <td>Jane Smith</td>
-                                    <td>10 minutes ago</td>
-                                </tr>
-                                <tr>
-                                    <td>Admin User</td>
-                                    <td>20 minutes ago</td>
-                                </tr>
+                                @forelse ($recentUsers as $user)
+                                    <tr>
+                                        <td>{{ $user->last_name }}, {{ $user->first_name }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($user->last_login)->format('M d, Y h:i A') }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="2" class="text-center">No recent logins.</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
@@ -111,35 +109,41 @@
 <script src="https://kit.fontawesome.com/a2e0b6f6d2.js" crossorigin="anonymous"></script>
 <script>
     // Animated Count Function
-    function animateCount(id, target) {
+    function animateCount(id, target, unit = '') {
         let count = 0;
         const speed = 30;
         const step = Math.ceil(target / 40);
         const el = document.getElementById(id);
+        const formatNumber = (num) => num.toLocaleString();
+
         const interval = setInterval(() => {
             count += step;
             if (count >= target) {
                 count = target;
                 clearInterval(interval);
             }
-            el.textContent = count;
+            el.textContent = formatNumber(count) + (unit ? unit : '');
         }, speed);
     }
 
     // Animate the widget counts
-    animateCount('usersCount', 21);
-    animateCount('adminsCount', 34);
-    animateCount('storageCount', 50);
+    animateCount('usersCount', {{ $totalUsers }});
+    animateCount('adminsCount', {{ $totalAdmins }});
+    animateCount('storageCount', {{ $totalStorageValue }}, '{{ $totalStorageUnit }}');
 
     // Line Chart
     new Chart(document.getElementById('chart1'), {
         type: 'line',
         data: {
-            labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [
                 {
                     label: 'Published',
-                    data: [2, 3, 5, 4, 6],
+                    data: [
+                        @for ($i = 1; $i <= 12; $i++)
+                            {{ $publishedDocs[$i] ?? 0 }},
+                        @endfor
+                    ],
                     borderColor: '#0b1b4a',
                     backgroundColor: 'rgba(11, 27, 74, 0.1)',
                     borderWidth: 2,
@@ -148,7 +152,11 @@
                 },
                 {
                     label: 'Unpublished',
-                    data: [1, 2, 2, 3, 1],
+                    data: [
+                        @for ($i = 1; $i <= 12; $i++)
+                            {{ $unpublishedDocs[$i] ?? 0 }},
+                        @endfor
+                    ],
                     borderColor: '#b22222',
                     backgroundColor: 'rgba(178, 34, 34, 0.1)',
                     borderWidth: 2,
@@ -160,69 +168,47 @@
         options: {
             responsive: true,
             plugins: {
-                legend: {
-                    labels: { usePointStyle: true, font: { size: 13 } }
-                }
+                legend: { labels: { usePointStyle: true, font: { size: 13 } } }
             },
             scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
         }
     });
 
-// Pie Chart
-new Chart(document.getElementById('chart2'), {
-    type: 'pie',
-    data: {
-        labels: ['Pending', 'Approved', 'LostDoc', 'Rejected', 'Abandoned', 'Needs Revision'],
-        datasets: [{
-            data: [15, 25, 10, 20, 5, 25],
-            backgroundColor: [
-                '#f0c75e', // Pending
-                '#2E8B57', // Approved
-                '#4682B4', // LostDoc
-                '#B22222', // Rejected
-                '#8B4513', // Abandoned
-                '#6A5ACD'  // Needs Revision
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'right', // ✅ move legend to the right
-                align: 'center',   // ✅ vertically centered
-                labels: {
-                    usePointStyle: true,
-                    pointStyle: 'circle',
-                    boxWidth: 15,
-                    padding: 20,
-                    font: {
-                        size: 13,
-                        family: 'Poppins'
-                    },
+    // Pie Chart
+    const statusLabels = {!! json_encode(array_keys($docStatuses)) !!};
+    const statusData = {!! json_encode(array_values($docStatuses)) !!};
+
+    new Chart(document.getElementById('chart2'), {
+        type: 'pie',
+        data: {
+            labels: statusLabels,
+            datasets: [{
+                data: statusData,
+                backgroundColor: [
+                    '#f0c75e', '#2E8B57', '#4682B4', '#B22222', '#8B4513', '#6A5ACD'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'right',
+                    align: 'center',
+                    labels: { usePointStyle: true, boxWidth: 15, padding: 20, font: { size: 13 }, color: '#0b1b4a' }
+                },
+                title: {
+                    display: true,
+                    text: 'Document Status Overview',
+                    font: { size: 16, family: 'Poppins', weight: '600' },
                     color: '#0b1b4a'
                 }
             },
-            title: {
-                display: true,
-                text: 'Document Status Overview',
-                font: {
-                    size: 16,
-                    family: 'Poppins',
-                    weight: '600'
-                },
-                color: '#0b1b4a'
-            }
-        },
-        layout: {
-            padding: {
-                right: 40 // ✅ give space for legend to breathe
-            }
+            layout: { padding: { right: 40 } }
         }
-    }
-});
+    });
 
 </script>
 @endsection

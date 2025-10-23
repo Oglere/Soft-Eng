@@ -8,8 +8,68 @@ use Illuminate\Routing\Controller;
 
 class AdminController extends Controller
 {
-    public function dashboard_page() {
-        return view ('admin.dashboard');
+    public function dashboard_page(){
+        // Total counts
+        $totalUsers = \App\Models\User::count();
+        $totalAdmins = \App\Models\User::where('role', 'admin')->count();
+
+        $totalStorageBytes = \DB::table('document_repositories')
+            ->selectRaw('SUM(LENGTH(file)) as total_size')
+            ->value('total_size') ?? 0;
+
+        // ✅ Convert bytes to human-readable unit
+        if ($totalStorageBytes >= 1099511627776) {
+            $totalStorageValue = round($totalStorageBytes / 1099511627776, 2);
+            $totalStorageUnit = 'TB';
+        } elseif ($totalStorageBytes >= 1073741824) {
+            $totalStorageValue = round($totalStorageBytes / 1073741824, 2);
+            $totalStorageUnit = 'GB';
+        } elseif ($totalStorageBytes >= 1048576) {
+            $totalStorageValue = round($totalStorageBytes / 1048576, 2);
+            $totalStorageUnit = 'MB';
+        } elseif ($totalStorageBytes >= 1024) {
+            $totalStorageValue = round($totalStorageBytes / 1024, 2);
+            $totalStorageUnit = 'KB';
+        } else {
+            $totalStorageValue = $totalStorageBytes;
+            $totalStorageUnit = 'Bytes';
+        }
+
+        // ✅ Published (Approved)
+        $publishedDocs = \App\Models\DocumentRepository::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->where('status', 'Approved')
+            ->groupBy('month')
+            ->pluck('count', 'month')
+            ->toArray();
+
+        // ✅ Unpublished (anything not Approved)
+        $unpublishedDocs = \App\Models\DocumentRepository::selectRaw('MONTH(created_at) as month, COUNT(*) as count')
+            ->where('status', '!=', 'Approved')
+            ->groupBy('month')
+            ->pluck('count', 'month')
+            ->toArray();
+
+        // Pie chart (status breakdown)
+        $docStatuses = \App\Models\DocumentRepository::select('status', \DB::raw('COUNT(*) as count'))
+            ->groupBy('status')
+            ->pluck('count', 'status')
+            ->toArray();
+
+        // Recent users (example using last_login)
+        $recentUsers = \App\Models\User::orderBy('last_login', 'desc')
+            ->take(5)
+            ->get(['last_name', 'first_name', 'last_login']);
+
+        return view('admin.dashboard', compact(
+            'totalUsers',
+            'totalAdmins',
+            'totalStorageValue',
+            'totalStorageUnit',
+            'publishedDocs',
+            'unpublishedDocs',
+            'docStatuses',
+            'recentUsers'
+        ));
     }
 
     public function user_control_page() {
