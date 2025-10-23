@@ -217,348 +217,241 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script>
+    // --- File Upload + Title Autofill ---
     const chooseFileBtn = document.getElementById('chooseFileBtn');
     const fileInput = document.getElementById('fileID');
     const fileNameDisplay = document.getElementById('fileNameDisplay');
     const titleInput = document.getElementById('title');
     const form = document.getElementById('documentForm');
 
-    // Disable typing in title input
-    titleInput.readOnly = false;
-
-    // Trigger hidden file input
     chooseFileBtn.addEventListener('click', () => fileInput.click());
 
-    // Auto-fill title based on uploaded file
     fileInput.addEventListener('change', function () {
         const file = this.files[0];
         if (file) {
             const fileName = file.name;
-            const baseName = fileName.replace(/\.[^/.]+$/, ""); // remove .pdf
-            titleInput.value = baseName; 
+            const baseName = fileName.replace(/\.[^/.]+$/, ""); // remove extension
             fileNameDisplay.textContent = `Selected: ${fileName}`;
+            if (!titleInput.value.trim()) titleInput.value = baseName;
         } else {
             fileNameDisplay.textContent = '';
         }
     });
 
-    // Form submission with title check
-    form.addEventListener('submit', function (e) {
-        e.preventDefault(); // stop form from submitting
+    // --- Unified Form Validation & Title Check ---
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
 
-        const title = titleInput.value.trim();
-        if (!title) {
-            Swal.fire('Missing Title', 'Please upload a PDF to auto-fill the title.', 'warning');
+        document.querySelectorAll('.error-text').forEach(el => el.remove());
+
+        let isValid = true;
+
+        function showError(input, message) {
+            const error = document.createElement('div');
+            error.className = 'error-text';
+            error.textContent = message;
+            error.style.color = '#e74c3c';
+            error.style.fontSize = '0.85rem';
+            error.style.marginTop = '6px';
+            input.insertAdjacentElement('afterend', error);
+        }
+
+        // Get fields
+        const typeChecks = document.querySelectorAll('input[name="document_types[]"]:checked');
+        const keywords = document.getElementById('keywords');
+        const abstract = document.getElementById('abstract');
+        const citations = document.getElementById('citations');
+        const teacher = document.getElementById('teacher_id');
+        const date = document.getElementById('submission_date');
+
+        // --- File Validation ---
+        if (fileInput.files.length === 0) {
+            showError(document.querySelector('.upload-box'), 'Please upload a PDF file.');
+            isValid = false;
+        } else {
+            const file = fileInput.files[0];
+            if (file.size > 25 * 1024 * 1024) {
+                showError(document.querySelector('.upload-box'), 'File size must not exceed 25MB.');
+                isValid = false;
+            }
+            if (!file.name.toLowerCase().endsWith('.pdf')) {
+                showError(document.querySelector('.upload-box'), 'Only PDF files are allowed.');
+                isValid = false;
+            }
+        }
+
+        // --- Type of Study ---
+        if (typeChecks.length === 0) {
+            showError(document.querySelector('.type-buttons'), 'Please select at least one study type.');
+            isValid = false;
+        }
+
+        // --- Title ---
+        const titleTrim = titleInput.value.trim();
+        if (titleTrim === '') {
+            showError(titleInput, 'Title is required.');
+            isValid = false;
+        } else if (titleTrim.length < 5 || titleTrim.length > 255) {
+            showError(titleInput, 'Title must be between 5 and 255 characters.');
+            isValid = false;
+        }
+
+        // --- Keywords ---
+        if (keywords.value.trim() === '') {
+            showError(keywords, 'Keywords are required.');
+            isValid = false;
+        }
+
+        // --- Abstract ---
+        const abstractTrim = abstract.value.trim();
+        if (abstractTrim === '') {
+            showError(abstract, 'Abstract is required.');
+            isValid = false;
+        } else if (abstractTrim.split(/\s+/).length < 10) {
+            showError(abstract, 'Abstract must be at least 10 words.');
+            isValid = false;
+        }
+
+        // --- Citations ---
+        if (citations.value.trim() === '') {
+            showError(citations, 'Citations are required.');
+            isValid = false;
+        }
+
+        // --- Teacher ---
+        if (teacher.value.trim() === '') {
+            showError(teacher, 'Please select a teacher.');
+            isValid = false;
+        }
+
+        // --- Date ---
+        if (date.value.trim() === '') {
+            showError(date, 'Submission date is required.');
+            isValid = false;
+        }
+
+        // --- Stop here if invalid ---
+        if (!isValid) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Form Error',
+                text: 'Please correct the highlighted fields before submitting.',
+                confirmButtonColor: '#e74c3c'
+            });
             return;
         }
 
-        // Check for duplicate titles before submission
-        fetch("{{ route('student.checkTitle') }}", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRF-TOKEN": "{{ csrf_token() }}"
-            },
-            body: JSON.stringify({ title: title })
-        })
-        .then(response => response.json())
-        .then(data => {
+        // --- Check for duplicate title ---
+        try {
+            const response = await fetch("{{ route('student.checkTitle') }}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                },
+                body: JSON.stringify({ title: titleTrim })
+            });
+
+            const data = await response.json();
+
             if (data.exists) {
-                // SweetAlert confirmation for duplicate title
                 Swal.fire({
                     title: 'Duplicate Title Found',
                     text: `A document with the same title already exists. Would you like to submit as "${data.next_title}"?`,
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'Yes, Proceed',
-                    cancelButtonText: 'Cancel',
-                }).then((result) => {
+                    cancelButtonText: 'Cancel'
+                }).then(result => {
                     if (result.isConfirmed) {
-                        titleInput.value = data.next_title; // set new title with (2), (3), etc.
+                        titleInput.value = data.next_title;
                         form.submit();
                     }
                 });
             } else {
                 form.submit();
             }
-        })
-        .catch(error => console.error('Error:', error));
-    });
-
-    // SweetAlert success message (on redirect)
-    @if(session('success'))
-        Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: "{{ session('success') }}",
-            showConfirmButton: false,
-            timer: 2500
-        });
-    @endif
-</script>
-
-<script>
-    // Trigger hidden file input
-    const chooseFileBtn = document.getElementById('chooseFileBtn');
-    const fileInput = document.getElementById('fileID');
-    const fileNameDisplay = document.getElementById('fileNameDisplay');
-    const titleInput = document.getElementById('title');
-
-    chooseFileBtn.addEventListener('click', () => fileInput.click());
-
-    // Show selected file name + auto-fill title
-    fileInput.addEventListener('change', function () {
-        const file = this.files[0];
-        if (file) {
-        const fileName = file.name;
-        const baseName = fileName.replace(/\.[^/.]+$/, ""); // remove extension
-        fileNameDisplay.textContent = `Selected: ${fileName}`;
-        if (!titleInput.value.trim()) {
-            titleInput.value = baseName; // auto-fill only if empty
-        }
-        } else {
-            fileNameDisplay.textContent = '';
+        } catch (error) {
+            console.error('Error checking title:', error);
+            Swal.fire('Error', 'An unexpected error occurred. Please try again.', 'error');
         }
     });
 
-    document.getElementById('documentForm').addEventListener('submit', function (e) {
-    e.preventDefault(); // stop form submission temporarily
-
-    // Remove previous errors
-    document.querySelectorAll('.error-text').forEach(el => el.remove());
-
-    let isValid = true;
-
-    // Helper function to show error
-    function showError(input, message) {
-        const error = document.createElement('p');
-        error.className = 'error-text';
-        error.textContent = message;
-        error.style.color = 'red';
-        error.style.fontSize = '0.85rem';
-        error.style.marginTop = '4px';
-        if (!input.nextElementSibling || !input.nextElementSibling.classList.contains('error-text')) {
-            input.insertAdjacentElement('afterend', error);
-        }
-    }
-
-    // Get inputs
-    const fileInput = document.getElementById('fileID');
-    const typeChecks = document.querySelectorAll('input[name="document_types[]"]:checked');
-    const title = document.getElementById('title');
-    const keywords = document.getElementById('keywords');
-    const abstract = document.getElementById('abstract');
-    const teacher = document.getElementById('teacher_id');
-    const date = document.getElementById('submission_date');
-
-    // ---- File Validation ----
-    if (fileInput.files.length === 0) {
-        showError(document.querySelector('.upload-box p'), 'Please upload a PDF file.');
-        isValid = false;
-    } else {
-        const file = fileInput.files[0];
-        if (file.size > 25 * 1024 * 1024) {
-            showError(document.querySelector('.upload-box p'), 'File size must not exceed 25MB.');
-            isValid = false;
-        }
-        if (!file.name.toLowerCase().endsWith('.pdf')) {
-            showError(document.querySelector('.upload-box p'), 'Only PDF files are allowed.');
-            isValid = false;
-        }
-    }
-
-    // ---- Type of Study ----
-    if (typeChecks.length === 0) {
-        const typeContainer = document.querySelector('.type-buttons');
-        const error = document.createElement('p');
-        error.className = 'error-text';
-        error.textContent = 'Please select at least one study type.';
-        error.style.color = 'red';
-        error.style.fontSize = '0.85rem';
-        error.style.marginTop = '-20px';
-        if (!typeContainer.nextElementSibling || !typeContainer.nextElementSibling.classList.contains('error-text')) {
-            typeContainer.insertAdjacentElement('afterend', error);
-        }
-        isValid = false;
-    }
-
-    // ---- Title ----
-    const titleTrim = title.value.trim();
-    if (titleTrim === '') {
-        showError(title, 'Title is required.');
-        isValid = false;
-    } else if (titleTrim.length < 5 || titleTrim.length > 255) {
-        showError(title, 'Title must be between 5 and 255 characters.');
-        isValid = false;
-    }
-
-    // ---- Keywords ----
-    const keywordsTrim = keywords.value.trim();
-    if (keywordsTrim === '') {
-        showError(keywords, 'Keywords are required.');
-        isValid = false;
-    } else {
-        const keywordArray = keywordsTrim.split(',').map(k => k.trim()).filter(k => k !== '');
-        if (keywordArray.length === 0) {
-            showError(keywords, 'Please enter at least one valid keyword.');
-            isValid = false;
-        }
-    }
-
-    // ---- Abstract ----
-    const abstractTrim = abstract.value.trim();
-        if (abstractTrim === '') {
-            showError(abstract, 'Abstract is required.');
-            isValid = false;
-        } else {
-        const wordCount = abstractTrim.split(/\s+/).length;
-        if (wordCount < 10) {
-                showError(abstract, 'Abstract must be at least 10 words.');
-                isValid = false;
-            }
-        }
-
-        // ---- Teacher ----
-        if (teacher.value.trim() === '') {
-        showError(teacher, 'Please select a teacher.');
-        isValid = false;
-        }
-
-        // ---- Submission Date ----
-        if (date.value.trim() === '') {
-        showError(date, 'Submission date is required.');
-        isValid = false;
-        }
-
-        // Submit if valid
-        if (isValid) {
-        this.submit();
-        }
-    });
-
-    // Prevent past date selection
+    // Prevent selecting past dates
     const dateInput = document.getElementById('submission_date');
     const today = new Date().toISOString().split('T')[0];
     dateInput.min = today;
 
-    const capstoneCheckbox = document.getElementById('capstone');
-    const extraTeachersDiv = document.getElementById('extraTeachers');
-    const mainTeacherLabel = document.getElementById('mainTeacherLabel');
-
-    // All teacher selects
-    const teacherSelects = [
-    document.getElementById('teacher_id'),
-    document.querySelector('select[name="teacher_id_2"]'),
-    document.querySelector('select[name="teacher_id_3"]')
-    ];
-
-    // Show/hide extra teachers based on Capstone
-    function updateTeacherDisplay() {
-        if (capstoneCheckbox.checked) {
-            extraTeachersDiv.style.display = 'block';
-            mainTeacherLabel.textContent = 'Teacher 1';
-        } else {
-            extraTeachersDiv.style.display = 'none';
-            mainTeacherLabel.textContent = 'Teacher';
-            // Reset extra selects
-            teacherSelects.slice(1).forEach(select => select.value = '');
-        }
-    }
-
-    capstoneCheckbox.addEventListener('change', updateTeacherDisplay);
-        updateTeacherDisplay(); // ensure correct state on load
-
-        // Prevent duplicate selection
-        function preventDuplicateTeachers() {
-        const selectedValues = teacherSelects.map(s => s.value);
-
-        teacherSelects.forEach((select, idx) => {
-            Array.from(select.options).forEach(option => {
-            // Don't disable empty option
-            if (option.value === '') return;
-
-            // Disable option if it's selected in another dropdown
-            option.disabled = selectedValues.includes(option.value) && option.value !== select.value;
-            });
-        });
-    }
-
-    // Add event listeners to all selects
-    teacherSelects.forEach(select => {
-    select.addEventListener('change', preventDuplicateTeachers);
+    // SweetAlert Success Message (if redirected)
+    @if(session('success'))
+    Swal.fire({
+        icon: 'success',
+        title: 'Success!',
+        text: "{{ session('success') }}",
+        showConfirmButton: false,
+        timer: 2500
     });
+    @endif
+    </script>
 
-    // Run on page load in case old values exist
-    preventDuplicateTeachers();
-</script>
-
-<script>
+    <!-- Notifications Script (unchanged) -->
+    <script>
     async function loadNotifications(saveToStorage = true) {
-    const notifBadge = document.getElementById('notifBadge');
-    const notifList = document.getElementById('notifList');
+        const notifBadge = document.getElementById('notifBadge');
+        const notifList = document.getElementById('notifList');
 
-    try {
-        const res = await fetch('{{ route("student.notifications") }}');
-        const data = await res.json();
+        try {
+            const res = await fetch('{{ route("student.notifications") }}');
+            const data = await res.json();
 
-        notifList.innerHTML = '';
+            notifList.innerHTML = '';
 
-        if (data.length === 0) {
-            notifBadge.style.display = 'none';
-            notifList.innerHTML = '<li>No new notifications.</li>';
-            if (saveToStorage) localStorage.setItem('notifCount', 0);
-            return;
-        }
+            if (data.length === 0) {
+                notifBadge.style.display = 'none';
+                notifList.innerHTML = '<li>No new notifications.</li>';
+                if (saveToStorage) localStorage.setItem('notifCount', 0);
+                return;
+            }
 
-        notifBadge.style.display = 'inline-block';
-        notifBadge.textContent = data.length;
+            notifBadge.style.display = 'inline-block';
+            notifBadge.textContent = data.length;
 
-        // store count so it persists across pages
-        if (saveToStorage) localStorage.setItem('notifCount', data.length);
+            if (saveToStorage) localStorage.setItem('notifCount', data.length);
 
-        data.forEach(n => {
-            const li = document.createElement('li');
-            li.innerHTML = `
-                ${n.icon}
-                <a href="${n.link}" class="notif-link">${n.message}</a>
-                <br>
-                <small>${n.time}</small>
-            `;
-            notifList.appendChild(li);
+            data.forEach(n => {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    ${n.icon}
+                    <a href="${n.link}" class="notif-link">${n.message}</a>
+                    <br>
+                    <small>${n.time}</small>
+                `;
+                notifList.appendChild(li);
             });
         } catch (error) {
             console.error('Error loading notifications:', error);
         }
     }
 
-    // --- INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', () => {
-    const notifBadge = document.getElementById('notifBadge');
+        const notifBadge = document.getElementById('notifBadge');
+        const savedCount = localStorage.getItem('notifCount');
+        if (savedCount && parseInt(savedCount) > 0) {
+            notifBadge.textContent = savedCount;
+            notifBadge.style.display = 'inline-block';
+        } else {
+            notifBadge.style.display = 'none';
+        }
 
-    // Load saved count from localStorage (keep number after page change)
-    const savedCount = localStorage.getItem('notifCount');
-    if (savedCount && parseInt(savedCount) > 0) {
-        notifBadge.textContent = savedCount;
-        notifBadge.style.display = 'inline-block';
-    } else {
-        notifBadge.style.display = 'none';
-    }
-
-    // Fetch new notifications immediately
-    loadNotifications();
-
-    // Refresh notifications every 10 seconds
-    setInterval(() => {
         loadNotifications();
-    }, 10000); // 10 seconds
+        setInterval(() => loadNotifications(), 10000);
     });
 
-    // Toggle dropdown on bell click
     document.getElementById('notifBtn').addEventListener('click', async () => {
         const dropdown = document.getElementById('notifDropdown');
         dropdown.classList.toggle('hidden');
         if (!dropdown.classList.contains('hidden')) {
-            await loadNotifications(false); // don’t overwrite saved count every click
+            await loadNotifications(false);
         }
     });
 </script>
