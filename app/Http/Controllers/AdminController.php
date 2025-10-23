@@ -25,7 +25,7 @@ class AdminController extends Controller
     }
 
     public function account_setting_page() {
-        return view ('admin.accountsetting');
+        return view ('admin.settings');
     }
 
     public function verify_identity(Request $request)

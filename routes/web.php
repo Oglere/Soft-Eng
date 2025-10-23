@@ -80,7 +80,7 @@ Route::middleware('auth.session:admin')->prefix('admin')->group(function (){
     Route::get('/manage-users/recover', [AdminController::class, 'user_recovery_page'])->name('recover.user');
     Route::get('/storage/', [AdminController::class, 'storage_page'])->name('storage');
     Route::get('/storage/{id}', [AdminController::class, 'storage_page'])->name('admin.pdf.reader');
-    Route::get('/account_setting/', [AdminController::class, 'account_setting_page'])->name('admin.account_setting');
+    Route::get('/account-setting/', [AdminController::class, 'account_setting_page'])->name('admin.account_setting');
 
     Route::post('/account_setting/verify', [AdminController::class, 'verify_identity'])->name('admin.verify_identity');
     Route::post('/account_setting/update', [AdminController::class, 'update_account'])->name('admin.update_account');
