@@ -12,8 +12,9 @@
 
   <!-- Navbar -->
   <div class="navbar">
-        <h1>D.A.R.A</h1>
-
+        <div>
+            {{-- <img src="{{ asset('images/DARA.png') }}" alt="Logo"> --}}
+        </div>
         <div class="navbar-right">
             <div class="notification-wrapper">
                 <button id="notifBtn" class="notif-btn">
@@ -31,7 +32,7 @@
                 </div>
             </div>
             <div class="profile">
-        
+
                 <div class="profile-info">
                     <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
 
@@ -101,7 +102,7 @@
                 </div>
             </div>
         </aside>
-        
+
     <!-- Main -->
     <main class="main">
     <h2>Review Studies</h2>
@@ -142,7 +143,7 @@
                 @forelse($documents as $doc)
                 <tr data-status="{{ strtolower($doc->status ?? 'pending') }}">
                     <td>
-                    <a href="{{ url('/teacher/submitted/' . $doc->document_id) }}" class="plain-link">
+                    <a href="{{ url('/teacher/view_submitted/' . $doc->document_id) }}" class="plain-link">
                         {{ $doc->title ?? 'Untitled Study' }}
                     </a>
                     </td>
@@ -168,7 +169,7 @@
                         <span class="status {{ $statusClass }}">{{ ucfirst($status) }}</span>
                     </td>
                     <td style="text-align: center;">
-                    <button 
+                    <button
                             class="action-btn view-btn"
                             data-id="{{ $doc->document_id }}"
                             data-title="{{ $doc->title }}"
@@ -221,9 +222,9 @@
 
                     <!-- PDF Viewer -->
                     <div id="modalPdfContainer" style="height:400px; margin-top: 1rem;">
-                        <iframe 
-                            id="modalFilePdf" 
-                            src="" 
+                        <iframe
+                            id="modalFilePdf"
+                            src=""
                             style="width:100%; height:100%; border:1px solid #ccc; border-radius:6px; display:none;">
                         </iframe>
                         <div id="noFileMessage" class="no-file" style="text-align:center; padding:20px; color:gray; display:none;">

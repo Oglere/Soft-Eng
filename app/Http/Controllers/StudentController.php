@@ -379,7 +379,7 @@ class StudentController extends Controller
                     break;
             }
         }
-        
+
         return response()->json($notifications);
     }
 }

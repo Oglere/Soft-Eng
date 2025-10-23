@@ -12,8 +12,9 @@
 
     <!-- Navbar -->
     <div class="navbar">
-        <h1>D.A.R.A</h1>
-
+        <div>
+            {{-- <img src="{{ asset('images/DARA.png') }}" alt="Logo"> --}}
+        </div>
         <div class="navbar-right">
             <div class="notification-wrapper">
                 <button id="notifBtn" class="notif-btn">
@@ -206,7 +207,7 @@
         <div class="pagination-container">
             {{ $submissions->withQueryString()->links('vendor.pagination.custom') }}
         </div>
-        
+
         <!-- Modal -->
         <div id="submissionModal" class="modal" style="display:none;">
             <div class="modal-content">
@@ -224,9 +225,9 @@
                     <p id="modalAbstract" class="scrollable-text"></p>
 
                     <div id="modalPdfContainer" style="height:400px;">
-                        <iframe 
-                            id="modalFilePdf" 
-                            src="" 
+                        <iframe
+                            id="modalFilePdf"
+                            src=""
                             style="width:100%; height:100%; border:1px solid #ccc; border-radius:6px;">
                         </iframe>
                         <div id="noFileMessage" class="no-file" style="display:none; text-align:center; padding:20px; color:gray;">

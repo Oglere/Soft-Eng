@@ -11,7 +11,9 @@
     <body>
         <!-- Navbar -->
         <div class="navbar">
-            <h1>D.A.R.A</h1>
+            <div>
+                {{-- <img src="{{ asset('images/DARA.png') }}" alt="Logo"> --}}
+            </div>
             <div class="navbar-right">
                 <div class="notification-wrapper">
                     <button id="notifBtn" class="notif-btn">

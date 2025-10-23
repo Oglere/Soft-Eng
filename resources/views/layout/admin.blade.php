@@ -212,7 +212,6 @@
     <header>
         <div class="header-left">
             <img src="{{ asset('images/DARA.png') }}" alt="Logo">
-            <span>D.A.R.A</span>
         </div>
         <div class="header-right">
             <div class="icon"><i class="fa-regular fa-bell"></i></div>
