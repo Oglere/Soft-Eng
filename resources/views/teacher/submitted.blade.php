@@ -15,14 +15,21 @@
         <h1>D.A.R.A</h1>
 
         <div class="navbar-right">
-            <button>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-            </button>
+            <div class="notification-wrapper">
+                <button id="notifBtn" class="notif-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                    <span id="notifBadge" class="notif-badge" style="display:none;">0</span>
+                </button>
 
+                <div id="notifDropdown" class="notif-dropdown hidden">
+                    <h4>Notifications</h4>
+                    <ul id="notifList"></ul>
+                </div>
+            </div>
             <div class="profile">
         
                 <div class="profile-info">
@@ -58,7 +65,7 @@
                             </svg>
                             Search Studies
                         </a>
-                        <a href="<?php echo e(url('/teacher/review')); ?>" class="active">
+                        <a href="<?php echo e(url('/teacher/submitted')); ?>" class="active">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                 viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -212,7 +219,14 @@
                     <p id="modalAbstract" class="scrollable-text"></p>
 
                     <div id="modalPdfContainer" style="height:400px;">
-                        <iframe id="modalFilePdf" src="" style="width:100%; height:100%; border:1px solid #ccc; border-radius:6px;"></iframe>
+                        <iframe 
+                            id="modalFilePdf" 
+                            src="" 
+                            style="width:100%; height:100%; border:1px solid #ccc; border-radius:6px;">
+                        </iframe>
+                        <div id="noFileMessage" class="no-file" style="display:none; text-align:center; padding:20px; color:gray;">
+                            <p>No PDF file found for this document.</p>
+                        </div>
                     </div>
                     <!-- Review Button -->
                     <div style="margin-top: 1rem; text-align: right;">
@@ -225,110 +239,234 @@
     <!-- JS Script -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-        const searchInput = document.getElementById('searchInput');
-        const filterButtons = document.querySelectorAll('.filters button');
-        const tbody = document.querySelector('.table tbody');
-        const rows = Array.from(tbody.querySelectorAll('tr'));
-        let currentFilter = "{{ request('status') ?? 'all' }}";
+            const searchInput = document.getElementById('searchInput');
+            const filterButtons = document.querySelectorAll('.filters button');
+            const tbody = document.querySelector('.table tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
 
-        function filterRows() {
-            const query = searchInput.value.toLowerCase();
-            let anyVisible = false;
+            let currentFilter = "{{ $filter ?? 'all' }}"; // initial filter from URL
 
-            rows.forEach(row => {
-            const titleCell = row.querySelector('td:first-child');
-            if (!titleCell) return;
+            function filterRows() {
+                const query = searchInput.value.toLowerCase();
+                let anyVisible = false;
 
-            const title = titleCell.innerText.toLowerCase();
-            const studyType = row.children[3]?.innerText.toLowerCase() || '';
-            const status = row.getAttribute('data-status');
+                rows.forEach(row => {
+                    const titleCell = row.querySelector('td:first-child');
+                    if (!titleCell) return;
 
-            const matchesSearch = title.includes(query) || studyType.includes(query);
-            const matchesFilter = currentFilter === 'all' || status === currentFilter;
+                    const title = titleCell.innerText.toLowerCase();
+                    const status = row.getAttribute('data-status');
 
-            if (matchesSearch && matchesFilter) {
-                row.style.display = '';
-                anyVisible = true;
-            } else {
-                row.style.display = 'none';
+                    const matchesSearch = title.includes(query);
+                    const matchesFilter = currentFilter === 'all' || status === currentFilter;
+
+                    if (matchesSearch && matchesFilter) {
+                        row.style.display = '';
+                        anyVisible = true;
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                const existingNoResult = tbody.querySelector('.no-results');
+                if (existingNoResult) existingNoResult.remove();
+
+                if (!anyVisible) {
+                    const noRow = document.createElement('tr');
+                    noRow.classList.add('no-results');
+                    const td = document.createElement('td');
+                    td.setAttribute('colspan', 4);
+
+                    let statusText = currentFilter.charAt(0).toUpperCase() + currentFilter.slice(1);
+                    if (currentFilter === 'all') statusText = 'submitted';
+                    else if (currentFilter === 'revision') statusText = 'For Revision';
+
+                    td.innerText = `No ${statusText} document yet.`;
+                    td.style.textAlign = 'center';
+                    td.style.color = 'gray';
+                    noRow.appendChild(td);
+                    tbody.appendChild(noRow);
+                }
             }
+
+            // Search event
+            searchInput.addEventListener('input', filterRows);
+
+            // Status buttons
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+
+                    currentFilter = button.textContent.toLowerCase().replace(/\s+/g, '');
+                    if(currentFilter === 'forrevision') currentFilter = 'revision';
+
+                    filterRows();
+                });
             });
 
-            const existingNoResult = tbody.querySelector('.no-results');
-            if (existingNoResult) existingNoResult.remove();
-
-            if (!anyVisible) {
-            const noRow = document.createElement('tr');
-            noRow.classList.add('no-results');
-            const td = document.createElement('td');
-            td.setAttribute('colspan', 5);
-            td.innerText = `No ${currentFilter === 'all' ? 'studies' : currentFilter + ' studies'} found.`;
-            td.style.textAlign = 'center';
-            td.style.color = 'gray';
-            noRow.appendChild(td);
-            tbody.appendChild(noRow);
-            }
-        }
-
-        searchInput.addEventListener('input', filterRows);
-
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            currentFilter = button.dataset.status;
+            // Apply filter from URL on page load
             filterRows();
-            });
         });
 
-        filterRows();
-        });
-
-        // Modal logic
-        const modal = document.getElementById('reviewModal');
+        const modal = document.getElementById('submissionModal');
         const modalTitle = document.getElementById('modalTitle');
-        const modalSender = document.getElementById('modalSender');
         const modalDate = document.getElementById('modalDate');
         const modalStatus = document.getElementById('modalStatus');
-        const modalStudyType = document.getElementById('modalStudyType');
         const modalAbstract = document.getElementById('modalAbstract');
+        const modalCitation = document.getElementById('modalCitation');
         const modalFilePdf = document.getElementById('modalFilePdf');
         const modalPdfContainer = document.getElementById('modalPdfContainer');
+        const modalApprovedByContainer = document.getElementById('modalApprovedByContainer');
+        const modalApprovedBy = document.getElementById('modalApprovedBy');
         const modalClose = document.getElementById('modalClose');
 
+        // View button logic
         document.querySelectorAll('.view-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 modalTitle.innerText = btn.dataset.title;
-                modalSender.innerText = btn.dataset.sender;
                 modalDate.innerText = btn.dataset.date;
                 modalStatus.innerText = btn.dataset.status;
-                modalStudyType.innerText = btn.dataset.studyType;
                 modalAbstract.innerText = btn.dataset.abstract;
+                modalCitation.innerText = btn.dataset.citation;
 
-                if (btn.dataset.fileUrl) {
-                    modalPdfContainer.style.display = 'block';
-                    modalFilePdf.src = btn.dataset.fileUrl;
+                // ✅ Always display the PDF if file exists
+                const pdfUrl = btn.dataset.fileUrl?.trim();
+
+                if (pdfUrl) {
+                    console.log('Loading PDF:', pdfUrl); // Debug line
+                    modalFilePdf.src = pdfUrl + `#toolbar=0`; // Disable PDF viewer toolbar
+                    modalFilePdf.style.display = 'block';
+                    document.getElementById('noFileMessage').style.display = 'none';
                 } else {
-                    modalPdfContainer.style.display = 'none';
+                    console.warn('No PDF found for document:', btn.dataset.id); // Debug line
                     modalFilePdf.src = '';
+                    modalFilePdf.style.display = 'none';
+                    document.getElementById('noFileMessage').style.display = 'block';
+                }
+
+                // ✅ Only show “Approved By” if status is approved
+                if (btn.dataset.status.toLowerCase() === 'approved' && btn.dataset.approvedBy) {
+                    modalApprovedByContainer.style.display = 'block';
+                    modalApprovedBy.innerText = btn.dataset.approvedBy;
+                } else {
+                    modalApprovedByContainer.style.display = 'none';
+                    modalApprovedBy.innerText = '';
                 }
 
                 // Add dynamic route to the button
                 const reviewButton = document.getElementById('reviewButton');
-                reviewButton.href = `/teacher/view_submitted?document_id=${btn.dataset.id}`;
+                reviewButton.href = `/teacher/view_submitted/${btn.dataset.id}`;
 
                 modal.style.display = 'flex';
             });
         });
-            modalClose.addEventListener('click', () => {
+
+        // Close modal
+        modalClose.addEventListener('click', () => {
             modal.style.display = 'none';
             modalFilePdf.src = '';
-            });
+        });
 
-            window.addEventListener('click', e => {
+        // Close modal when clicking outside
+        window.addEventListener('click', e => {
             if (e.target === modal) {
                 modal.style.display = 'none';
                 modalFilePdf.src = '';
+            }
+        });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const notifStatus = urlParams.get('status'); // e.g. approved
+            const notifDocId = urlParams.get('doc_id');  // e.g. 5
+
+            if (notifStatus && notifDocId) {
+                // Find the exact row (status + doc_id must match)
+                const row = document.querySelector(
+                    `tr[data-status="${notifStatus.toLowerCase()}"][data-id="${notifDocId}"]`
+                );
+
+                if (row) {
+                    row.classList.add('highlight');
+                    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                    // Remove highlight after 5 seconds
+                    setTimeout(() => {
+                        row.classList.remove('highlight');
+                    }, 5000);
+                }
+            }
+        });
+
+        async function loadNotifications(saveToStorage = true) {
+            const notifBadge = document.getElementById('notifBadge');
+            const notifList = document.getElementById('notifList');
+
+            try {
+                const res = await fetch('{{ route("teacher.notifications") }}');
+                const data = await res.json();
+
+                notifList.innerHTML = '';
+
+                if (!data || data.length === 0) {
+                    notifBadge.style.display = 'none';
+                    notifList.innerHTML = '<li>No new notifications.</li>';
+                    if (saveToStorage) localStorage.setItem('notifCount', 0);
+                    return;
+                }
+
+                notifBadge.textContent = data.length;
+                notifBadge.style.display = 'inline-block';
+                if (saveToStorage) localStorage.setItem('notifCount', data.length);
+
+                data.forEach(n => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <div class="notif-item">
+                            <span class="notif-icon">${n.icon}</span>
+                            <div class="notif-content">
+                                <a href="${n.link}" class="notif-link">${n.message}</a>
+                                <small>${n.time}</small>
+                            </div>
+                        </div>`;
+                    notifList.appendChild(li);
+                });
+            } catch (err) {
+                console.error('Error loading notifications:', err);
+            }
+        }
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+        const notifBadge = document.getElementById('notifBadge');
+
+        // Load saved count from localStorage (keep number after page change)
+        const savedCount = localStorage.getItem('notifCount');
+        if (savedCount && parseInt(savedCount) > 0) {
+            notifBadge.textContent = savedCount;
+            notifBadge.style.display = 'inline-block';
+        } else {
+            notifBadge.style.display = 'none';
+        }
+
+            // Fetch new notifications immediately
+            loadNotifications();
+
+            // Refresh notifications every 10 seconds
+            setInterval(() => {
+
+                loadNotifications();
+            }, 10000); // 10 seconds
+        });
+
+        // Toggle dropdown on bell click
+        document.getElementById('notifBtn').addEventListener('click', async () => {
+            const dropdown = document.getElementById('notifDropdown');
+            dropdown.classList.toggle('hidden');
+            if (!dropdown.classList.contains('hidden')) {
+                await loadNotifications(false); // don’t overwrite saved count every click
             }
         });
     </script>

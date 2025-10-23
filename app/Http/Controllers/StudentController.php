@@ -169,14 +169,6 @@ class StudentController extends Controller
     }
 
     /**
-     * Display the PDF reader page for a specific ID.
-     */
-    public function pdf_reader_page($id)
-    {
-        return view('student.pdf-reader');
-    }
-
-    /**
      * Display the student account setting page.
      */
     public function account_setting_page()
@@ -187,28 +179,28 @@ class StudentController extends Controller
     /**
      * Verify student identity (password check before editing).
      */
-public function verify_identity(Request $request)
-{
-    $request->validate([
-        'password' => 'required|string',
-    ]);
-
-    $user = Auth::user();
-
-    // Get session-based attempt tracking
-    $attempts = session('login_attempts', 0);
-    $locked_until = session('locked_until');
-
-    // 🔒 Check if user is temporarily locked out
-    if ($locked_until && now()->lt($locked_until)) {
-        return back()->withErrors([
-            'login_error' => 'Please wait a few seconds before trying again.'
+    public function verify_identity(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string',
         ]);
-    }
 
-    // ❌ Incorrect password handling
-    if (!\Illuminate\Support\Facades\Hash::check($request->password, $user->password_hash)) {
-        $attempts++;
+        $user = Auth::user();
+
+        // Get session-based attempt tracking
+        $attempts = session('login_attempts', 0);
+        $locked_until = session('locked_until');
+
+        // 🔒 Check if user is temporarily locked out
+        if ($locked_until && now()->lt($locked_until)) {
+            return back()->withErrors([
+                'login_error' => 'Please wait a few seconds before trying again.'
+            ]);
+        }
+
+        // ❌ Incorrect password handling
+        if (!\Illuminate\Support\Facades\Hash::check($request->password, $user->password_hash)) {
+            $attempts++;
 
         if ($attempts >= 3) {
             // Lock user for 1 minute (60 seconds)
@@ -230,29 +222,29 @@ public function verify_identity(Request $request)
         ]);
     }
 
-    // ✅ Correct password
-    session(['account_verified' => true]);
-    session()->forget(['login_attempts', 'locked_until']);
+        // ✅ Correct password
+        session(['account_verified' => true]);
+        session()->forget(['login_attempts', 'locked_until']);
 
-    return redirect()->route('student.account_setting')->with('success', 'Identity verified successfully.');
-}
+        return redirect()->route('student.account_setting')->with('success', 'Identity verified successfully.');
+    }
 
 
     /**
      * Update student account after verification.
      */
-public function update_account(Request $request)
-{
-    $user = Auth::user();
+    public function update_account(Request $request)
+    {
+        $user = Auth::user();
 
-    if (!session('account_verified')) {
-        return redirect()->route('student.account_setting')
-            ->withErrors(['login_error' => 'You must verify your identity before updating your account.']);
-    }
+        if (!session('account_verified')) {
+            return redirect()->route('student.account_setting')
+                ->withErrors(['login_error' => 'You must verify your identity before updating your account.']);
+        }
 
-    // Validate input
-    $validator = \Validator::make($request->all(), [
-        'email' => [
+        // Validate input
+        $validator = \Validator::make($request->all(), [
+            'email' => [
             'nullable',
             'string',
             'email',
