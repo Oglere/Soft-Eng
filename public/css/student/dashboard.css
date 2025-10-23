@@ -1,16 +1,15 @@
 .main {
-  flex: 1;
-  padding: 2rem;
+    flex: 1;
+    padding: 2rem;
 }
 
 .main h2 {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
-  color: #0a1444;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    color: #0a1444;
 }
 
-/* Main card layout */
 .cards {
     display: flex;
     flex-direction: column;
@@ -18,71 +17,65 @@
     align-items: center;
 }
 
-/* Top and bottom rows */
 .top-row,
 .bottom-row {
-  display: flex;
-  justify-content: flex-start;
-  gap: 50px;
-  flex-wrap: wrap;
-  position: relative;
+    display: flex;
+    justify-content: flex-start;
+    gap: 50px;
+    flex-wrap: wrap;
+    position: relative;
 }
 
-/* Bottom row alignment */
 .bottom-row {
-  margin-top: 20px;
+    margin-top: 20px;
 }
 
-/* Card styles */
 .card {
-  width: 389px;
-  height: 259px;
-  border-radius: 1.5rem;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-  text-decoration: none;
-  color: #0a1444;
-  font-family: sans-serif;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 20px;
-  position: relative;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 389px;
+    height: 259px;
+    border-radius: 1.5rem;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: #0a1444;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px;
+    position: relative;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Hover effect */
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
-/* SVG icons */
 .card svg {
-  width: 120px;
-  height: 120px;
-  position: absolute;
-  right: 20px;
-  bottom: 60px;
-  opacity: 0.15;
+    width: 120px;
+    height: 120px;
+    position: absolute;
+    right: 20px;
+    bottom: 60px;
+    opacity: 0.15;
 }
 
-/* Text styles */
 .label {
-  font-size: 23px;
-  font-weight: 600;
-  color: #0a1444;
-  margin-left: 20px;
-  margin-top: 10px;
+    font-size: 23px;
+    font-weight: 600;
+    color: #0a1444;
+    margin-left: 20px;
+    margin-top: 10px;
 }
 
 .number {
-  font-size: 60px;
-  font-weight: 700;
-  color: #000;
-  margin-left: 20px;
-  display: inline-block;
-  transform: translateY(-35px);
-  transition: transform 0.15s ease;
+    font-size: 60px;
+    font-weight: 700;
+    color: #000;
+    margin-left: 20px;
+    display: inline-block;
+    transform: translateY(-35px);
+    transition: transform 0.15s ease;
 }
 
 /* Custom colors */
@@ -96,71 +89,71 @@
 
 /* Tablets (≤ 1024px) */
 @media (max-width: 1024px) {
-  .cards {
-    margin-left: 60px;
-    gap: 20px;
-  }
+    .cards {
+        margin-left: 60px;
+        gap: 20px;
+    }
 
-  .top-row,
-  .bottom-row {
-    justify-content: center;
-    margin-left: 0;
-  }
+    .top-row,
+    .bottom-row {
+        justify-content: center;
+        margin-left: 0;
+    }
 
-  .card {
-    width: 320px;
-    height: 230px;
-  }
+    .card {
+        width: 320px;
+        height: 230px;
+    }
 
-  .card svg {
-    width: 90px;
-    height: 90px;
-    bottom: 40px;
-  }
+    .card svg {
+        width: 90px;
+        height: 90px;
+        bottom: 40px;
+    }
 
-  .number {
-    font-size: 50px;
-    transform: translateY(20px); /* ✅ move down */
-  }
+    .number {
+        font-size: 50px;
+        transform: translateY(20px); /* ✅ move down */
+    }
 }
 
 /* Mobile (≤ 768px) */
 @media (max-width: 768px) {
-  .cards {
-    margin-left: 0;
-    margin-top: 20px;
-    align-items: center;
-  }
+    .cards {
+        margin-left: 0;
+        margin-top: 20px;
+        align-items: center;
+    }
 
-  .top-row,
-  .bottom-row {
-    flex-direction: column;
-    align-items: center;
-    margin-left: 0;
-    gap: 25px;
-  }
+    .top-row,
+    .bottom-row {
+        flex-direction: column;
+        align-items: center;
+        margin-left: 0;
+        gap: 25px;
+    }
 
-  .card {
-    width: 90%;
-    max-width: 360px;
-    height: auto;
-  }
+    .card {
+        width: 90%;
+        max-width: 360px;
+        height: auto;
+    }
 
-  .card svg {
-    width: 80px;
-    height: 80px;
-    right: 15px;
-    bottom: 20px;
-  }
+    .card svg {
+        width: 80px;
+        height: 80px;
+        right: 15px;
+        bottom: 20px;
+    }
 
-  .label {
-    font-size: 20px;
-  }
+    .label {
+        font-size: 20px;
+    }
 
-  .number {
-    font-size: 45px;
-    transform: translateY(10px); /* ✅ move down on mobile */
-  }
+    .number {
+        font-size: 45px;
+        transform: translateY(10px); /* ✅ move down on mobile */
+    }
 }
 
 /* Small phones (≤ 480px) */
@@ -196,79 +189,79 @@
 
 /* Notification Bell */
 .notification-wrapper {
-  position: relative;
+    position: relative;
 }
 
 .notif-btn {
-  position: relative;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 5px;
+    position: relative;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px;
 }
 
 .notif-badge {
-  position: absolute;
-  top: -3px;
-  right: -3px;
-  background: #ff4d4d;
-  color: white;
-  font-size: 11px;
-  font-weight: bold;
-  border-radius: 50%;
-  padding: 2px 6px;
+    position: absolute;
+    top: -3px;
+    right: -3px;
+    background: #ff4d4d;
+    color: white;
+    font-size: 11px;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 2px 6px;
 }
 
 .notif-dropdown {
-  position: absolute;
-  top: 40px;
-  right: 0;
-  background: white;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  border-radius: 10px;
-  width: 500px;
-  z-index: 100;
-  padding: 10px;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    width: 500px;
+    z-index: 100;
+    padding: 10px;
 }
 
 .notif-dropdown h4 {
-  margin: 0 0 10px 5px;
-  font-size: 16px;
-  font-weight: 600;
-  color: #0a1444;
+    margin: 0 0 10px 5px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #0a1444;
 }
 
 .notif-dropdown ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  max-height: 250px;
-  overflow-y: auto;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 250px;
+    overflow-y: auto;
 }
 
 .notif-dropdown ul li {
-  padding: 10px;
-  border-bottom: 1px solid #f0f0f0;
-  font-size: 14px;
-  color: #333;
+    padding: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+    color: #333;
 }
 
 .notif-dropdown ul li small {
-  display: block;
-  font-size: 12px;
-  color: #888;
+    display: block;
+    font-size: 12px;
+    color: #888;
 }
 
 .hidden {
-  display: none;
+    display: none;
 }
 .notif-link {
-  color: #0a1444;
-  text-decoration: none;
-  font-weight: 600;
+    color: #0a1444;
+    text-decoration: none;
+    font-weight: 600;
 }
 
 .notif-link:hover {
-  text-decoration: underline;
-  color: #0056b3;
+    text-decoration: underline;
+    color: #0056b3;
 }

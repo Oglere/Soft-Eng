@@ -39,14 +39,13 @@
 
 .search-bar input {
   width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.5rem; /* ← left padding adjusted for icon */
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
   border: 1px solid #d1d5db;
   border-radius: 2rem;
   outline: none;
   background: #f9fafb;
   font-size: 0.9rem;
 }
-
 
 .filters {
     display: flex;
@@ -69,7 +68,6 @@
     border-color: #1e3a8a;
 }
 
-/* Table */
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -108,28 +106,31 @@
 .status.pending { background: #fed7aa; color: #78350f; }
 .action-btn {
     background-color: #f3f4f6;
-    border: none;        /* remove border */
-    border-radius: 4px;    /* remove rounded corners */
-    display: inline-flex;      /* keep it inline with other buttons */
-    align-items: center;       /* vertical center of SVG */
+    border: none;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
-    padding: 2px 3px  /* horizontal center of SVG */
+    padding: 2px 3px;
 }
 
 .action-btn svg {
     width: 20px;
     height: 20px;
     color: #1e3a8a;
-    display: block;            /* prevents inline spacing issues */
+    display: block;
+}
+
+.action-btn svg:hover{
+    cursor: pointer;
 }
 
 
-    /* Make title links plain text like submitted date */
 .table td a.plain-link {
-    text-decoration: none; /* removes underline */
-    color: #374151; /* same as table text color or adjust to match submitted date */
+    text-decoration: none;
+    color: #374151;
 }
-/* Status badges - consistent style with different colors */
+
 .status {
     display: inline-block;
     padding: 0.3rem 0.8rem;
@@ -139,7 +140,6 @@
     text-align: center;
 }
 
-/* Status colors */
 .status.approved {
     background-color: #d1fae5; /* light green */
     color: #065f46; /* dark green */
@@ -164,9 +164,7 @@
 .pagination-container {
     margin-top: 1rem;
     display: flex;
-    justify-content: flex-end; /* move to the opposite side (right) */
-
-
+    justify-content: flex-end;
 }
 
 .pagination-btn {
@@ -202,7 +200,7 @@
     background: #f9fafb;
     border-color: #d1d5db;
 }
-/* Modal styling same as before */
+
 .modal {
     display: none;
     position: fixed;

@@ -47,17 +47,19 @@ class TeacherController extends Controller
         return view('teacher.submitted', compact('documents'));
     }
 
-    public function view_submitted_page(Request $request)
+    public function view_submitted_page($id)
     {
-        $document = null;
+        $document = DocumentRepository::with('student')->find($id);
 
-        if ($request->has('document_id')) {
-            $document = DocumentRepository::with('student')->find($request->document_id);
+        if (!$document) {
+            return redirect()->route('teacher.submitted.list')
+                ->withErrors(['error' => 'Document not found.']);
         }
 
         return view('teacher.view_submitted', compact('document'));
     }
 
+    
     public function pdf_approve($id)
     {
         $teacherId = auth()->id();

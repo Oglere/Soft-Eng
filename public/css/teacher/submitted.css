@@ -131,6 +131,10 @@
     display: block;            /* prevents inline spacing issues */
 }
 
+.action-btn svg:hover{
+    cursor: pointer;
+}
+
 
     /* Make title links plain text like submitted date */
 .table td a.plain-link {

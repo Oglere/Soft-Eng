@@ -26,6 +26,10 @@
     width: 60%;
 }
 
+.par p {
+    margin-bottom: 5px;
+}
+
 .par-btn {
     width: 100%;
     background-color:#afafaf;

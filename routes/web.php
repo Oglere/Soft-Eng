@@ -43,7 +43,7 @@ Route::middleware('auth.session:student')->prefix('student')->group(function (){
     Route::get('/search', [StudentController::class, 'search_page']);
     Route::get('/submission', [StudentController::class, 'submission'])->name('student.submission');
     Route::post('/submit', [StudentController::class, 'submit_document'])->name('student.submit'); // ✅ NEW: Handles form submission
-    Route::post('/student/check-title', [App\Http\Controllers\StudentController::class, 'checkTitle'])->name('student.checkTitle');
+    Route::post('/student/check-title', [StudentController::class, 'checkTitle'])->name('student.checkTitle');
     Route::get('/submitted/', [StudentController::class, 'submitted_studies_page'])->name('student.submitted');
     Route::get('/view_submitted/{id}', [StudentController::class, 'view_submitted_page'])->name('student.view_submitted');
     Route::delete('/abandon/{id}', [StudentController::class, 'abandon'])->name('student.abandon');
@@ -59,8 +59,7 @@ Route::middleware('auth.session:student')->prefix('student')->group(function (){
 Route::middleware('auth.session:teacher')->prefix('teacher')->group(function (){
     Route::get('/dashboard', [TeacherController::class, 'dashboard_page'])->name('teacher.dashboard');
     Route::get('/submitted/', [TeacherController::class, 'submitted_page'])->name('teacher.submitted.list');
-    Route::get('/submitted/{id}', [TeacherController::class, 'pdf_reader_page'])->name('teacher.pdf.reader');
-    Route::get('/view_submitted', [TeacherController::class, 'view_submitted_page'])->name('teacher.view_submitted');
+    Route::get('/view_submitted/{id}', [TeacherController::class, 'view_submitted_page'])->name('teacher.view_submitted');
     Route::get('/notifications', [TeacherController::class, 'get_notifications'])->name('teacher.notifications');
 
     Route::post('/document/{id}/approve', [TeacherController::class, 'pdf_approve'])->name('teacher.document.approve');

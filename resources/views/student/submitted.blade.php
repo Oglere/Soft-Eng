@@ -216,7 +216,6 @@
                     <p><strong>Submitted Date:</strong> <span id="modalDate"></span></p>
                     <p><strong>Status:</strong> <span id="modalStatus"></span></p>
 
-
                     <p id="modalApprovedByContainer" style="display:none;">
                         <strong>Approved By:</strong> <span id="modalApprovedBy"></span>
                     </p>

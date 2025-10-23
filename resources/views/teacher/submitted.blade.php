@@ -142,7 +142,7 @@
                 @forelse($documents as $doc)
                 <tr data-status="{{ strtolower($doc->status ?? 'pending') }}">
                     <td>
-                    <a href="{{ url('/teacher/review-document/' . $doc->document_id) }}" class="plain-link">
+                    <a href="{{ url('/teacher/submitted/' . $doc->document_id) }}" class="plain-link">
                         {{ $doc->title ?? 'Untitled Study' }}
                     </a>
                     </td>
@@ -177,7 +177,7 @@
                             data-status="{{ ucfirst($doc->status ?? 'Pending') }}"
                             data-study-type="{{ $doc->study_type ?? 'N/A' }}"
                             data-abstract="{{ $doc->abstract ?? 'No abstract provided.' }}"
-                            data-file-url="{{ $doc->file ? asset('storage/documents/' . $doc->file) : '' }}"
+                            data-file-url="{{ $doc->file ? asset('storage/' . $doc->file) : '' }}"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor">
@@ -205,7 +205,7 @@
             {{ $documents->withQueryString()->links('vendor.pagination.custom') }}
         </div>
 
-        <!-- Modal -->
+        <!-- Review Modal -->
         <div id="reviewModal" class="modal" style="display:none;">
             <div class="modal-content">
                 <button id="modalClose" class="modal-close">&times;</button>
@@ -215,20 +215,22 @@
                     <p><strong>Date Submitted:</strong> <span id="modalDate"></span></p>
                     <p><strong>Status:</strong> <span id="modalStatus"></span></p>
                     <p><strong>Study Type:</strong> <span id="modalStudyType"></span></p>
+
                     <p><strong>Abstract:</strong></p>
                     <p id="modalAbstract" class="scrollable-text"></p>
 
-                    <div id="modalPdfContainer" style="height:400px;">
+                    <!-- PDF Viewer -->
+                    <div id="modalPdfContainer" style="height:400px; margin-top: 1rem;">
                         <iframe 
                             id="modalFilePdf" 
                             src="" 
-                            style="width:100%; height:100%; border:1px solid #ccc; border-radius:6px;">
+                            style="width:100%; height:100%; border:1px solid #ccc; border-radius:6px; display:none;">
                         </iframe>
-                        <div id="noFileMessage" class="no-file" style="display:none; text-align:center; padding:20px; color:gray;">
+                        <div id="noFileMessage" class="no-file" style="text-align:center; padding:20px; color:gray; display:none;">
                             <p>No PDF file found for this document.</p>
                         </div>
                     </div>
-                    <!-- Review Button -->
+
                     <div style="margin-top: 1rem; text-align: right;">
                         <a id="reviewButton" href="#" class="review-btn">Review Submitted Studies</a>
                     </div>
@@ -309,55 +311,45 @@
             filterRows();
         });
 
-        const modal = document.getElementById('submissionModal');
+        const modal = document.getElementById('reviewModal');
         const modalTitle = document.getElementById('modalTitle');
+        const modalSender = document.getElementById('modalSender');
         const modalDate = document.getElementById('modalDate');
         const modalStatus = document.getElementById('modalStatus');
+        const modalStudyType = document.getElementById('modalStudyType');
         const modalAbstract = document.getElementById('modalAbstract');
-        const modalCitation = document.getElementById('modalCitation');
         const modalFilePdf = document.getElementById('modalFilePdf');
-        const modalPdfContainer = document.getElementById('modalPdfContainer');
-        const modalApprovedByContainer = document.getElementById('modalApprovedByContainer');
-        const modalApprovedBy = document.getElementById('modalApprovedBy');
+        const noFileMessage = document.getElementById('noFileMessage');
         const modalClose = document.getElementById('modalClose');
 
         // View button logic
         document.querySelectorAll('.view-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                modalTitle.innerText = btn.dataset.title;
-                modalDate.innerText = btn.dataset.date;
-                modalStatus.innerText = btn.dataset.status;
-                modalAbstract.innerText = btn.dataset.abstract;
-                modalCitation.innerText = btn.dataset.citation;
+                // Populate modal fields dynamically
+                modalTitle.innerText = btn.dataset.title || 'Untitled Study';
+                modalSender.innerText = btn.dataset.sender || 'Unknown Student';
+                modalDate.innerText = btn.dataset.date || 'N/A';
+                modalStatus.innerText = btn.dataset.status || 'Pending';
+                modalStudyType.innerText = btn.dataset.studyType || 'N/A';
+                modalAbstract.innerText = btn.dataset.abstract || 'No abstract provided.';
 
-                // ✅ Always display the PDF if file exists
+                // Handle PDF viewer
                 const pdfUrl = btn.dataset.fileUrl?.trim();
-
                 if (pdfUrl) {
-                    console.log('Loading PDF:', pdfUrl); // Debug line
-                    modalFilePdf.src = pdfUrl + `#toolbar=0`; // Disable PDF viewer toolbar
+                    modalFilePdf.src = pdfUrl + '#toolbar=0';
                     modalFilePdf.style.display = 'block';
-                    document.getElementById('noFileMessage').style.display = 'none';
+                    noFileMessage.style.display = 'none';
                 } else {
-                    console.warn('No PDF found for document:', btn.dataset.id); // Debug line
                     modalFilePdf.src = '';
                     modalFilePdf.style.display = 'none';
-                    document.getElementById('noFileMessage').style.display = 'block';
+                    noFileMessage.style.display = 'block';
                 }
 
-                // ✅ Only show “Approved By” if status is approved
-                if (btn.dataset.status.toLowerCase() === 'approved' && btn.dataset.approvedBy) {
-                    modalApprovedByContainer.style.display = 'block';
-                    modalApprovedBy.innerText = btn.dataset.approvedBy;
-                } else {
-                    modalApprovedByContainer.style.display = 'none';
-                    modalApprovedBy.innerText = '';
-                }
-
-                // Add dynamic route to the button
+                // Add dynamic review button link
                 const reviewButton = document.getElementById('reviewButton');
                 reviewButton.href = `/teacher/view_submitted/${btn.dataset.id}`;
 
+                // Show modal
                 modal.style.display = 'flex';
             });
         });
