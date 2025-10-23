@@ -1,107 +1,362 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>D.A.R.A Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
- <link rel="stylesheet" href="{{ asset('css/sidenav.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/student/dashboard.css') }}">
-</head>
-<body>
+@extends('layout.admin')
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Navbar -->
-  <div class="navbar">
-    <h1>D.A.R.A</h1>
 
-    <div class="navbar-right">
-      <button>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-             viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-        </svg>
-      </button>
+@section('content')
 
-      <div class="profile">
 
-        <div class="profile-info">
-          <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
-
-          <p>Admin</p>
+<div class="container-fluid px-3 py-3">
+    <div class="row g-4 d-flex justify-content-center">
+        <!-- Total Users Widget -->
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="widget-card" id="card-1">
+                <div class="widget-info">
+                    <h2 id="usersCount">0</h2>
+                    <p>Total Users</p>
+                    <div class="widget-footer">
+                        <a href="#">More info →</a>
+                    </div>
+                </div>
+                <div class="widget-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <!-- Total Admins Widget -->
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="widget-card" id="card-2">
+                <div class="widget-info">
+                    <h2 id="adminsCount">0</h2>
+                    <p>Total Admins</p>
+                    <div class="widget-footer">
+                        <a href="#">More info →</a>
+                    </div>
+                </div>
+                <div class="widget-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Storage Widget -->
+        <div class="col-lg-4 col-md-6 col-sm-12">
+            <div class="widget-card" id="card-3">
+                <div class="widget-info">
+                    <h2 id="storageCount">0</h2>
+                    <p>Total Storage</p>
+                    <div class="widget-footer">
+                        <a href="#">More info →</a>
+                    </div>
+                </div>
+                <div class="widget-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 
-  <!-- Layout -->
-  <div class="layout">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div>
-        <div class="menu-section">
-          <p class="menu-title">Menu</p>
-          <div class="menu">
-            <a href="<?php echo e(url('/admin/dashboard')); ?>" class="active">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M3 10h4v11H3zM10 3h4v18h-4zM17 6h4v15h-4z" />
-              </svg>
-              Dashboard
-            </a>
-            <a href="/">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 24 24" stroke="currentColor" width="24" height="24" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-                Search Studies
-            </a>
-            <a href="<?php echo e(url('/admin/manage-users')); ?>">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-              Manage Users
-            </a>
-            <a href="<?php echo e(url('/admin/storage')); ?>">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-database"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
-              Storage
-            </a>
-          </div>
+    <div class="row g-3 mt-4 align-items-stretch">
+        <div class="col-lg-7 col-md-12">
+            <div class="card shadow-sm p-3 bg-white h-100">
+                <canvas id="chart1" class="chart"></canvas>
+            </div>
         </div>
 
-        <div class="menu-section">
-          <p class="menu-title">Settings</p>
-          <div class="menu">
-            <a href="<?php echo e(url('/admin/account_setting')); ?>">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M5.121 17.804A1 1 0 015 17V7a1 1 0 011-1h3.382a1 1 0 01.894.553l1.382 2.764a1 1 0 00.894.553H19a1 1 0 011 1v6a1 1 0 01-.121.496l-2.382 4.764a1 1 0 01-.894.553H6a1 1 0 01-.879-.496z" />
-              </svg>
-              Account Settings
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
-                @csrf
-            </form>
-
-            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="inline-flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
-                </svg>
-                Log out
-            </a>
-          </div>
+        <div class="col-lg-5 col-md-12">
+            <div class="card shadow-sm p-3 bg-white h-100 d-flex align-items-center justify-content-center">
+                <canvas id="chart2" class="chart large-pie"></canvas>
+            </div>
         </div>
-      </div>
-    </aside>
+    </div>
 
-    <!-- Main -->
- <main class="main">
-  <h2>Welcome, <?php echo e(auth()->user()->first_name); ?>! You have</h2>
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    <h2 class="mb-4 fw-bold text-dark">Recent Users Online</h2>
+                    <div class="table-responsive">
+                        <table class="table align-middle table-striped table-hover mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th style="width: 60%">Name</th>
+                                    <th>Last Online</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>John Doe</td>
+                                    <td>5 minutes ago</td>
+                                </tr>
+                                <tr>
+                                    <td>Jane Smith</td>
+                                    <td>10 minutes ago</td>
+                                </tr>
+                                <tr>
+                                    <td>Admin User</td>
+                                    <td>20 minutes ago</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+</div>
 
-</main>
+{{-- Chart.js & Count Animation --}}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://kit.fontawesome.com/a2e0b6f6d2.js" crossorigin="anonymous"></script>
+<script>
+    // Animated Count Function
+    function animateCount(id, target) {
+        let count = 0;
+        const speed = 30;
+        const step = Math.ceil(target / 40);
+        const el = document.getElementById(id);
+        const interval = setInterval(() => {
+            count += step;
+            if (count >= target) {
+                count = target;
+                clearInterval(interval);
+            }
+            el.textContent = count;
+        }, speed);
+    }
 
-  </div>
-</body>
-</html>
+    // Animate the widget counts
+    animateCount('usersCount', 21);
+    animateCount('adminsCount', 34);
+    animateCount('storageCount', 50);
+
+    // Line Chart
+    new Chart(document.getElementById('chart1'), {
+        type: 'line',
+        data: {
+            labels: ['Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [
+                {
+                    label: 'Published',
+                    data: [2, 3, 5, 4, 6],
+                    borderColor: '#0b1b4a',
+                    backgroundColor: 'rgba(11, 27, 74, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                },
+                {
+                    label: 'Unpublished',
+                    data: [1, 2, 2, 3, 1],
+                    borderColor: '#b22222',
+                    backgroundColor: 'rgba(178, 34, 34, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    labels: { usePointStyle: true, font: { size: 13 } }
+                }
+            },
+            scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+        }
+    });
+
+// Pie Chart
+new Chart(document.getElementById('chart2'), {
+    type: 'pie',
+    data: {
+        labels: ['Pending', 'Approved', 'LostDoc', 'Rejected', 'Abandoned', 'Needs Revision'],
+        datasets: [{
+            data: [15, 25, 10, 20, 5, 25],
+            backgroundColor: [
+                '#f0c75e', // Pending
+                '#2E8B57', // Approved
+                '#4682B4', // LostDoc
+                '#B22222', // Rejected
+                '#8B4513', // Abandoned
+                '#6A5ACD'  // Needs Revision
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'right', // ✅ move legend to the right
+                align: 'center',   // ✅ vertically centered
+                labels: {
+                    usePointStyle: true,
+                    pointStyle: 'circle',
+                    boxWidth: 15,
+                    padding: 20,
+                    font: {
+                        size: 13,
+                        family: 'Poppins'
+                    },
+                    color: '#0b1b4a'
+                }
+            },
+            title: {
+                display: true,
+                text: 'Document Status Overview',
+                font: {
+                    size: 16,
+                    family: 'Poppins',
+                    weight: '600'
+                },
+                color: '#0b1b4a'
+            }
+        },
+        layout: {
+            padding: {
+                right: 40 // ✅ give space for legend to breathe
+            }
+        }
+    }
+});
+
+</script>
+@endsection
+<style>
+    /* ===== THEME ===== */
+    body {
+        background-color: #fffbea;
+        color: #0b1b4a;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    /* ===== WIDGET CARDS ===== */
+    .widget-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 15px;
+        padding: 25px 30px;
+        color: #fff;
+        transition: all 0.3s ease-in-out;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+        border: none;
+        cursor: pointer;
+    }
+
+    .widget-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Widget color themes */
+    #card-1 {
+        background: linear-gradient(135deg, #2E8B57, #3CB371);
+    }
+
+    #card-2 {
+        background: linear-gradient(135deg, #B22222, #DC143C);
+    }
+
+    #card-3 {
+        background: linear-gradient(135deg, #0b1b4a, #2c3e80);
+    }
+
+    /* Widget icons */
+    .widget-icon {
+        font-size: 2.5rem;
+        background: rgba(255, 255, 255, 0.25);
+        padding: 18px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Widget text */
+    .widget-info h2 {
+        font-weight: 700;
+        font-size: 2.3rem;
+        margin: 0;
+        color: #fff;
+    }
+
+    .widget-info p {
+        font-weight: 500;
+        font-size: 1rem;
+        opacity: 0.9;
+        margin: 3px 0 0 0;
+    }
+
+    .widget-footer {
+        margin-top: 10px;
+    }
+
+    .widget-footer a {
+        color: #fff;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: 0.3s;
+    }
+
+    .widget-footer a:hover {
+        text-decoration: underline;
+        color: #fffbea;
+    }
+
+    /* ===== CHARTS ===== */
+    .chart {
+        height: 300px !important;
+    }
+
+ /* ===== TABLE DESIGN FIX FOR BOOTSTRAP ===== */
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table thead.table-dark th {
+    background: #0b1b4a !important;
+    border: none;
+    color: #fff;
+    font-size: 0.95rem;
+    letter-spacing: 0.5px;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #fff9dc !important;
+}
+
+.table-striped > tbody > tr:nth-of-type(even) {
+    background-color: #fffbea !important;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #fdf3c5 !important;
+    transition: 0.2s ease;
+}
+
+.card-body h2 {
+    color: #0b1b4a;
+    font-weight: 700;
+}
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+        .widget-card {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .widget-icon {
+            margin-bottom: 10px;
+        }
+        .widget-info h2 {
+            font-size: 1.8rem;
+        }
+    }
+</style>

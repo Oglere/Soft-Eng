@@ -3,204 +3,267 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D.A.R.A Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: #fffbea;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden; /* prevent body scroll */
+        }
 
-    <title>
-        DARA -
-        @if (request()->is('admin/dashboard'))
-            Admin
-        @elseif (request()->is('admin/storage*'))
-            Admin | Storage
-        @elseif (request()->is('admin/manage-users*'))
-            Admin | Manage Users
-        @elseif (request()->is('admin/account-setting*'))
-            Admin | Account Setting
-        @else
-            Admin | Page
-        @endif
-    </title>
+        /* ===== HEADER ===== */
+        header {
+            background: #f9f9f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid #e5e5e5;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #0b1b4a;
+        }
 
-    <link rel="stylesheet" href="{{ asset('css/sidenav.css') }}">
+        .header-left img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: #fff;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-right .user-info {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #111;
+        }
+
+        .user-role {
+            font-size: 0.85rem;
+            color: #777;
+        }
+
+        .header-right .icon {
+            background: #fff;
+            border-radius: 50%;
+            padding: 8px;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            background: #fffbea;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            background: #f8f9fc;
+            width: 250px;
+            border-right: 1px solid #e5e5e5;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.03);
+            position: sticky;
+            top: 0;
+            height: calc(100vh - 65px); /* subtract header height */
+        }
+
+        .sidebar-content {
+            overflow-y: auto;
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .menu h5 {
+            color: #9b9b9b;
+            font-size: 0.8rem;
+            margin: 10px 0;
+            letter-spacing: 1px;
+        }
+
+        .menu a {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: #222;
+            font-weight: 500;
+            padding: 10px 14px;
+            border-radius: 10px;
+            transition: 0.2s;
+        }
+
+        .menu a i {
+            font-size: 1.1rem;
+            color: #0b1b4a;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: #0b1b4a;
+            color: #fff;
+        }
+
+        .menu a:hover i,
+        .menu a.active i {
+            color: #fff;
+        }
+
+        /* ===== CONTENT AREA ===== */
+        .content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            height: calc(100vh - 65px);
+        }
+
+        /* ===== LOGOUT BUTTON ===== */
+        .logout-section {
+            padding: 20px;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #fef2f2;
+            color: #c53030;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: 0.2s;
+            width: 100%;
+            text-align: left;
+        }
+
+        .logout-btn:hover {
+            background: #c53030;
+            color: white;
+        }
+
+        .logout-btn i {
+            font-size: 1.1rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 70px;
+            }
+
+            .sidebar-content {
+                padding: 15px 5px;
+            }
+
+            .menu a span {
+                display: none;
+            }
+
+            .menu a {
+                justify-content: center;
+                padding: 10px;
+            }
+        }
+    </style>
 </head>
-<body style="overflow: hidden; height: calc(100% - 61px)">
-    <main>
-        <header>
-            <div class="ahh">
-                <img
-                    src="{{ asset('images/DARA.png') }}"
-                    alt="DARA Logo"
-                    style=" width: 40px;
-                            height: 40px;
-                            border-radius: 50%;
-                            object-fit: cover;
-                            background: white;
-                            border: 2px solid white;
-                    ">
+<body>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="header-left">
+            <img src="{{ asset('images/DARA.png') }}" alt="Logo">
+            <span>D.A.R.A</span>
+        </div>
+        <div class="header-right">
+            <div class="icon"><i class="fa-regular fa-bell"></i></div>
+            <div class="user-info">
+                <span class="user-name">{{ auth()->user()->first_name ?? 'Admin' }} {{ auth()->user()->last_name ?? '' }}</span>
+                <span class="user-role">Administrator</span>
             </div>
-        </header>
+        </div>
+    </header>
 
-        <div class="main" style="height: 100%;">
-            <div class="left" >
-                <div class="profile">
-                    <h2>{{ auth()->user()->first_name }}</h2>
-                </div>
-                <nav class="nav-links">
-                    <div class="dropdown">
-                        <a href="{{ url('/admin/dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active-link' : '' }}">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="feather feather-home"
-                                >
-                                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-                                <polyline points="9 22 9 12 15 12 15 22" />
-                            </svg>
-
-                            Dashboard
-
-                            <svg
-                                style="margin-left: auto; opacity: 50%;"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="12"
-                                height="12"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="feather
-                                feather-chevron-down">
-                                <polyline points="6 9 12 15 18 9"/>
-                            </svg>
-                        </a>
-                        <a href="/" class="unq uou">Search Studies</a>
-                    </div>
-
-                    <div class="dropdown">
-                        <a href="{{ url('/admin/manage-users') }}" class="{{ request()->is('admin/manage-users') ? 'active-link' : '' }}">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="feather feather-users"
-                                >
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                <circle cx="9" cy="7" r="4" />
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                            </svg>
-
-                            Manage Users
-
-                            <svg
-                                style="margin-left: auto; opacity: 50%;"
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="12"
-                                height="12"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="feather
-                                feather-chevron-down">
-                                <polyline points="6 9 12 15 18 9"/>
-                            </svg>
-                        </a>
-                        <a href="{{ url('/admin/manage-users/recover') }}" class="  {{ request()->is('admin/manage-users/recover') ? 'active-sublink' : 'unq uou' }}">
-                            Recovery
-                        </a>
-                    </div>
-
-                    <a href="{{ url('/admin/storage') }}" class="{{ request()->is('admin/storage') ? 'active-link' : '' }}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-database">
-                            <ellipse cx="12" cy="5" rx="9" ry="3"/>
-                            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
-                            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
-                        </svg>
-
-                        Storage
+    <!-- ===== MAIN SECTION ===== -->
+    <div class="main">
+        <aside class="sidebar">
+            <div class="sidebar-content">
+                <div class="menu">
+                    <h5>MENU</h5>
+                    <a href="{{ url('/admin/dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
+                        <i class="fa-solid fa-house"></i><span>Dashboard</span>
                     </a>
 
-                    <div class="asd2" style=" width: 100%; margin-top: 10px; display: flex; justify-content: center;">
-                        <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
-                    </div>
+                    <a href="{{ url('/admin/manage-users') }}" class="{{ request()->is('admin/manage-users*') ? 'active' : '' }}">
+                        <i class="fa-solid fa-users"></i><span>Manage Users</span>
+                    </a>
 
-                    <a href="{{ url('/admin/account-setting') }}" class=" {{ request()->is('admin/account-setting') ? 'active-sublink' : 'unq' }}">Edit Account</a>
+                    <a href="{{ url('/admin/storage') }}" class="{{ request()->is('admin/storage') ? 'active' : '' }}">
+                        <i class="fa-solid fa-database"></i><span>Storage</span>
+                    </a>
 
-                    <div class="asd2" style=" width: 100%; display: flex; justify-content: center;">
-                        <div class="asd3" style="border-bottom: 1px solid rgb(0, 0, 0, 0.2); width: 150px;"></div>
-                    </div>
-
-                    <form action="/logout" method="POST">
-                        @csrf
-                        <button class="lgt">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                class="feather feather-log-in"
-                                >
-                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
-                                <polyline points="10 17 15 12 10 7" />
-                                <line x1="15" y1="12" x2="3" y2="12" />
-                            </svg>
-
-                            Logout
-                        </button>
-                    </form>
-                </nav>
+                    <h5>SETTINGS</h5>
+                    <a href="{{ url('/admin/account-setting') }}" class="{{ request()->is('admin/account-setting') ? 'active' : '' }}">
+                        <i class="fa-solid fa-gear"></i><span>Account</span>
+                    </a>
+                </div>
             </div>
 
-            <div class="right">
-                @yield('right')
+            <!-- Logout button section always at the bottom -->
+            <div class="logout-section">
+                <form action="/logout" method="POST">
+                    @csrf
+                    <button type="submit" class="logout-btn">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                        <span>Log out</span>
+                    </button>
+                </form>
             </div>
+        </aside>
 
+        <!-- ===== MAIN CONTENT AREA ===== -->
+        <div class="content">
+            @yield('content')
         </div>
-
-        <footer>
-        </footer>
-    </main>
+    </div>
 </body>
 </html>
-
-<script>
-    function showCode(type) {
-    // Hide all blocks
-    document.querySelectorAll(".code-block").forEach(el => el.classList.remove("active"));
-    // Deactivate all buttons
-    document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
-    // Show selected
-    document.getElementById(type).classList.add("active");
-    event.target.classList.add("active");
-    }
-
-    function copyCode(button) {
-    const code = button.nextElementSibling.innerText;
-    navigator.clipboard.writeText(code).then(() => {
-        button.innerText = "Copied!";
-        setTimeout(() => button.innerText = "Copy", 2000);
-    });
-    }
-</script>
