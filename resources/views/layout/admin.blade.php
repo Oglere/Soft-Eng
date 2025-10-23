@@ -232,6 +232,10 @@
                         <i class="fa-solid fa-house"></i><span>Dashboard</span>
                     </a>
 
+                    <a href="{{ url('/') }}">
+                        <i class="fa-solid fa-search"></i><span>Search Studies</span>
+                    </a>
+
                     <a href="{{ url('/admin/manage-users') }}" class="{{ request()->is('admin/manage-users*') ? 'active' : '' }}">
                         <i class="fa-solid fa-users"></i><span>Manage Users</span>
                     </a>
