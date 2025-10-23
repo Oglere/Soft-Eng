@@ -1,5 +1,5 @@
 @extends('layout.admin')
-<link rel="stylesheet" href="{{ asset('') }}">
+<link rel="stylesheet" href="{{ asset('admin/ctrl.css') }}">
 <style>
     .right h1 {
         text-align: center;
@@ -107,40 +107,107 @@
     }
 </style>
 
-@section('right')
+@section('content')
+<h2>Account Setting</h2>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '{{ session('success') }}',
+                confirmButtonColor: '#0a0099'
+            });
+        </script>
+    @endif
 
-   <h1 style="font-weight: bold; color: black; font-size: 40px;">
-        ACCOUNT SETTINGS
-    </h1>
+    @if (session('cancel_message'))
+        <script>
+            Swal.fire({
+                icon: 'info',
+                title: 'Canceled',
+                text: '{{ session('cancel_message') }}',
+                confirmButtonColor: '#b30000'
+            });
+        </script>
+    @endif
 
-    <!-- Login Form -->
+    @php
+        $attempts = session('login_attempts', 0);
+        $locked_until = session('locked_until', null);
+    @endphp
+
+    {{-- If account is not verified, show verify form --}}
     @if (!session('account_verified'))
-        <div class="login-container">
-            <div class="login-box" style="box-shadow: 5px 5px 1px #04128e;">
-                <h2>VERIFY YOUR IDENTITY</h2>
+        <div class="verify-wrapper">
+            <form class="verify-form" id="verifyForm" method="POST" action="{{ route('admin.verify_identity') }}">
+                @csrf
+                <div class="verify-card">
+                    <h1>Verify Your Identity</h1>
 
-                @if ($errors->has('login_error'))
-                    <div class="error">{{ $errors->first('login_error') }}</div>
-                @endif
+                    {{-- Error Message --}}
+                    @if ($errors->has('login_error'))
+                        <div class="error">{{ $errors->first('login_error') }}</div>
+                    @endif
 
-                <form method="POST" action="{{ route('admin.verify_identity') }}">
-                    @csrf
-                    <label for="password">Enter your password</label>
-                    <input type="password" name="password" id="password" required>
-                    <button type="submit">Verify</button>
-                </form>
-            </div>
+                    {{-- Lockout Message --}}
+                    @if ($locked_until && now()->lt($locked_until))
+                        <div class="error" id="lockout-message">
+                            Too many failed attempts.<br>
+                            Please wait <span id="countdown">60</span> seconds before trying again.
+                        </div>
+                    @endif
+
+                    <div class="input-group">
+                        <label for="password">Enter your password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            @if ($locked_until && now()->lt($locked_until)) disabled @endif
+                        >
+                        <div id="passwordError" class="error-message"></div>
+                    </div>
+
+                    <button type="submit"
+                        @if ($locked_until && now()->lt($locked_until)) disabled @endif>
+                        Verify
+                    </button>
+                </div>
+            </form>
         </div>
-    @else
-        <div class="register-container">
-            <div class="register-box" style="box-shadow: 5px 5px 1px #04128e;">
-                <h2 style="color: #0a0099; font-weight: 800; text-align: center; margin-bottom: 25px;">
-                    Edit Your Account
-                </h2>
 
+        {{-- Countdown Script --}}
+        @if ($locked_until && now()->lt($locked_until))
+            <script>
+                const countdownElement = document.getElementById('countdown');
+
+                if (!localStorage.getItem('lockoutEndTime')) {
+                    const endTime = Date.now() + 60000;
+                    localStorage.setItem('lockoutEndTime', endTime);
+                }
+
+                const endTime = parseInt(localStorage.getItem('lockoutEndTime'));
+
+                const timer = setInterval(() => {
+                    const now = Date.now();
+                    const remaining = Math.max(0, Math.floor((endTime - now) / 1000));
+                    countdownElement.textContent = remaining;
+
+                    if (remaining <= 0) {
+                        clearInterval(timer);
+                        localStorage.removeItem('lockoutEndTime');
+                        location.reload();
+                    }
+                }, 1000);
+            </script>
+        @endif
+    @else
+        {{-- If verified, show edit account form --}}
+        <div class="edit-account-wrapper">
+            <div class="edit-account-card">
                 @if ($errors->any())
-                    <div class="error">
-                        <ul>
+                    <div class="error" style="color: red;margin-top:5px">
+                        <ul style="list-style: none; padding: 0; text-align: center;">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
@@ -148,60 +215,107 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('admin.update_account') }}">
+                <form method="POST" action="{{ route('student.update_account') }}">
                     @csrf
+                    <h2 style="color: #0a0099; font-weight: 800; text-align: center; margin-bottom: 10px;">
+                        Edit Your Account
+                    </h2>
 
-                <!-- Username -->
-                <label for="usn">Username</label>
-                <input type="text" name="usn" id="usn" value="{{ old('usn', Auth::user()->usn ?? '') }}">
+                    <!-- Username -->
+                    <label for="usn">Username</label>
+                    <input
+                        type="text"
+                        name="usn"
+                        id="usn"
+                        value="{{ old('usn', Auth::user()->usn ?? '') }}"
+                        disabled
+                    >
 
-                <!-- First + Last Name (side by side) -->
-                <div style="display: flex; gap: 40px; margin-bottom: 15px;">
-                    <div style="flex: 1;">
-                        <label for="first_name">Edit First Name</label>
-                        <input type="text" name="first_name" id="first_name"
-                            value="{{ old('first_name', Auth::user()->first_name ?? '') }}">
+                    <!-- First + Last Name -->
+                    <div style="display: flex; gap: 40px; margin-bottom: 15px;">
+                        <div style="flex: 1;">
+                            <label for="first_name">First Name</label>
+                            <input
+                                type="text"
+                                name="first_name"
+                                id="first_name"
+                                value="{{ old('first_name', Auth::user()->first_name ?? '') }}"
+                                maxlength="30"
+                            >
+                        </div>
+                        <div style="flex: 1;">
+                            <label for="last_name">Last Name</label>
+                            <input
+                                type="text"
+                                name="last_name"
+                                id="last_name"
+                                value="{{ old('last_name', Auth::user()->last_name ?? '') }}"
+                                maxlength="30"
+                            >
+                        </div>
                     </div>
-                    <div style="flex: 1;">
-                        <label for="last_name">Edit Last Name</label>
-                        <input type="text" name="last_name" id="last_name"
-                            value="{{ old('last_name', Auth::user()->last_name ?? '') }}">
+
+                    <!-- Email -->
+                    <label style="margin-top:-15px" for="email">Email Address</label>
+                    <input type="email"
+                        name="email"
+                        id="email"
+                        value="{{ old('email', Auth::user()->email ?? '') }}"
+                        pattern="^[A-Za-z0-9._%+-]{1,15}@gmail\.com$"
+                        title="Email must be Gmail and max 15 characters before @">
+
+                    <!-- Phone Number -->
+                    <label for="phone_number">Phone Number</label>
+                    <input
+                        type="text"
+                        name="phone_number"
+                        id="phone_number"
+                        value="{{ old('phone_number', Auth::user()->phone_number ?? '') }}"
+                        oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                        maxlength="10"
+                        placeholder="9XXXXXXXXX"
+                    >
+
+                    <!-- Password -->
+                    <label for="password">
+                        New Password
+                        <span style="font-weight: normal; font-size: 13px; color: #333;">
+                            (leave blank to keep current password)
+                        </span>
+                    </label>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        minlength="6"
+                        pattern="^(?=.*[0-9])(?=.*[!@#$%^&*])[A-Za-z0-9!@#$%^&*]{6,}$"
+                        title="Password must be at least 6 characters long and include at least one number and one special character (!@#$%^&*)."
+                        placeholder="Enter new password"
+                    >
+
+                    <!-- Buttons -->
+                    <div style="display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 15px;">
+                        <form method="POST" action="{{ route('student.update_account') }}">
+                            @csrf
+                            <button type="submit"
+                                style="background-color: #0a0099; color: white; border: none;
+                                padding: 12px 30px; border-radius: 8px; font-size: 16px;
+                                font-weight: bold; cursor: pointer; transition: 0.3s;">
+                                Update Account
+                            </button>
+                        </form>
+
+                        <form method="POST" action="{{ route('student.cancel_update') }}">
+                            @csrf
+                            <button type="submit"
+                                style="background-color: #b30000; color: white; border: none;
+                                padding: 12px 30px; border-radius: 8px; font-size: 16px;
+                                font-weight: bold; cursor: pointer; transition: 0.3s;">
+                                Cancel
+                            </button>
+                        </form>
                     </div>
-                </div>
-
-                <!-- Email -->
-                <label for="email">Edit Email Address</label>
-                <input type="email" name="email" id="email" value="{{ old('email', Auth::user()->email ?? '') }}">
-
-                <!-- Password -->
-                <label for="password">
-                    New Password <span style="font-weight: normal; font-size: 13px; color: #333;">
-                        (leave blank to keep current password)
-                    </span>
-                </label>
-                <input type="password" name="password" id="password">
-
-                <!-- Buttons Row -->
-                <div style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
-                    <!-- Update Account (inside main form) -->
-                    <button type="submit"
-                        style="background-color: #0a0099; color: white; border: none;
-                            padding: 12px 20px; border-radius: 8px; font-size: 16px;
-                            font-weight: bold; cursor: pointer;">
-                        Update Account
-                    </button>
-
-                    <!-- Cancel (separate form but inline with flex) -->
-                    <form method="POST" action="{{ route('admin.cancel_update') }}">
-                        @csrf
-                        <button type="submit"
-                            style="background-color: #b30000; color: white; border: none;
-                                padding: 12px 20px; border-radius: 8px; font-size: 16px;
-                                font-weight: bold; cursor: pointer;">
-                            Cancel
-                        </button>
-                    </form>
-                </div>
+                </form>
             </div>
         </div>
     @endif
