@@ -1,52 +1,39 @@
 document.addEventListener('DOMContentLoaded', function () {
     const rowsPerPage = 10;
-    const table = document.querySelector('table');
-    if (!table) return; // safety check
+    const table = document.querySelector('#usersTable table');
+    if (!table) return;
 
     const tbody = table.querySelector('tbody');
-    let rows = Array.from(tbody.querySelectorAll('tr')).filter(row => row.querySelector('td'));
-    let totalPages = Math.ceil(rows.length / rowsPerPage) || 1;
+    const allRows = Array.from(tbody.querySelectorAll('tr')).filter(row => row.querySelector('td'));
+    const searchInput = document.querySelector('input[name="search"]');
+    const roleFilter = document.querySelector('select[name="filter"]');
+    const filterForm = document.querySelector('.filter-form');
+    const paginationWrapper = document.querySelector('.pagination-wrapper');
+    let filteredRows = [...allRows];
     let currentPage = 1;
 
-    // Create pagination container
     const paginationContainer = document.createElement('nav');
     paginationContainer.classList.add('mt-3');
     const paginationList = document.createElement('ul');
     paginationList.classList.add('pagination', 'justify-content-center');
     paginationContainer.appendChild(paginationList);
-    table.parentElement.appendChild(paginationContainer);
+    paginationWrapper.innerHTML = '';
+    paginationWrapper.appendChild(paginationContainer);
 
-    function createEmptyRow() {
-        const tr = document.createElement('tr');
-        const td = document.createElement('td');
-        td.colSpan = table.querySelectorAll('thead th').length || 6;
-        td.innerHTML = "&nbsp;";
-        tr.appendChild(td);
-        tr.classList.add('empty-row');
-        return tr;
-    }
-
+    // 🧭 Show page function
     function showPage(page) {
-        rows.forEach(row => row.style.display = 'none');
+        filteredRows.forEach(row => row.style.display = 'none');
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
-        const visibleRows = rows.slice(start, end);
+        const visibleRows = filteredRows.slice(start, end);
         visibleRows.forEach(row => row.style.display = '');
-
-        // Clean old fillers
-        tbody.querySelectorAll('.empty-row').forEach(r => r.remove());
-
-        // Add placeholders if needed
-        const missingRows = rowsPerPage - visibleRows.length;
-        for (let i = 0; i < missingRows; i++) {
-            tbody.appendChild(createEmptyRow());
-        }
     }
 
+    // 🧮 Update pagination buttons
     function updatePagination() {
         paginationList.innerHTML = '';
+        const totalPages = Math.ceil(filteredRows.length / rowsPerPage) || 1;
 
-        // Previous
         const prev = document.createElement('li');
         prev.classList.add('page-item', currentPage === 1 ? 'disabled' : '');
         prev.innerHTML = `<a class="page-link" href="#">Previous</a>`;
@@ -60,7 +47,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         paginationList.appendChild(prev);
 
-        // Page numbers
         for (let i = 1; i <= totalPages; i++) {
             const li = document.createElement('li');
             li.classList.add('page-item', i === currentPage ? 'active' : '');
@@ -74,7 +60,6 @@ document.addEventListener('DOMContentLoaded', function () {
             paginationList.appendChild(li);
         }
 
-        // Next
         const next = document.createElement('li');
         next.classList.add('page-item', currentPage === totalPages ? 'disabled' : '');
         next.innerHTML = `<a class="page-link" href="#">Next</a>`;
@@ -89,7 +74,49 @@ document.addEventListener('DOMContentLoaded', function () {
         paginationList.appendChild(next);
     }
 
-    // Initialize pagination
-    showPage(currentPage);
-    updatePagination();
+    // 🧩 Apply filters
+    function applyFilters() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const roleValue = roleFilter.value;
+
+        filteredRows = allRows.filter(row => {
+            const first = row.cells[0]?.textContent.toLowerCase() || '';
+            const last = row.cells[1]?.textContent.toLowerCase() || '';
+            const email = row.cells[2]?.textContent.toLowerCase() || '';
+            const role = row.cells[3]?.textContent.toLowerCase() || '';
+
+            const matchesSearch =
+                first.includes(searchTerm) ||
+                last.includes(searchTerm) ||
+                email.includes(searchTerm);
+
+            const matchesRole =
+                !roleValue ||
+                (roleValue === '1' && role.includes('admin')) ||
+                (roleValue === '2' && role.includes('student')) ||
+                (roleValue === '3' && role.includes('teacher'));
+
+            return matchesSearch && matchesRole;
+        });
+
+        currentPage = 1;
+        showPage(currentPage);
+        updatePagination();
+
+        if (filteredRows.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center text-muted">No users found</td></tr>`;
+        } else {
+            tbody.innerHTML = '';
+            filteredRows.forEach(row => tbody.appendChild(row));
+        }
+    }
+
+    // 🧠 Bind filter form
+    filterForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        applyFilters();
+    });
+
+    // Initialize
+    applyFilters();
 });

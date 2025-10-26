@@ -14,7 +14,7 @@
             display: flex;
             flex-direction: column;
             height: 100vh;
-            overflow: hidden; /* prevent body scroll */
+            overflow: hidden;
         }
 
         /* ===== HEADER ===== */
@@ -46,6 +46,16 @@
             border-radius: 50%;
             object-fit: cover;
             background: #fff;
+        }
+
+        /* Hamburger menu (hidden on desktop) */
+        .hamburger {
+            display: none;
+            font-size: 1.6rem;
+            color: #0b1b4a;
+            cursor: pointer;
+            background: none;
+            border: none;
         }
 
         .header-right {
@@ -84,6 +94,7 @@
             flex: 1;
             overflow: hidden;
             background: #fffbea;
+            transition: all 0.3s ease;
         }
 
         /* ===== SIDEBAR ===== */
@@ -97,7 +108,8 @@
             box-shadow: 2px 0 8px rgba(0, 0, 0, 0.03);
             position: sticky;
             top: 0;
-            height: calc(100vh - 65px); /* subtract header height */
+            height: calc(100vh - 65px);
+            transition: all 0.3s ease;
         }
 
         .sidebar-content {
@@ -187,22 +199,41 @@
         }
 
         /* ===== RESPONSIVE ===== */
-        @media (max-width: 900px) {
+        @media (max-width: 992px) {
+            .hamburger {
+                display: block;
+            }
+
             .sidebar {
-                width: 70px;
+                position: fixed;
+                left: -260px;
+                top: 65px;
+                height: calc(100vh - 65px);
+                z-index: 999;
+                width: 250px;
+                background: #f8f9fc;
             }
 
-            .sidebar-content {
-                padding: 15px 5px;
+            .sidebar.show {
+                left: 0;
             }
 
-            .menu a span {
+            .content {
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header-right .user-info {
                 display: none;
             }
 
-            .menu a {
-                justify-content: center;
-                padding: 10px;
+            .header {
+                padding: 10px 20px;
+            }
+
+            .content {
+                padding: 15px;
             }
         }
     </style>
@@ -211,6 +242,7 @@
     <!-- ===== HEADER ===== -->
     <header>
         <div class="header-left">
+            <button class="hamburger" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
             <img src="{{ asset('images/DARA.png') }}" alt="Logo">
         </div>
         <div class="header-right">
@@ -224,34 +256,35 @@
 
     <!-- ===== MAIN SECTION ===== -->
     <div class="main">
-        <aside class="sidebar">
+        <aside class="sidebar" id="sidebar">
             <div class="sidebar-content">
                 <div class="menu">
                     <h5>MENU</h5>
                     <a href="{{ url('/admin/dashboard') }}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
                         <i class="fa-solid fa-house"></i><span>Dashboard</span>
                     </a>
-
-                    <a href="{{ url('/') }}">
-                        <i class="fa-solid fa-search"></i><span>Search Studies</span>
+                    
+                    <a href="{{ url('/') }}" class="{{ request()->is('search-studies') ? 'active' : '' }}">
+                        <i class="fa-solid fa-magnifying-glass"></i><span>Search Studies</span>
                     </a>
 
                     <a href="{{ url('/admin/manage-users') }}" class="{{ request()->is('admin/manage-users*') ? 'active' : '' }}">
                         <i class="fa-solid fa-users"></i><span>Manage Users</span>
                     </a>
 
+
                     <a href="{{ url('/admin/storage') }}" class="{{ request()->is('admin/storage') ? 'active' : '' }}">
                         <i class="fa-solid fa-database"></i><span>Storage</span>
                     </a>
 
                     <h5>SETTINGS</h5>
-                    <a href="{{ url('/admin/account_setting') }}" class="{{ request()->is('admin/account-setting') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/account-setting') }}" class="{{ request()->is('admin/account-setting') ? 'active' : '' }}">
                         <i class="fa-solid fa-gear"></i><span>Account</span>
                     </a>
                 </div>
             </div>
 
-            <!-- Logout button section always at the bottom -->
+            <!-- Logout button -->
             <div class="logout-section">
                 <form action="/logout" method="POST">
                     @csrf
@@ -268,5 +301,21 @@
             @yield('content')
         </div>
     </div>
+
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+
+        menuToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('show');
+        });
+
+        // Close sidebar when clicking outside (for mobile)
+        document.addEventListener('click', function(e) {
+            if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                sidebar.classList.remove('show');
+            }
+        });
+    </script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 @extends('layout.admin')
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="{{ asset('admin/manage-users.css') }}">
+<link rel="stylesheet" href="{{ asset('admin/manage-userss.css') }}">
 <link rel="stylesheet" href="{{ asset('admin/manage-users-2.css') }}">
 
 @section('content')
@@ -15,11 +15,11 @@
     </div>
 
     <div class="card filter-card mb-4">
-        <form action="" method="GET" class="row g-3 align-items-center">
-            <div class="col-md-5 col-sm-12">
+        <form action="" method="GET" class="filter-form">
+            <div class="filter-item">
                 <input type="text" name="search" class="form-control" placeholder="🔍 Search user..." value="{{ request('search') }}">
             </div>
-            <div class="col-md-3 col-sm-6">
+            <div class="filter-item">
                 <select name="filter" class="form-select">
                     <option value="">All Roles</option>
                     <option value="1">Admin</option>
@@ -27,17 +27,18 @@
                     <option value="3">Teacher</option>
                 </select>
             </div>
-            <div class="col-md-2 col-sm-6">
+            <div class="filter-item">
                 <button type="submit" class="btn btn-dark w-100">Filter</button>
             </div>
         </form>
     </div>
 
+
     <div class="card-wrapper">
         <!-- Toggle Buttons -->
         <div class="mb-3">
             <button class="btn btn-primary btn-sm me-2" id="btnUsers">Users</button>
-            <button class="btn btn-outline-secondary btn-sm" id="btnDeleted">Deleted Users</button>
+            <button class="btn btn-outline-secondary btn-sm" id="btnDeleted">Deleted Userss</button>
         </div>
 
         <!-- Active Users Table -->
@@ -99,6 +100,11 @@
                     @endforelse
                 </tbody>
             </table>
+        </div>
+
+        <!-- Pagination outside scroll area -->
+        <div class="pagination-wrapper mt-3">
+            <ul class="pagination justify-content-center mb-0" id="pagination"></ul>
         </div>
 
         <!-- Deleted Users Table -->

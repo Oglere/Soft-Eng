@@ -15,19 +15,12 @@
 
     {{-- Search & Filter --}}
     <div class="card filter-card mb-4">
-        <form action="" method="GET" class="row g-3 align-items-center">
-            <div class="col-md-5 col-sm-12">
+        <form action="" method="GET"class="filter-form">
+            <div class="filter-item">
                 <input type="text" name="search" class="form-control" placeholder="🔍 Search file..." value="{{ request('search') }}">
             </div>
-            <div class="col-md-3 col-sm-6">
-                <select name="filter" class="form-select">
-                    <option value="">All</option>
-                    <option value="1">Admin</option>
-                    <option value="2">Student</option>
-                    <option value="3">Teacher</option>
-                </select>
-            </div>
-            <div class="col-md-2 col-sm-6">
+
+            <div class="filter-item">
                 <button type="submit" class="btn btn-dark w-100">Filter</button>
             </div>
         </form>
@@ -65,6 +58,10 @@
                 </tbody>
             </table>
         </div>
+
+            <div class="pagination-wrapper mt-3">
+                <ul class="pagination justify-content-center mb-0" id="pagination"></ul>
+            </div>
     </div>
 
 </div>
@@ -120,16 +117,39 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // === Eye Button Mask/Unmask ===
-    const viewButtons = document.querySelectorAll('.btn-view');
+   const viewButtons = document.querySelectorAll('.btn-view');
 
-    viewButtons.forEach(button => {
+    // Load hidden rows from localStorage
+    let hiddenRows = JSON.parse(localStorage.getItem('hiddenRows')) || [];
+
+    // Apply hidden state from localStorage
+    hiddenRows.forEach(index => {
+        const row = document.querySelectorAll('tbody tr')[index];
+        if (row) {
+            const button = row.querySelector('.btn-view');
+            const icon = button.querySelector('i');
+            const cells = row.querySelectorAll('td:not(:last-child)');
+            cells.forEach(cell => {
+                if (!cell.getAttribute('data-original')) {
+                    cell.setAttribute('data-original', cell.textContent.trim());
+                }
+                cell.textContent = '******';
+            });
+            button.classList.add('hidden-data');
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        }
+    });
+
+    // Handle click events for mask/unmask
+    viewButtons.forEach((button, index) => {
         button.addEventListener('click', function () {
             const row = this.closest('tr');
             const icon = this.querySelector('i');
             const cells = row.querySelectorAll('td:not(:last-child)');
 
             if (this.classList.contains('hidden-data')) {
+                // Unmask
                 cells.forEach(cell => {
                     const original = cell.getAttribute('data-original');
                     if (original !== null) cell.textContent = original;
@@ -137,7 +157,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.classList.remove('hidden-data');
                 icon.classList.remove('fa-eye-slash');
                 icon.classList.add('fa-eye');
+
+                // Remove from localStorage
+                hiddenRows = hiddenRows.filter(i => i !== index);
+                localStorage.setItem('hiddenRows', JSON.stringify(hiddenRows));
             } else {
+                // Mask
                 cells.forEach(cell => {
                     if (!cell.getAttribute('data-original')) {
                         cell.setAttribute('data-original', cell.textContent.trim());
@@ -147,38 +172,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.classList.add('hidden-data');
                 icon.classList.remove('fa-eye');
                 icon.classList.add('fa-eye-slash');
+
+                // Save to localStorage
+                if (!hiddenRows.includes(index)) {
+                    hiddenRows.push(index);
+                    localStorage.setItem('hiddenRows', JSON.stringify(hiddenRows));
+                }
             }
         });
     });
-
-    // === PAGINATION INSIDE TABLE (SHOW 10 ROWS) ===
     const rowsPerPage = 10;
     const table = document.querySelector('table');
+    if (!table) return;
+
     const tbody = table.querySelector('tbody');
-    let rows = Array.from(tbody.querySelectorAll('tr'));
-    const totalPages = Math.ceil(rows.length / rowsPerPage) || 1;
+    const allRows = Array.from(tbody.querySelectorAll('tr')).filter(row => row.querySelector('td'));
+    const searchInput = document.querySelector('input[name="search"]');
+    const filterForm = document.querySelector('.filter-form');
+    const paginationList = document.getElementById('pagination');
+
+    let filteredRows = [...allRows];
     let currentPage = 1;
 
-    // Create a <tfoot> if not existing
-    let tfoot = table.querySelector('tfoot');
-    if (!tfoot) {
-        tfoot = document.createElement('tfoot');
-        table.appendChild(tfoot);
-    }
-
-    // Create pagination row
-    const paginationRow = document.createElement('tr');
-    const paginationCell = document.createElement('td');
-    paginationCell.colSpan = 4;
-    paginationCell.classList.add('text-center');
-    paginationRow.appendChild(paginationCell);
-    tfoot.appendChild(paginationRow);
-
-    // Create pagination container
-    const paginationList = document.createElement('ul');
-    paginationList.classList.add('pagination', 'justify-content-center', 'mb-0');
-    paginationCell.appendChild(paginationList);
-
+    // === Pagination Functions ===
     function createEmptyRow() {
         const tr = document.createElement('tr');
         const td = document.createElement('td');
@@ -190,19 +206,14 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     function showPage(page) {
-        rows.forEach(row => row.style.display = 'none');
-
+        filteredRows.forEach(row => row.style.display = 'none');
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
-        const visibleRows = rows.slice(start, end);
+        const visibleRows = filteredRows.slice(start, end);
 
-        // Remove filler rows
         tbody.querySelectorAll('.empty-row').forEach(e => e.remove());
-
-        // Show visible rows
         visibleRows.forEach(row => row.style.display = '');
 
-        // Add filler rows if needed
         const missingRows = rowsPerPage - visibleRows.length;
         for (let i = 0; i < missingRows; i++) {
             tbody.appendChild(createEmptyRow());
@@ -211,8 +222,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function updatePagination() {
         paginationList.innerHTML = '';
+        const totalPages = Math.ceil(filteredRows.length / rowsPerPage) || 1;
 
-        // Prev
         const prevItem = document.createElement('li');
         prevItem.classList.add('page-item', currentPage === 1 ? 'disabled' : '');
         prevItem.innerHTML = `<a class="page-link" href="#">Previous</a>`;
@@ -226,7 +237,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         paginationList.appendChild(prevItem);
 
-        // Page numbers
         for (let i = 1; i <= totalPages; i++) {
             const li = document.createElement('li');
             li.classList.add('page-item', i === currentPage ? 'active' : '');
@@ -240,7 +250,6 @@ document.addEventListener('DOMContentLoaded', function () {
             paginationList.appendChild(li);
         }
 
-        // Next
         const nextItem = document.createElement('li');
         nextItem.classList.add('page-item', currentPage === totalPages ? 'disabled' : '');
         nextItem.innerHTML = `<a class="page-link" href="#">Next</a>`;
@@ -255,15 +264,45 @@ document.addEventListener('DOMContentLoaded', function () {
         paginationList.appendChild(nextItem);
     }
 
-    // Initialize
+    // === Search Filter Function ===
+    function applyFilter() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+
+        filteredRows = allRows.filter(row => {
+            const title = row.cells[0]?.textContent.toLowerCase() || '';
+            return title.includes(searchTerm);
+        });
+
+        // Update display
+        currentPage = 1;
+        if (filteredRows.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No files found</td></tr>`;
+        } else {
+            tbody.innerHTML = '';
+            filteredRows.forEach(row => tbody.appendChild(row));
+            showPage(currentPage);
+            updatePagination();
+        }
+    }
+
+    // === Form Submit ===
+    filterForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        applyFilter();
+    });
+
+    // === Initialize ===
     showPage(currentPage);
     updatePagination();
+
+
 });
 </script>
 
 
 
 <style>
+
     /* === PAGE HEADER === */
     .page-header {
         display: flex;
@@ -282,17 +321,56 @@ document.addEventListener('DOMContentLoaded', function () {
         font-weight: 600;
         box-shadow: 0 3px 6px rgba(0,0,0,0.1);
     }
+/* === FILTER CARD === */
+.filter-card {
+    background: #fff;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    padding-bottom: 0.1rem !important;
+}
 
-    /* === FILTER CARD === */
-    .filter-card {
-        background: #fff;
-        border: none;
-        border-radius: 15px;
-        box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-        padding: 20px;
+/* === FLEX LAYOUT FOR FILTER FORM === */
+.filter-form {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    max-width: 700px;
+    width: 100%;
+}
+
+.filter-item {
+    flex: 1;
+    min-width: 150px;
+}
+
+.filter-item:first-child {
+    flex: 1.6;
+}
+
+.filter-item button {
+    white-space: nowrap;
+}
+
+/* Responsive behavior */
+@media (max-width: 576px) {
+    .filter-form {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        max-width: 100%;
     }
+    .filter-item {
+        min-width: 120px;
+    }
+}
 
-
+.filter-card input,
+.filter-card select {
+    border-radius: 10px;
+}
 .table {
     border-radius: 12px;
     overflow: hidden;
