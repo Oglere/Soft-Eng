@@ -17,7 +17,7 @@ return new class extends Migration
         $table->string('last_name');
         $table->string('usn')->unique();
         $table->string('password_hash');
-        $table->string('email')->unique();
+        $table->string('email')->unique()->nullable();
         $table->string('phone_number')->nullable();
         $table->string('role');
         $table->timestamp('locked_until')->nullable(); // ✅ timestamp, replaces is_locked

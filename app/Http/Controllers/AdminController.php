@@ -169,7 +169,6 @@ class AdminController extends Controller
                     'last_name' => $last,
                     'password_hash' => Hash::make($password),
                     'role' => 'student',
-                    'is_active' => 1,
                 ]);
 
                 $imported++;

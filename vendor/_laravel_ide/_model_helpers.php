@@ -667,13 +667,14 @@ namespace App\Models {
      *
      * @property \Illuminate\Support\Carbon|null $updated_at
      * @property \Illuminate\Support\Carbon|null $created_at
+     * @property boolean $is_deleted
      * @property boolean $is_active
      * @property \Illuminate\Support\Carbon|null $last_login
      * @property mixed $attempts
      * @property \Illuminate\Support\Carbon|null $locked_until
      * @property string $role
      * @property string|null $phone_number
-     * @property string|null $email
+     * @property string $email
      * @property string $password_hash
      * @property string $usn
      * @property string $last_name
@@ -699,6 +700,7 @@ namespace App\Models {
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereAttempts($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereLastLogin($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereIsActive($value)
+     * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereIsDeleted($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereCreatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User whereUpdatedAt($value)
      * @method static \Illuminate\Database\Eloquent\Builder<User>|User newModelQuery()
