@@ -26,6 +26,7 @@ class User extends Authenticatable
         'attempts',
         'last_login',
         'is_active',
+        'is_deleted',
     ];
 
     protected $hidden = [
@@ -37,6 +38,7 @@ class User extends Authenticatable
         'locked_until' => 'datetime',
         'last_login' => 'datetime',
         'is_active' => 'boolean',
+        'is_deleted' => 'boolean',
     ];
 
     // Relationships

@@ -673,7 +673,7 @@ namespace App\Models {
      * @property \Illuminate\Support\Carbon|null $locked_until
      * @property string $role
      * @property string|null $phone_number
-     * @property string $email
+     * @property string|null $email
      * @property string $password_hash
      * @property string $usn
      * @property string $last_name

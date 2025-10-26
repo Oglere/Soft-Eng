@@ -1,0 +1,132 @@
+/* === PAGE HEADER === */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 25px;
+    }
+
+    .page-header h2 {
+        font-weight: 700;
+        color: #0b1b4a;
+    }
+
+    .page-header .btn {
+        border-radius: 10px;
+        font-weight: 600;
+        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+    }
+
+    /* === FILTER CARD === */
+    .filter-card {
+        background: #fff;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        padding: 20px;
+    }
+
+    .filter-card input,
+    .filter-card select {
+        border-radius: 10px;
+    }
+
+
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+
+.table thead th {
+    background-color: #0b1b4a !important;
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 12px;
+}
+
+/* Pagination Consistency */
+.pagination {
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.pagination .page-link {
+    border-radius: 6px !important;
+    margin: 0 3px;
+    color: #0b1b4a;
+    font-weight: 500;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #0b1b4a;
+    border-color: #0b1b4a;
+    color: white;
+}
+    .btn-action {
+        border-radius: 8px;
+        font-size: 0.9rem;
+        padding: 4px 10px;
+    }
+
+    .btn-edit {
+        background-color: #2E8B57;
+        color: #fff;
+    }
+
+    .btn-delete {
+        background-color: #B22222;
+        color: #fff;
+    }
+
+    .btn-edit:hover, .btn-delete:hover {
+        opacity: 0.9;
+    }
+
+    .card-wrapper {
+        background: #fff;
+        border-radius: 15px;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        padding: 25px;
+    }
+
+    /* === MODAL STYLING === */
+    .modal-content {
+        border-radius: 15px;
+        border: none;
+    }
+
+    .modal-header {
+        border-bottom: none;
+    }
+
+    .form-label {
+        font-size: 0.9rem;
+        color: #0b1b4a;
+    }
+
+    .form-control, .form-select {
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        box-shadow: none;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #0b1b4a;
+        box-shadow: 0 0 0 0.2rem rgba(11, 27, 74, 0.15);
+    }
+
+    .error-message {
+        font-size: 0.85rem;
+    }
+
+    @media (max-width: 768px) {
+        .page-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
+        }
+    }

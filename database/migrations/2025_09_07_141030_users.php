@@ -24,6 +24,7 @@ return new class extends Migration
         $table->integer('attempts')->default(0);
         $table->dateTime('last_login')->nullable();
         $table->boolean('is_active')->default(true);
+        $table->boolean('is_deleted')->default(false);
         $table->timestamps();
     });
 

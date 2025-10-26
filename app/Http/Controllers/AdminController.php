@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Hash;
 use APP\Models\User;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 class AdminController extends Controller
 {
@@ -75,11 +76,17 @@ class AdminController extends Controller
     }
 
     public function user_control_page(){
-        $users = \App\Models\User::select('user_id', 'first_name', 'last_name', 'email', 'role', 'is_active')
+        $users = \App\Models\User::select('user_id', 'usn', 'first_name', 'last_name', 'email', 'role', 'is_active')
+            ->where('is_deleted', '===', '0')
             ->orderBy('last_name')
             ->get();
 
-        return view('admin.manage_users', compact('users'));
+        $toRecover = \App\Models\User::select('user_id', 'usn', 'first_name', 'last_name', 'email', 'role', 'is_active')
+            ->where('is_deleted', '!=', '0')
+            ->orderBy('last_name')
+            ->get();
+
+        return view('admin.manage_users', compact('users', 'toRecover'));
     }
 
     public function add_acc(Request $request){
@@ -116,17 +123,126 @@ class AdminController extends Controller
         }
     }
 
-    public function checkEmail(Request $request){
-        $exists = \App\Models\User::where('email', $request->email)->exists();
-        return response()->json(['exists' => $exists]);
+    public function checkDuplicates(Request $request){
+        $emailExists = \App\Models\User::where('email', $request->email)->exists();
+        $usnExists = \App\Models\User::where('usn', $request->usn)->exists();
+
+        return response()->json([
+            'email_exists' => $emailExists,
+            'usn_exists' => $usnExists,
+        ]);
     }
 
-    public function add_acc_pdf(){
+    public function add_acc_xml(Request $request){
+        $request->validate([
+            'fileUpload' => 'required|file|mimes:xlsx,xls',
+        ]);
 
+        $file = $request->file('fileUpload');
+        $path = $file->store('temp');
+
+        try {
+            $file = $request->file('fileUpload');
+            $rows = (new FastExcel)->import($file);
+            $imported = 0;
+            $skipped = 0;
+
+            foreach ($rows as $row) {
+                $usn = trim($row['usn'] ?? '');
+                $first = trim($row['first_name'] ?? '');
+                $last = trim($row['last_name'] ?? '');
+                $password = trim($row['password_hash'] ?? '');
+
+                if (!$usn || !$first || !$last || !$password) {
+                    $skipped++;
+                    continue;
+                }
+
+                if (User::where('usn', $usn)->exists()) {
+                    $skipped++;
+                    continue;
+                }
+
+                User::create([
+                    'usn' => $usn,
+                    'first_name' => $first,
+                    'last_name' => $last,
+                    'password_hash' => Hash::make($password),
+                    'role' => 'student',
+                    'is_active' => 1,
+                ]);
+
+                $imported++;
+            }
+
+            return redirect()->back()->with('success', "Import completed: $imported users added, $skipped skipped.");
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to import users: ' . $e->getMessage());
+        }
     }
 
-    public function user_recovery_page() {
-        return view ('admin.recovery');
+    public function edit_acc(Request $request, $id) {
+        // dd($request->all());
+        $user = User::findOrFail($id);
+
+        $request->validate([
+            'role' => 'required|string',
+            'is_active' => 'required|in:0,1',
+            'password_hash' => 'nullable|min:6',
+            'email' => 'required|email',
+        ]);
+
+        $emailChanged = $request->email !== $user->email;
+        $roleChanged = $request->role !== $user->role;
+        $statusChanged = (int)$request->is_active !== (int)$user->is_active;
+        $passwordChanged = !empty($request->password_hash);
+
+        if (!$emailChanged && !$roleChanged && !$statusChanged && !$passwordChanged) {
+            return redirect()->back()->with('info', "Nothing has changed.");
+        }
+
+        if ($emailChanged) {
+            $existing = User::where('email', $request->email)
+                            ->where('user_id', '!=', $id)
+                            ->first();
+
+            if ($existing) {
+                return redirect()->back()->with('error', 'Email already exists.');
+            }
+
+            $user->email = $request->email;
+        }
+
+        $user->role = $request->role;
+        $user->is_active = $request->is_active;
+
+        if ($passwordChanged) {
+            $user->password_hash = Hash::make($request->password_hash);
+        }
+
+        $user->save();
+
+        return redirect()->back()->with('success', 'User updated successfully!');
+    }
+
+    public function del_acc(Request $request, $id) {
+        $user = User::findOrFail($id);
+
+        // Update role to "deleted" instead of deleting
+        $user->is_deleted = 1; // optionally deactivate the account
+        $user->save();
+
+        return redirect()->back()->with('success', "User {$user->first_name} {$user->last_name} has been marked as deleted.");
+    }
+
+    public function recover_acc(Request $request, $id) {
+        $user = User::findOrFail($id);
+
+        // Update role to "deleted" instead of deleting
+        $user->is_deleted = 0; // optionally deactivate the account
+        $user->save();
+
+        return redirect()->back()->with('success', "User {$user->first_name} {$user->last_name} has been recovered.");
     }
 
     public function storage_page() {
