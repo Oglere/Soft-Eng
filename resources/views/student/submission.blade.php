@@ -112,11 +112,11 @@
         <!-- Main -->
         <main class="main">
             <h2>Submit a Document</h2>
-            @if(session('success'))
+            {{-- @if(session('success'))
                 <div style="color: green; text-align: center; margin-bottom: 15px;">
                     {{ session('success') }}
                 </div>
-            @endif
+            @endif --}}
             <form id="documentForm" method="POST" enctype="multipart/form-data" action="{{ route('student.submit') }}">
             @csrf
             {{-- File Upload Box --}}

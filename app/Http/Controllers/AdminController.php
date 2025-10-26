@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Hash;
+use APP\Models\User;
 
 class AdminController extends Controller
 {
@@ -72,8 +74,55 @@ class AdminController extends Controller
         ));
     }
 
-    public function user_control_page() {
-        return view ('admin.manage_users');
+    public function user_control_page(){
+        $users = \App\Models\User::select('user_id', 'first_name', 'last_name', 'email', 'role', 'is_active')
+            ->orderBy('last_name')
+            ->get();
+
+        return view('admin.manage_users', compact('users'));
+    }
+
+    public function add_acc(Request $request){
+        try {
+            // ✅ Step 1: Validate inputs
+            $validated = $request->validate([
+                'first_name' => 'required|string|max:100',
+                'last_name'  => 'required|string|max:100',
+                'email'      => 'required|email|unique:users,email',
+                'usn'        => 'required|numeric|unique:users,usn',
+                'password'   => 'required|string|min:8',
+                'role'       => 'required|in:admin,student,teacher',
+                'is_active'  => 'required|boolean',
+            ]);
+
+            User::create([
+                'first_name'    => $validated['first_name'],
+                'last_name'     => $validated['last_name'],
+                'email'         => $validated['email'],
+                'usn'           => $validated['usn'],
+                'password_hash' => Hash::make($validated['password']),
+                'role'          => $validated['role'],
+                'is_active'     => $validated['is_active'],
+            ]);
+
+            return redirect()->back()->with('success', 'User added successfully!');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect()->back()
+                ->withErrors($e->errors())
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Error adding user: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to add user. Please try again.');
+        }
+    }
+
+    public function checkEmail(Request $request){
+        $exists = \App\Models\User::where('email', $request->email)->exists();
+        return response()->json(['exists' => $exists]);
+    }
+
+    public function add_acc_pdf(){
+
     }
 
     public function user_recovery_page() {

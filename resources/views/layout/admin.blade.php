@@ -245,7 +245,7 @@
                     </a>
 
                     <h5>SETTINGS</h5>
-                    <a href="{{ url('/admin/account-setting') }}" class="{{ request()->is('admin/account-setting') ? 'active' : '' }}">
+                    <a href="{{ url('/admin/account_setting') }}" class="{{ request()->is('admin/account-setting') ? 'active' : '' }}">
                         <i class="fa-solid fa-gear"></i><span>Account</span>
                     </a>
                 </div>

@@ -3,7 +3,9 @@
 
 
 @section('content')
-
+    <div class="page-header">
+        <h2>Dashboard</h2>
+    </div>
 
 <div class="container-fluid px-3 py-3">
     <div class="row g-4 d-flex justify-content-center">
@@ -14,7 +16,6 @@
                     <h2 id="usersCount">0</h2>
                     <p>Total Users</p>
                     <div class="widget-footer">
-                        <a href="#">More info →</a>
                     </div>
                 </div>
                 <div class="widget-icon">
@@ -30,7 +31,6 @@
                     <h2 id="adminsCount">0</h2>
                     <p>Total Admins</p>
                     <div class="widget-footer">
-                        <a href="#">More info →</a>
                     </div>
                 </div>
                 <div class="widget-icon">
@@ -46,7 +46,6 @@
                     <h2 id="storageCount">0</h2>
                     <p>Total Storage</p>
                     <div class="widget-footer">
-                        <a href="#">More info →</a>
                     </div>
                 </div>
                 <div class="widget-icon">
@@ -213,99 +212,107 @@
 </script>
 @endsection
 <style>
-    /* ===== THEME ===== */
-    body {
-        background-color: #fffbea;
-        color: #0b1b4a;
-        font-family: 'Poppins', sans-serif;
-    }
-
-    /* ===== WIDGET CARDS ===== */
-    .widget-card {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        border-radius: 15px;
-        padding: 25px 30px;
-        color: #fff;
-        transition: all 0.3s ease-in-out;
-        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        border: none;
-        cursor: pointer;
-    }
-
-    .widget-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Widget color themes */
-    #card-1 {
-        background: linear-gradient(135deg, #2E8B57, #3CB371);
-    }
-
-    #card-2 {
-        background: linear-gradient(135deg, #B22222, #DC143C);
-    }
-
-    #card-3 {
-        background: linear-gradient(135deg, #0b1b4a, #2c3e80);
-    }
-
-    /* Widget icons */
-    .widget-icon {
-        font-size: 2.5rem;
-        background: rgba(255, 255, 255, 0.25);
-        padding: 18px;
-        border-radius: 15px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    /* Widget text */
-    .widget-info h2 {
+/* ===== THEME ===== */
+body {
+    background-color: #fffbea;
+    color: #0b1b4a;
+    font-family: 'Poppins', sans-serif;
+}
+    .page-header h2 {
         font-weight: 700;
-        font-size: 2.3rem;
-        margin: 0;
-        color: #fff;
+        color: #0b1b4a;
     }
 
-    .widget-info p {
-        font-weight: 500;
-        font-size: 1rem;
-        opacity: 0.9;
-        margin: 3px 0 0 0;
-    }
+/* ===== WIDGET CARDS ===== */
+.widget-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 15px;
+    padding: 25px 30px;
+    color: #fff;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    border: none;
+    cursor: pointer;
+    min-height: 130px;
+}
 
-    .widget-footer {
-        margin-top: 10px;
-    }
+.widget-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
 
-    .widget-footer a {
-        color: #fff;
-        text-decoration: none;
-        font-weight: 600;
-        font-size: 0.9rem;
-        transition: 0.3s;
-    }
+/* Widget color themes */
+#card-1 {
+    background: linear-gradient(135deg, #2E8B57, #3CB371);
+}
+#card-2 {
+    background: linear-gradient(135deg, #B22222, #DC143C);
+}
+#card-3 {
+    background: linear-gradient(135deg, #0b1b4a, #2c3e80);
+}
 
-    .widget-footer a:hover {
-        text-decoration: underline;
-        color: #fffbea;
-    }
+/* Widget icons */
+.widget-icon {
+    font-size: 2.5rem;
+    background: rgba(255, 255, 255, 0.25);
+    padding: 18px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-    /* ===== CHARTS ===== */
-    .chart {
-        height: 300px !important;
-    }
+/* Widget text */
+.widget-info h2 {
+    font-weight: 700;
+    font-size: 2.3rem;
+    margin: 0;
+    color: #fff;
+}
 
- /* ===== TABLE DESIGN FIX FOR BOOTSTRAP ===== */
+.widget-info p {
+    font-weight: 500;
+    font-size: 1rem;
+    opacity: 0.9;
+    margin: 3px 0 0 0;
+}
+
+.widget-footer {
+    margin-top: 10px;
+}
+
+.widget-footer a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.widget-footer a:hover {
+    text-decoration: underline;
+    color: #fffbea;
+}
+
+/* ===== CHARTS ===== */
+.chart {
+    width: 100% !important;
+    height: 40vh !important;
+    max-height: 400px;
+}
+
+.large-pie {
+    height: 45vh !important;
+}
+
+/* ===== TABLE DESIGN ===== */
 .table {
     border-radius: 10px;
     overflow: hidden;
 }
-
 .table thead.table-dark th {
     background: #0b1b4a !important;
     border: none;
@@ -313,36 +320,66 @@
     font-size: 0.95rem;
     letter-spacing: 0.5px;
 }
-
 .table-striped > tbody > tr:nth-of-type(odd) {
     background-color: #fff9dc !important;
 }
-
 .table-striped > tbody > tr:nth-of-type(even) {
     background-color: #fffbea !important;
 }
-
 .table-hover tbody tr:hover {
     background-color: #fdf3c5 !important;
     transition: 0.2s ease;
 }
-
 .card-body h2 {
     color: #0b1b4a;
     font-weight: 700;
 }
 
-    /* ===== RESPONSIVE ===== */
-    @media (max-width: 768px) {
-        .widget-card {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-        .widget-icon {
-            margin-bottom: 10px;
-        }
-        .widget-info h2 {
-            font-size: 1.8rem;
-        }
+
+@media (max-width: 576px) {
+    .row.g-4.d-flex.justify-content-center {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        justify-items: center;
     }
+
+    .widget-card {
+        width: 100%;
+        max-width: 120px;
+        min-height: 100px;
+        padding: 12px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        border-radius: 10px;
+    }
+
+    .widget-info h2 {
+        font-size: 1.2rem;
+    }
+
+    .widget-info p {
+        font-size: 0.8rem;
+        margin: 4px 0;
+    }
+
+    .widget-icon {
+        font-size: 1.5rem;
+        padding: 10px;
+        margin-bottom: 6px;
+    }
+
+    .widget-footer a {
+        font-size: 0.75rem;
+    }
+
+    /* Make charts smaller */
+    .chart {
+        height: 220px !important;
+    }
+}
+
+
 </style>

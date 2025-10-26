@@ -80,8 +80,15 @@ Route::middleware('auth.session:admin')->prefix('admin')->group(function (){
     Route::get('/manage-users/recover', [AdminController::class, 'user_recovery_page'])->name('recover.user');
     Route::get('/storage/', [AdminController::class, 'storage_page'])->name('storage');
     Route::get('/storage/{id}', [AdminController::class, 'storage_page'])->name('admin.pdf.reader');
-    Route::get('/account-setting/', [AdminController::class, 'account_setting_page'])->name('admin.account_setting');
+    Route::get('/account_setting/', [AdminController::class, 'account_setting_page'])->name('admin.account_setting');
 
+    Route::post('/manage-users/add', [AdminController::class, 'add_acc'])->name('admin.add.account');
+    Route::post('/manage-users/check-email', [AdminController::class, 'checkEmail'])->name('admin.checkEmail');
+
+    Route::post('/manage-users/addinpdf', [AdminController::class, 'add_acc_pdf'])->name('admin.add.account.pdf');
+
+    Route::post('/manage-users/edit/{id}', [AdminController::class, 'edit_acc'])->name('admin.edit.account');
+    Route::post('/manage-users/delete/{id}', [AdminController::class, 'del_acc'])->name('admin.del.account');
     Route::post('/account_setting/verify', [AdminController::class, 'verify_identity'])->name('admin.verify_identity');
     Route::post('/account_setting/update', [AdminController::class, 'update_account'])->name('admin.update_account');
     Route::post('/account_setting/cancel', [AdminController::class, 'cancel_update'])->name('admin.cancel_update');
