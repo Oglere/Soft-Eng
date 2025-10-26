@@ -24,7 +24,9 @@ class QueryController extends Controller
         $user = auth()->user();
 
         // Start query
-        $query = \App\Models\DocumentRepository::where('status', 'Approved');
+        $query = \App\Models\DocumentRepository::where('status', 'Approved')
+            ->where('archived', '!=', 1)
+        ;
 
         // 🔍 Keyword search
         if ($request->filled('search')) {

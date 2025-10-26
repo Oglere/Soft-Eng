@@ -84,8 +84,9 @@ Route::middleware('auth.session:admin')->prefix('admin')->group(function (){
 
     Route::post('/manage-users/add', [AdminController::class, 'add_acc'])->name('admin.add.account');
     Route::post('/manage-users/check-duplicates', [AdminController::class, 'checkDuplicates'])->name('admin.checkDuplicates');
-
     Route::post('/manage-users/addinexcel', [AdminController::class, 'add_acc_xml'])->name('admin.add.acc.excel');
+
+    Route::post('/storage/hide/{id}', [AdminController::class, 'hide_doc'])->name('admin.hide.doc');
 
     Route::post('/manage-users/edit/{id}', [AdminController::class, 'edit_acc'])->name('admin.edit.account');
     Route::post('/manage-users/delete/{id}', [AdminController::class, 'del_acc'])->name('admin.del.account');

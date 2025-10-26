@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DocumentRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controller;
@@ -244,9 +245,45 @@ class AdminController extends Controller
         return redirect()->back()->with('recovered', "User {$user->first_name} {$user->last_name} has been recovered.");
     }
 
-    public function storage_page() {
-        return view ('admin.storage');
+    public function hide_doc($id) {
+        $doc = \App\Models\DocumentRepository::findOrFail($id);
+
+        if ($doc->archived != 1) {
+            $doc->archived = 1;
+            $doc->save();
+        } else {
+            $doc->archived = 0;
+            $doc->save();
+        }
+
+        return redirect()->back()->with('hidden', "Document has been hidden.");
     }
+
+    public function storage_page() {
+        $documents = \App\Models\DocumentRepository::select(
+            'document_id',
+            'title',
+            'archived',
+            'status',
+            'created_at',
+            'file',
+            \DB::raw('LENGTH(file) as file_size')
+        )
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+        foreach ($documents as $doc) {
+            $filePath = storage_path('app/' . $doc->file);
+            if (file_exists($filePath)) {
+                $doc->file_size = filesize($filePath);
+            } else {
+                $doc->file_size = 0;
+            }
+        }
+
+        return view('admin.storage', compact('documents'));
+    }
+
 
     public function account_setting_page() {
         return view ('admin.settings');

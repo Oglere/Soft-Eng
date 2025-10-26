@@ -8,9 +8,7 @@
     {{-- Header --}}
     <div class="page-header">
         <h2>Storage Management</h2>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addFileModal">
-            <i class="fas fa-upload me-2"></i> Add File
-        </button>
+
     </div>
 
     {{-- Search & Filter --}}
@@ -34,82 +32,63 @@
                     <tr>
                         <th>Title</th>
                         <th>Status</th>
+                        <th>Date</th>
                         <th>File Size</th>
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>System_Report_2025.pdf</td>
-                        <td><span class="badge bg-success">Active</span></td>
-                        <td>2.4 MB</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-action btn-view me-1"><i class="fas fa-eye"></i></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Research_Data_2024.xlsx</td>
-                        <td><span class="badge bg-secondary">Archived</span></td>
-                        <td>1.8 MB</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-action btn-view me-1"><i class="fas fa-eye"></i></button>
-                        </td>
-                    </tr>
+                    @forelse ($documents as $doc)
+                        <tr>
+                            <td>{{ $doc->title }}</td>
+                            <td>
+                                @if ($doc->status == 'active')
+                                    <span class="badge bg-success">Active</span>
+                                @else
+                                    <span class="badge bg-secondary">Archived</span>
+                                @endif
+                            </td>
+                            <td>{{ $doc->created_at->format('M d, Y') }}</td>
+                            <td>
+                                @php
+                                    $bytes = strlen($doc->file);
+                                    if ($bytes >= 1073741824) {
+                                        $size = number_format($bytes / 1073741824, 2) . ' GB';
+                                    } elseif ($bytes >= 1048576) {
+                                        $size = number_format($bytes / 1048576, 2) . ' MB';
+                                    } elseif ($bytes >= 1024) {
+                                        $size = number_format($bytes / 1024, 2) . ' KB';
+                                    } else {
+                                        $size = $bytes . ' Bytes';
+                                    }
+                                @endphp
+                                {{ $size }}
+                            </td>
+
+                            <td class="text-center">
+                                <form action="storage/hide/{{ $doc->document_id }}" method="POST" style="margin: 0;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-action btn-view me-1">
+                                        @if ($doc->archived == '1')
+                                            <i class="fas fa-eye-slash"></i>
+                                        @else
+                                            <i class="fas fa-eye"></i>
+                                        @endif
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No documents found</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
-
-            <div class="pagination-wrapper mt-3">
-                <ul class="pagination justify-content-center mb-0" id="pagination"></ul>
-            </div>
     </div>
 
-</div>
 
-{{-- Add File Modal --}}
-<div class="modal fade" id="addFileModal" tabindex="-1" aria-labelledby="addFileModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header" style="background-color: #0b1b4a; color: #fff;">
-                <h5 class="modal-title fw-bold" id="addFileModalLabel">
-                    <i class="fas fa-upload me-2"></i> Add New File
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <form action="" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="fileTitle" class="form-label fw-semibold">File Title</label>
-                        <input type="text" name="fileTitle" id="fileTitle" class="form-control" placeholder="Enter file title" required>
-                        <small class="text-danger" id="fileTitleError"></small>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="fileUpload" class="form-label fw-semibold">Upload File</label>
-                        <input type="file" name="fileUpload" id="fileUpload" class="form-control" required>
-                        <small class="text-danger" id="fileUploadError"></small>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="fileStatus" class="form-label fw-semibold">Status</label>
-                        <select name="fileStatus" id="fileStatus" class="form-select" required>
-                            <option value="">-- Select Status --</option>
-                            <option value="active">Active</option>
-                            <option value="archived">Archived</option>
-                        </select>
-                        <small class="text-danger" id="fileStatusError"></small>
-                    </div>
-                </div>
-
-                <div class="modal-footer d-flex justify-content-between">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary fw-semibold">Upload File</button>
-                </div>
-            </form>
-        </div>
-    </div>
 </div>
 
 {{-- Scripts --}}
@@ -118,69 +97,6 @@
 <script>
 document.addEventListener('DOMContentLoaded', function () {
    const viewButtons = document.querySelectorAll('.btn-view');
-
-    // Load hidden rows from localStorage
-    let hiddenRows = JSON.parse(localStorage.getItem('hiddenRows')) || [];
-
-    // Apply hidden state from localStorage
-    hiddenRows.forEach(index => {
-        const row = document.querySelectorAll('tbody tr')[index];
-        if (row) {
-            const button = row.querySelector('.btn-view');
-            const icon = button.querySelector('i');
-            const cells = row.querySelectorAll('td:not(:last-child)');
-            cells.forEach(cell => {
-                if (!cell.getAttribute('data-original')) {
-                    cell.setAttribute('data-original', cell.textContent.trim());
-                }
-                cell.textContent = '******';
-            });
-            button.classList.add('hidden-data');
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        }
-    });
-
-    // Handle click events for mask/unmask
-    viewButtons.forEach((button, index) => {
-        button.addEventListener('click', function () {
-            const row = this.closest('tr');
-            const icon = this.querySelector('i');
-            const cells = row.querySelectorAll('td:not(:last-child)');
-
-            if (this.classList.contains('hidden-data')) {
-                // Unmask
-                cells.forEach(cell => {
-                    const original = cell.getAttribute('data-original');
-                    if (original !== null) cell.textContent = original;
-                });
-                this.classList.remove('hidden-data');
-                icon.classList.remove('fa-eye-slash');
-                icon.classList.add('fa-eye');
-
-                // Remove from localStorage
-                hiddenRows = hiddenRows.filter(i => i !== index);
-                localStorage.setItem('hiddenRows', JSON.stringify(hiddenRows));
-            } else {
-                // Mask
-                cells.forEach(cell => {
-                    if (!cell.getAttribute('data-original')) {
-                        cell.setAttribute('data-original', cell.textContent.trim());
-                    }
-                    cell.textContent = '******';
-                });
-                this.classList.add('hidden-data');
-                icon.classList.remove('fa-eye');
-                icon.classList.add('fa-eye-slash');
-
-                // Save to localStorage
-                if (!hiddenRows.includes(index)) {
-                    hiddenRows.push(index);
-                    localStorage.setItem('hiddenRows', JSON.stringify(hiddenRows));
-                }
-            }
-        });
-    });
     const rowsPerPage = 10;
     const table = document.querySelector('table');
     if (!table) return;
@@ -198,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function createEmptyRow() {
         const tr = document.createElement('tr');
         const td = document.createElement('td');
-        td.colSpan = 4;
+        td.colSpan = 5;
         td.innerHTML = "&nbsp;";
         tr.classList.add('empty-row');
         tr.appendChild(td);
@@ -276,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // Update display
         currentPage = 1;
         if (filteredRows.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="4" class="text-center text-muted">No files found</td></tr>`;
+            tbody.innerHTML = `<tr><td="5" class="text-center text-muted">No files found</td></tr>`;
         } else {
             tbody.innerHTML = '';
             filteredRows.forEach(row => tbody.appendChild(row));
