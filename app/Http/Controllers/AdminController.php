@@ -242,7 +242,7 @@ class AdminController extends Controller
         $user->is_deleted = 0; // optionally deactivate the account
         $user->save();
 
-        return redirect()->back()->with('success', "User {$user->first_name} {$user->last_name} has been recovered.");
+        return redirect()->back()->with('recovered', "User {$user->first_name} {$user->last_name} has been recovered.");
     }
 
     public function storage_page() {

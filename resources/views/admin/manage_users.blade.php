@@ -675,11 +675,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // SweetAlert after redirect
-    @if(session('success'))
+    @if(session('recovered'))
         Swal.fire({
             icon: 'success',
             title: 'Recovered!',
-            text: "{{ session('success') }}",
+            text: "{{ session('recovered') }}",
             showConfirmButton: false,
             timer: 2500
         });
