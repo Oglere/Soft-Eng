@@ -73,7 +73,7 @@ class OtpController extends Controller
         }
 
         // Check expiry (15 minutes)
-        if (now()->diffInMinutes($record->created_at) > 15) {
+        if (now()->diffInMinutes($record->created_at) > 5) {
             return back()->withErrors(['otp' => 'OTP expired. Please request again.']);
         }
 
@@ -159,7 +159,80 @@ class OtpController extends Controller
 
             $mail->isHTML(true);
             $mail->Subject = 'Your OTP Code';
-            $mail->Body    = "Your OTP code is <b>{$otp}</b>. It will expire in 15 minutes.";
+            $mail->Body = '
+                <html>
+                <head>
+                <style>
+                    body {
+                    font-family: "Segoe UI", Arial, sans-serif;
+                    background-color: #f4f6f8;
+                    margin: 0;
+                    padding: 0;
+                    }
+                    .container {
+                    background-color: #ffffff;
+                    max-width: 480px;
+                    margin: 30px auto;
+                    border-radius: 10px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+                    overflow: hidden;
+                    }
+                    .header {
+                    background-color: #0b1b4a;
+                    color: #ffffff;
+                    text-align: center;
+                    padding: 25px 10px;
+                    font-size: 22px;
+                    font-weight: 600;
+                    letter-spacing: 1px;
+                    }
+                    .content {
+                    padding: 30px;
+                    text-align: center;
+                    color: #333333;
+                    }
+                    .otp {
+                    display: inline-block;
+                    background-color: #e9f1ff;
+                    color: #0b1b4a;
+                    font-size: 28px;
+                    letter-spacing: 4px;
+                    font-weight: bold;
+                    border-radius: 8px;
+                    padding: 12px 20px;
+                    margin: 20px 0;
+                    }
+                    .footer {
+                    text-align: center;
+                    font-size: 12px;
+                    color: #888888;
+                    padding: 20px;
+                    background-color: #f9fafb;
+                    }
+                    a {
+                    color: #0b1b4a;
+                    text-decoration: none;
+                    }
+                </style>
+                </head>
+                <body>
+                <div class="container">
+                    <div class="header">Digital Academic Repository and Archive</div>
+                    <div class="content">
+                    <p>Hello,</p>
+                    <p>We received a request to verify your account. Use the OTP code below to continue:</p>
+                    <div class="otp">' . $otp . '</div>
+                    <p>This code will expire in <b>15 minutes</b>.</p>
+                    <p>If you did not request this, please ignore this email.</p>
+                    </div>
+                    <div class="footer">
+                    © ' . date('Y') . ' Digital Academic Repository and Archive (DARA). All rights reserved.
+                    </div>
+                </div>
+                </body>
+                </html>
+            ';
+
 
             $mail->send();
             return true;
