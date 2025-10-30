@@ -113,13 +113,15 @@ document.addEventListener('DOMContentLoaded', function () {
             e.preventDefault();
 
             const form = this.closest('form');
+            const row = this.closest('tr');
+            const title = row ? row.querySelector('td:first-child').textContent.trim() : 'this document';
             const isHidden = this.classList.contains('hidden-doc');
 
             Swal.fire({
                 title: isHidden ? 'Unhide Document?' : 'Hide Document?',
-                text: isHidden 
-                    ? "This document will be visible again in storage." 
-                    : "Are you sure you want to hide this document from storage?",
+                html: isHidden 
+                    ? `Do you want to <b>unhide</b> <span style="color:#0b1b4a;">"${title}"</span>?<br><br>This document will be visible again in storage.` 
+                    : `Are you sure you want to <b>hide</b> <span style="color:#0b1b4a;">"${title}"</span>?<br><br>This document will no longer appear in storage.`,
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -134,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // Set button color dynamically
+    // Set button color dynamically based on visibility
     document.querySelectorAll('.btn-view').forEach(button => {
         if (button.querySelector('i').classList.contains('fa-eye-slash')) {
             button.classList.add('hidden-doc');
