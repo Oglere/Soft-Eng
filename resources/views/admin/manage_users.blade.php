@@ -232,8 +232,8 @@
                             <option value="student">Student</option>
                             <option value="teacher">Teacher</option>
                         </select>
-                    <div class="text-danger small mt-1 error-message" id="error-role" style="display:none;">Please select a role.</div>
-                </div>
+                        <div class="text-danger small mt-1 error-message" id="error-role" style="display:none;">Please select a role.</div>
+                    </div>
 
                 <div class="col-md-6">
                     <label for="status" class="form-label fw-semibold">Status</label>

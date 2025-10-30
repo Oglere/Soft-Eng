@@ -1,0 +1,86 @@
+/* === PAGE HEADER === */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+.page-header h2 {
+    font-weight: 700;
+    color: #0b1b4a;
+}
+/* === FILTER CARD === */
+.filter-card {
+    background: #fff;
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    padding-bottom: 0.1rem !important;
+}
+.filter-form {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    max-width: 700px;
+    width: 100%;
+}
+.filter-item {
+    flex: 1;
+    min-width: 150px;
+}
+.filter-item:first-child {
+    flex: 1.6;
+}
+.table {
+    border-radius: 12px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+.table thead th {
+    background-color: #0b1b4a !important;
+    color: #fff !important;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 12px;
+}
+.table tbody td {
+    padding: 12px;
+    font-size: 0.93rem;
+    vertical-align: middle;
+}
+.table-striped > tbody > tr:nth-of-type(odd) {
+    background-color: #f8f8f8 !important;
+}
+.pagination {
+    justify-content: center;
+    margin-top: 10px;
+}
+.pagination .page-link {
+    border-radius: 6px !important;
+    margin: 0 3px;
+    color: #0b1b4a;
+    font-weight: 500;
+}
+.pagination .page-item.active .page-link {
+    background-color: #0b1b4a;
+    border-color: #0b1b4a;
+    color: white;
+}
+.card-wrapper {
+    background: #fff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+}
+.btn-view {
+    background-color: #1E90FF;
+    color: #fff;
+}
+.btn-view.hidden-doc {
+    background-color: red !important;
+    color: white !important;
+}

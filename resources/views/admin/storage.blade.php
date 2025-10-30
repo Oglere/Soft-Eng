@@ -8,14 +8,21 @@
     {{-- Header --}}
     <div class="page-header">
         <h2>Storage Management</h2>
-
     </div>
 
     {{-- Search & Filter --}}
     <div class="card filter-card mb-4">
-        <form action="" method="GET"class="filter-form">
+        <form action="" method="GET" class="filter-form">
             <div class="filter-item">
                 <input type="text" name="search" class="form-control" placeholder="🔍 Search file..." value="{{ request('search') }}">
+            </div>
+            <div class="col-md-6" style="width: 25%">
+                <select id="role" name="role" class="form-select rounded-3">
+                    <option value="">All documents</option>
+                    <option value="admin">Hide</option>
+                    <option value="student">Unhide</option>
+                </select>
+                <div class="text-danger small mt-1 error-message" id="error-role" style="display:none;">Please select a role.</div>
             </div>
 
             <div class="filter-item">
@@ -86,17 +93,63 @@
                 </tbody>
             </table>
         </div>
+        {{-- Pagination container --}}
+        <ul class="pagination" id="pagination"></ul>
     </div>
-
-
 </div>
 
 {{-- Scripts --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://kit.fontawesome.com/a2e0b6f6d2.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+{{-- Hide/Unhide Confirmation --}}
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-   const viewButtons = document.querySelectorAll('.btn-view');
+    const viewButtons = document.querySelectorAll('.btn-view');
+
+    viewButtons.forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+
+            const form = this.closest('form');
+            const isHidden = this.classList.contains('hidden-doc');
+
+            Swal.fire({
+                title: isHidden ? 'Unhide Document?' : 'Hide Document?',
+                text: isHidden 
+                    ? "This document will be visible again in storage." 
+                    : "Are you sure you want to hide this document from storage?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: isHidden ? 'Yes, Unhide it!' : 'Yes, Hide it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    });
+
+    // Set button color dynamically
+    document.querySelectorAll('.btn-view').forEach(button => {
+        if (button.querySelector('i').classList.contains('fa-eye-slash')) {
+            button.classList.add('hidden-doc');
+            button.style.backgroundColor = 'red';
+        } else {
+            button.classList.remove('hidden-doc');
+            button.style.backgroundColor = '#1E90FF';
+        }
+    });
+});
+</script>
+
+{{-- Search + Filter + Pagination --}}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
     const rowsPerPage = 10;
     const table = document.querySelector('table');
     if (!table) return;
@@ -104,13 +157,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const tbody = table.querySelector('tbody');
     const allRows = Array.from(tbody.querySelectorAll('tr')).filter(row => row.querySelector('td'));
     const searchInput = document.querySelector('input[name="search"]');
+    const roleSelect = document.querySelector('select[name="role"]');
     const filterForm = document.querySelector('.filter-form');
     const paginationList = document.getElementById('pagination');
 
     let filteredRows = [...allRows];
     let currentPage = 1;
 
-    // === Pagination Functions ===
+    // === Pagination ===
     function createEmptyRow() {
         const tr = document.createElement('tr');
         const td = document.createElement('td');
@@ -180,204 +234,45 @@ document.addEventListener('DOMContentLoaded', function () {
         paginationList.appendChild(nextItem);
     }
 
-    // === Search Filter Function ===
+    // === Filter Function ===
     function applyFilter() {
         const searchTerm = searchInput.value.toLowerCase().trim();
+        const filterValue = roleSelect.value;
 
         filteredRows = allRows.filter(row => {
             const title = row.cells[0]?.textContent.toLowerCase() || '';
-            return title.includes(searchTerm);
+            const isHidden = row.querySelector('i.fa-eye-slash');
+            const matchesSearch = title.includes(searchTerm);
+
+            if (filterValue === 'admin') {
+                return matchesSearch && isHidden;
+            } else if (filterValue === 'student') {
+                return matchesSearch && !isHidden;
+            } else {
+                return matchesSearch;
+            }
         });
 
-        // Update display
-        currentPage = 1;
+        tbody.innerHTML = '';
         if (filteredRows.length === 0) {
-            tbody.innerHTML = `<tr><td="5" class="text-center text-muted">No files found</td></tr>`;
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">No documents found</td></tr>`;
         } else {
-            tbody.innerHTML = '';
             filteredRows.forEach(row => tbody.appendChild(row));
             showPage(currentPage);
             updatePagination();
         }
     }
 
-    // === Form Submit ===
+    // === On Filter Submit ===
     filterForm.addEventListener('submit', function (e) {
         e.preventDefault();
+        currentPage = 1;
         applyFilter();
     });
 
     // === Initialize ===
     showPage(currentPage);
     updatePagination();
-
-
 });
 </script>
-
-
-
-<style>
-
-    /* === PAGE HEADER === */
-    .page-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 25px;
-    }
-
-    .page-header h2 {
-        font-weight: 700;
-        color: #0b1b4a;
-    }
-
-    .page-header .btn {
-        border-radius: 10px;
-        font-weight: 600;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.1);
-    }
-/* === FILTER CARD === */
-.filter-card {
-    background: #fff;
-    border: none;
-    border-radius: 15px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    padding-bottom: 0.1rem !important;
-}
-
-/* === FLEX LAYOUT FOR FILTER FORM === */
-.filter-form {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-    max-width: 700px;
-    width: 100%;
-}
-
-.filter-item {
-    flex: 1;
-    min-width: 150px;
-}
-
-.filter-item:first-child {
-    flex: 1.6;
-}
-
-.filter-item button {
-    white-space: nowrap;
-}
-
-/* Responsive behavior */
-@media (max-width: 576px) {
-    .filter-form {
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        max-width: 100%;
-    }
-    .filter-item {
-        min-width: 120px;
-    }
-}
-
-.filter-card input,
-.filter-card select {
-    border-radius: 10px;
-}
-.table {
-    border-radius: 12px;
-    overflow: hidden;
-    background: #fff;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.table thead th {
-    background-color: #0b1b4a !important;
-    color: #fff !important;
-    font-weight: 700;
-    font-size: 0.95rem;
-    padding: 12px;
-}
-
-.table tbody td {
-    padding: 12px;
-    font-size: 0.93rem;
-    vertical-align: middle;
-}
-
-.table-striped > tbody > tr:nth-of-type(odd) {
-    background-color: #f8f8f8 !important;
-}
-
-/* Pagination Consistency */
-.pagination {
-    justify-content: center;
-    margin-top: 10px;
-}
-
-.pagination .page-link {
-    border-radius: 6px !important;
-    margin: 0 3px;
-    color: #0b1b4a;
-    font-weight: 500;
-}
-
-.pagination .page-item.active .page-link {
-    background-color: #0b1b4a;
-    border-color: #0b1b4a;
-    color: white;
-}
-.card-wrapper {
-    background: #fff;
-    border-radius: 15px;
-    padding: 20px;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
-}
-
-    /* === ACTION BUTTONS === */
-    .btn-action {
-        border-radius: 8px;
-        font-size: 0.9rem;
-        padding: 4px 10px;
-    }
-
-    .btn-view {
-        background-color: #1E90FF;
-        color: #fff;
-    }
-
-    /* === MODAL STYLING === */
-    .modal-content {
-        border-radius: 15px;
-        border: none;
-        box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-    }
-
-    .modal-body label {
-        color: #0b1b4a;
-    }
-
-    .modal-footer .btn-primary {
-        background-color: #0b1b4a;
-        border: none;
-    }
-
-    .modal-footer .btn-primary:hover {
-        background-color: #162d7d;
-    }
-
-    @media (max-width: 768px) {
-        .page-header {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 10px;
-        }
-    }
-</style>
-
-
-
 @endsection

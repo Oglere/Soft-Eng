@@ -13,8 +13,9 @@
             background-color: #fffbea;
             display: flex;
             flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
+            min-height: 100vh; /* use min-height instead of fixed height */
+            overflow-y: auto;  /* allow scrolling and SweetAlert overlay to display properly */
+            overflow-x: hidden;
         }
 
         /* ===== HEADER ===== */
