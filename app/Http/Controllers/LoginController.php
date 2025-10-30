@@ -34,7 +34,7 @@ class LoginController extends Controller
         $user = User::where('usn', $request->usn_login)->first();
 
         if (!$user) {
-            return back()->withErrors(['usn_login' => 'Incorrect username.'])->onlyInput('usn_login');
+            return back()->withErrors(['role' => 'Invalid Credentials.']);
         }
 
         $maxAttempts = $user->role === 'admin' ? 3 : 5;
@@ -45,6 +45,7 @@ class LoginController extends Controller
             $retryAfter = now()->diffInSeconds(\Carbon\Carbon::parse($user->locked_until));
             return back()
                 ->withErrors(['general' => 'Your account is locked due to too many failed attempts.'])
+                ->with('info', "Account Locked.")
                 ->with('retry_after', $retryAfter);
         }
 
@@ -55,24 +56,40 @@ class LoginController extends Controller
 
         // ❌ Incorrect password
         if (!password_verify($request->password_hash_login, $user->password_hash)) {
-            $user->attempts = ($user->attempts ?? 0) + 1;
+            if ($user->attempts >= "4") {
+                $user->attempts = ($user->attempts ?? 0) + 1;
 
-            if ($user->attempts >= $maxAttempts) {
-                $user->locked_until = now()->addMinutes($lockMinutes);
+                if ($user->attempts >= $maxAttempts) {
+                    $user->locked_until = now()->addMinutes($lockMinutes);
+                }
+
+                $user->save();
+
+                $retryAfter = now()->diffInSeconds(\Carbon\Carbon::parse($user->locked_until));
+                    return back()
+                        ->withErrors(['general' => 'Your account is locked due to too many failed attempts.'])
+                        ->with('info', "Account Locked for {$lockMinutes} minutes.")
+                        ->with('retry_after', $retryAfter);
+            } else {
+                $user->attempts = ($user->attempts ?? 0) + 1;
+
+                if ($user->attempts >= $maxAttempts) {
+                    $user->locked_until = now()->addMinutes($lockMinutes);
+                }
+
+                $user->save();
+
+                return back()->withErrors([
+                    'password_hash_login' => $user->locked_until
+                        ? "Too many failed attempts. Account locked for {$lockMinutes} minutes."
+                        : "Invalid Credentials. Attempt {$user->attempts}/{$maxAttempts}.",
+                ])->onlyInput('usn_login');
             }
-
-            $user->save();
-
-            return back()->withErrors([
-                'password_hash_login' => $user->locked_until
-                    ? "Too many failed attempts. Account locked for {$lockMinutes} minutes."
-                    : "Incorrect password. Attempt {$user->attempts}/{$maxAttempts}.",
-            ])->onlyInput('usn_login');
         }
 
         // ❌ Role mismatch
         if ($user->role !== $request->role) {
-            return back()->withErrors(['role' => 'Selected role does not match your account.']);
+            return back()->withErrors(['role' => 'Invalid Credentials.']);
         }
 
         // ✅ Successful login
