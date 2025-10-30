@@ -213,9 +213,7 @@
 </div>
 
 {{-- JavaScript --}}
-
-<!-- Include SweetAlert -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
 
 <script>
     // --- File Upload + Title Autofill ---

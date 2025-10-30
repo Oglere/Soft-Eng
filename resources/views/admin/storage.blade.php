@@ -99,7 +99,7 @@
 </div>
 
 {{-- Scripts --}}
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
 <script src="https://kit.fontawesome.com/a2e0b6f6d2.js" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

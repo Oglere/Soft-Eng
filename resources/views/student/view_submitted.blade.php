@@ -169,51 +169,51 @@
   </div>
 
   {{-- SweetAlert Dialog --}}
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          const abandonBtn = document.getElementById('abandonBtn');
-          const abandonForm = document.getElementById('abandonForm');
+<script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const abandonBtn = document.getElementById('abandonBtn');
+        const abandonForm = document.getElementById('abandonForm');
 
-          abandonBtn.addEventListener('click', function() {
-              Swal.fire({
-                  title: 'Abandon Document?',
-                  text: 'This action cannot be undone.',
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'Yes, abandon it',
-                  cancelButtonText: 'Revert'
-              }).then((result) => {
-                  if (result.isConfirmed) {
-                      fetch(abandonForm.action, {
-                          method: 'DELETE',
-                          headers: {
-                              'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                              'Accept': 'application/json',
-                          }
-                      })
-                      .then(res => {
-                          if (res.ok) {
-                              Swal.fire({
-                                  title: 'Abandoned!',
-                                  text: 'Your document has been deleted successfully.',
-                                  icon: 'success',
-                                  timer: 1800,
-                                  showConfirmButton: false
-                              }).then(() => {
-                                  window.location.href = "{{ route('student.submitted') }}";
-                              });
-                          } else {
-                              Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
-                          }
-                      });
-                  }
-              });
-          });
-      });
-  </script>
+        abandonBtn.addEventListener('click', function() {
+            Swal.fire({
+                title: 'Abandon Document?',
+                text: 'This action cannot be undone.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, abandon it',
+                cancelButtonText: 'Revert'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(abandonForm.action, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                        }
+                    })
+                    .then(res => {
+                        if (res.ok) {
+                            Swal.fire({
+                                title: 'Abandoned!',
+                                text: 'Your document has been deleted successfully.',
+                                icon: 'success',
+                                timer: 1800,
+                                showConfirmButton: false
+                            }).then(() => {
+                                window.location.href = "{{ route('student.submitted') }}";
+                            });
+                        } else {
+                            Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
   <script>
         async function loadNotifications(saveToStorage = true) {
         const notifBadge = document.getElementById('notifBadge');

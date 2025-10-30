@@ -323,7 +323,7 @@
 </body>
 </html>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
 <script>
     document.getElementById('verifyForm').addEventListener('submit', function(event) {
         const passwordInput = document.getElementById('password');
