@@ -17,7 +17,7 @@ use App\Http\Controllers\AdminController; // Admin Functions
 //     Route::get('/sidenav', [PdfController::class, 'sidenav_layout']);
 //     Route::get('/static', [PdfController::class, 'static_pdf_layout']);
 //     Route::get('/dynamic', [PdfController::class, 'dynamic_pdf_layout']);
-// });
+// });.
 
 Route::prefix('/')->group(function (){
     Route::get('/', [QueryController::class, 'landing_page'])->name('landing');
