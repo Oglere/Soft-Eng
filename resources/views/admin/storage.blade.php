@@ -68,13 +68,15 @@
                             <td class="text-center">
                                 <form action="storage/hide/{{ $doc->document_id }}" method="POST" style="margin: 0;">
                                     @csrf
-                                    <button type="submit" class="btn btn-sm btn-action btn-view me-1">
                                         @if ($doc->archived == '1')
-                                            <i class="fas fa-eye-slash"></i>
+                                            <button type="submit" class="btn btn-sm btn-action btn-view me-1" style="background-color: #DC143C">
+                                                <i class="fas fa-eye-slash"></i>
+                                            </button>
                                         @else
-                                            <i class="fas fa-eye"></i>
+                                            <button type="submit" class="btn btn-sm btn-action btn-view me-1">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
                                         @endif
-                                    </button>
                                 </form>
                             </td>
                         </tr>
@@ -345,7 +347,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     .btn-view {
-        background-color: #1E90FF;
+        background-color: #0b1b4a;
         color: #fff;
     }
 

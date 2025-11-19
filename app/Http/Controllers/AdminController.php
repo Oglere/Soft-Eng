@@ -339,77 +339,7 @@ class AdminController extends Controller
         return redirect()->route('admin.account_setting')->with('success', 'Identity verified successfully.');
     }
 
-    public function update_account(Request $request)
-    {
-        $user = Auth::user();
 
-        if (!session('account_verified')) {
-            return redirect()->route('admin.account_setting')
-                ->withErrors(['login_error' => 'You must verify your identity before updating your account.']);
-        }
-
-        // Validate input
-        $validator = \Validator::make($request->all(), [
-            'email' => [
-                'nullable',
-                'string',
-                'email',
-                'max:255',
-                function ($attribute, $value, $fail) {
-                    if ($value && !preg_match('/^[A-Za-z0-9._%+-]{1,15}@gmail\.com$/', $value)) {
-                        $fail('Email must be a Gmail address and max 15 characters before @.');
-                    }
-                },
-            ],
-            'phone_number' => 'nullable|string|max:20',
-            'password' => 'nullable|string|min:6',
-        ]);
-
-        $validator->after(function ($validator) use ($request) {
-            $missing = [];
-            if (empty($request->first_name)) $missing[] = 'first name';
-            if (empty($request->last_name)) $missing[] = 'last name';
-            if (empty($request->email)) $missing[] = 'email';
-            if (empty($request->phone_number)) $missing[] = 'phone number';
-
-            if (!empty($missing)) {
-                $last = array_pop($missing);
-                $message = 'The ' . (empty($missing) ? $last : implode(', ', $missing) . ' and ' . $last) . ' fields are required.';
-                $validator->errors()->add('required', $message);
-            }
-        });
-
-        $validator->validate();
-
-        // ✅ Check if user changed anything
-        $noChanges =
-            $user->first_name === $request->first_name &&
-            $user->last_name === $request->last_name &&
-            $user->email === $request->email &&
-            $user->phone_number === $request->phone_number &&
-            !$request->filled('password');
-
-        if ($noChanges) {
-            return back()->withErrors(['no_changes' => 'No changes detected. Please update at least one field.']);
-        }
-
-        // ✅ Apply updates
-        $user->first_name = $request->first_name;
-        $user->last_name = $request->last_name;
-        $user->email = $request->email;
-        $user->phone_number = $request->phone_number;
-
-        if ($request->filled('password')) {
-            $user->password_hash = \Illuminate\Support\Facades\Hash::make($request->password);
-        }
-
-        $user->save();
-
-        session()->forget('account_verified');
-
-        return redirect()->route('admin.account_setting')
-            ->with('success', 'Account updated successfully!');
-    }
 
 
     public function cancel_update(Request $request)

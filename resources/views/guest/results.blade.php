@@ -222,10 +222,7 @@
 /* 🧾 Results Section */
 .results-content {
     flex: 1;
-    background: white;
-    border-radius: 12px;
     padding: 30px;
-    box-shadow: 0 3px 10px rgba(12, 28, 67, 0.08);
 }
 
 .results-heading {
