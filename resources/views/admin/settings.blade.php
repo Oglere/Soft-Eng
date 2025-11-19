@@ -1,3 +1,5 @@
+{{-- Naa diri dapit pyang --}}
+
 @extends('layout.admin')
 <link rel="stylesheet" href="{{ asset('admin/ctrl.css') }}">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
@@ -201,16 +203,18 @@
             </div>
 
             <!-- Buttons -->
-<div class="button-group">
-    <button type="submit"><i class="fas fa-save"></i> Update Account</button>
+            <div class="button-group">
+                <button type="submit">
+                    <i class="fas fa-save"></i> Update Account
+                </button>
 
-    <form method="POST" action="{{ route('student.cancel_update') }}">
-        @csrf
-        <button type="submit" class="cancel-btn">
-            <i class="fas fa-times"></i> Cancel
-        </button>
-    </form>
-</div>
+                <form method="POST" action="{{ route('student.cancel_update') }}" style="display:inline;">
+                    @csrf
+                    <button type="submit" class="cancel-btn">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </form>
+            </div>
 
         </form>
     </div>
