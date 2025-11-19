@@ -76,14 +76,9 @@
         transition: 0.2s;
     }
 
-    .reset-form input:focus {
-        border-color: #007bff;
-        box-shadow: 0 0 0 2px rgba(0,123,255,0.1);
-    }
-
     /* Submit Button */
     .reset-btn {
-        background-color: #007bff;
+        background-color: #0c1c43;
         color: white;
         padding: 10px;
         border: none;
@@ -92,10 +87,6 @@
         cursor: pointer;
         transition: background 0.3s;
         margin-top: 5px;
-    }
-
-    .reset-btn:hover {
-        background-color: #0056b3;
     }
 
     /* Alerts */

@@ -265,9 +265,9 @@
             @endif
 
             // ❌ Do nothing for cancel_message (normal redirect only)
-            // @if(session('cancel_message'))
-            //     console.log("Cancel: {{ session('cancel_message') }}");
-            // @endif
+            @if(session('cancel_message'))
+                console.log("Cancel: {{ session('cancel_message') }}");
+            @endif
         });
     });
 </script>
