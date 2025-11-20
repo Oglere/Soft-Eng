@@ -126,6 +126,7 @@
 
             <div class="filters">
                 <button class="{{ ($filter ?? 'all') === 'all' ? 'active' : '' }}">All</button>
+                <button class="{{ ($filter ?? '') === 'abandoned' ? 'active' : '' }}">Abandoned</button>
                 <button class="{{ ($filter ?? '') === 'approved' ? 'active' : '' }}">Approved</button>
                 <button class="{{ ($filter ?? '') === 'revision' ? 'active' : '' }}">For Revision</button>
                 <button class="{{ ($filter ?? '') === 'rejected' ? 'active' : '' }}">Rejected</button>
@@ -158,6 +159,7 @@
                                 'revision' => 'revision',
                                 'rejected' => 'rejected',
                                 'pending' => 'pending',
+                                'abandoned' => 'abandoned', // new
                                 default => 'unknown'
                             };
                             $statusText = match(strtolower($submission->status)) {
@@ -165,6 +167,7 @@
                                 'revision' => 'For Revision',
                                 'rejected' => 'Rejected',
                                 'pending' => 'Pending',
+                                'abandoned' => 'Abandoned', // new
                                 default => 'Unknown'
                             };
                         @endphp

@@ -134,18 +134,35 @@
             <div>
                 <form id="statusForm" method="POST">
                     @csrf
-                    <button type="button" id="approveBtn" class="par-btn" style="background-color:#03d103;">
-                        ✅ Approve Document
-                    </button>
-                    <button type="button" id="reviseBtn" class="par-btn" style="background-color:#4105cc;">
-                        ✏️ Revision Document
-                    </button>
-                    <button type="button" id="rejectBtn" class="par-btn" style="background-color:#ff4d4d;">
-                        ❌ Reject Document
-                    </button>
-                    <a href="{{ url('/teacher/submitted') }}" class="par-btn">
-                        🔙 Go Back
-                    </a>
+                    @php
+                        $statusLower = strtolower($document->status ?? 'pending');
+                    @endphp
+
+                    @if($statusLower === 'abandoned')
+                        <a href="{{ url('/teacher/submitted') }}" class="par-btn">
+                            🔙 Go Back
+                        </a>
+                    @elseif($statusLower !== 'pending')
+                        <button type="button" id="revertBtn" class="par-btn" style="background-color:#f0ad4e;">
+                            🔄 Revert Document
+                        </button>
+                        <a href="{{ url('/teacher/submitted') }}" class="par-btn">
+                            🔙 Go Back
+                        </a>
+                    @else
+                        <button type="button" id="approveBtn" class="par-btn" style="background-color:#03d103;">
+                            ✅ Approve Document
+                        </button>
+                        <button type="button" id="reviseBtn" class="par-btn" style="background-color:#4105cc;">
+                            ✏️ Revision Document
+                        </button>
+                        <button type="button" id="rejectBtn" class="par-btn" style="background-color:#ff4d4d;">
+                            ❌ Reject Document
+                        </button>
+                        <a href="{{ url('/teacher/submitted') }}" class="par-btn">
+                            🔙 Go Back
+                        </a>
+                    @endif
                 </form>
             </div>
         </div>
@@ -169,62 +186,80 @@
 {{-- SweetAlert Dialog --}}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const approveBtn = document.getElementById('approveBtn');
-        const reviseBtn = document.getElementById('reviseBtn');
-        const rejectBtn = document.getElementById('rejectBtn');
+document.addEventListener('DOMContentLoaded', function() {
+    const documentId = "{{ $document->document_id ?? '' }}";
 
-        const documentId = "{{ $document->document_id ?? '' }}";
+    // Mapping of buttons to their actions
+    const actions = {
+        approveBtn: {
+            title: 'Approve Document?',
+            text: 'This will mark the document as approved.',
+            icon: 'question',
+            route: `/teacher/document/${documentId}/approve`
+        },
+        reviseBtn: {
+            title: 'Mark for Revision?',
+            text: 'This will require the student to revise their study.',
+            icon: 'warning',
+            route: `/teacher/document/${documentId}/revise`
+        },
+        rejectBtn: {
+            title: 'Reject Document?',
+            text: 'Are you sure you want to reject this study?',
+            icon: 'error',
+            route: `/teacher/document/${documentId}/reject`
+        },
+        revertBtn: {
+            title: 'Revert Document?',
+            text: 'This will revert the document back to pending.',
+            icon: 'warning',
+            route: `/teacher/document/${documentId}/revert`
+        }
+    };
 
-        const confirmAction = (title, text, icon, route) => {
-            Swal.fire({
-                title: title,
-                text: text,
-                icon: icon,
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, confirm',
-                cancelButtonText: 'Cancel'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetch(route, {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Content-Type': 'application/json'
-                        }
-                    }).then(res => {
-                        if (res.ok) {
-                            Swal.fire({
-                                title: 'Success!',
-                                text: 'Document status updated.',
-                                icon: 'success',
-                                timer: 2000,
-                                showConfirmButton: false
-                            }).then(() => {
-                                location.reload();
-                            });
-                        } else {
-                            Swal.fire('Error', 'Something went wrong.', 'error');
-                        }
-                    });
-                }
-            });
-        };
-
-        approveBtn?.addEventListener('click', () => {
-            confirmAction('Approve Document?', 'This will mark the document as approved.', 'question', `/teacher/document/${documentId}/approve`);
+    const confirmAction = ({title, text, icon, route}) => {
+        Swal.fire({
+            title: title,
+            text: text,
+            icon: icon,
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Confirm!',
+            cancelButtonText: 'Cancel'
+        }).then(result => {
+            if (result.isConfirmed) {
+                fetch(route, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Content-Type': 'application/json'
+                    }
+                }).then(res => {
+                    if (res.ok) {
+                        Swal.fire({
+                            title: 'Success!',
+                            text: 'Document status updated.',
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false
+                        }).then(() => location.reload());
+                    } else {
+                        Swal.fire('Error', 'Something went wrong.', 'error');
+                    }
+                });
+            }
         });
+    };
 
-        reviseBtn?.addEventListener('click', () => {
-            confirmAction('Mark for Revision?', 'This will require the student to revise their study.', 'warning', `/teacher/document/${documentId}/revise`);
-        });
-
-        rejectBtn?.addEventListener('click', () => {
-            confirmAction('Reject Document?', 'Are you sure you want to reject this study?', 'error', `/teacher/document/${documentId}/reject`);
-        });
+    // Attach event listeners dynamically
+    Object.keys(actions).forEach(btnId => {
+        const btn = document.getElementById(btnId);
+        if (btn) {
+            btn.addEventListener('click', () => confirmAction(actions[btnId]));
+        }
     });
+});
 </script>
 <script>
     async function loadNotifications(saveToStorage = true) {

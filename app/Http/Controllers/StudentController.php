@@ -130,11 +130,15 @@ class StudentController extends Controller
         $highlightId = $request->query('doc_id'); // ✅ new line
 
         $query = DocumentRepository::where('student_id', $studentId);
-        if ($filter !== 'all') {
-            $query->where('status', $filter);
-        }
 
-        $submissions = $query->latest('date_submitted')->paginate(8);
+    // If filter is not 'all', apply status filter
+    if ($filter !== 'all') {
+        $query->where('status', $filter);
+    }
+
+    // Include abandoned if you want to show them separately or as "all"
+    $submissions = $query->latest('date_submitted')->paginate(8);
+    
 
         // ✅ Pass highlightId to view
         return view('student.submitted', compact('submissions', 'filter', 'highlightId'));
@@ -167,6 +171,37 @@ class StudentController extends Controller
 
         return redirect()->route('student.submission')->with('success', 'Document abandoned successfully.');
     }
+
+    public function toggleAbandon($id)
+    {
+        $document = DocumentRepository::findOrFail($id);
+
+        // If document is already abandoned, revert it to previous status
+        if ($document->status === 'abandoned') {
+            $previousStatus = $document->previous_status ?? 'pending'; // fallback to pending
+            $document->status = $previousStatus;
+            $document->previous_status = null;
+            $document->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Document has been reverted.',
+                'status' => $document->status
+            ]);
+        }
+
+        // Otherwise, mark as abandoned and store previous status
+        $document->previous_status = $document->status;
+        $document->status = 'abandoned';
+        $document->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Document has been abandoned.',
+            'status' => 'abandoned'
+        ]);
+    }
+
 
     /**
      * Display the student account setting page.

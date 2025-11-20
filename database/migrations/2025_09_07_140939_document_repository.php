@@ -23,6 +23,7 @@ return new class extends Migration
         $table->longText('metadata')->nullable();
         $table->binary('file')->nullable();
         $table->string('status')->default('pending');
+        $table->string('previous_status')->nullable();
         $table->dateTime('date_submitted')->nullable();
         $table->dateTime('date_reviewed')->nullable();
         $table->longText('study_type')->nullable();

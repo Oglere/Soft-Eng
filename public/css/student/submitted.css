@@ -161,6 +161,11 @@
     color: #374151; /* dark gray */
 }
 
+.status.abandoned {
+    background-color: #9ca3af; /* gray */
+    color: white;
+}
+
 .pagination-container {
     margin-top: 1rem;
     display: flex;
@@ -374,3 +379,4 @@ tr.highlight td a {
   text-decoration: underline;
   color: #0056b3;
 }
+

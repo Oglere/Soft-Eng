@@ -96,7 +96,7 @@ class TeacherController extends Controller
         $document->status = 'Pending';
         $document->save();
 
-        return redirect()->back()->with('success', 'Document reverted successfully.');
+        return response()->json(['success' => true]); // <-- Return JSON instead of redirect
     }
 
     public function account_setting_page()

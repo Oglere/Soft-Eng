@@ -46,6 +46,7 @@ Route::middleware('auth.session:student')->prefix('student')->group(function (){
     Route::post('/student/check-title', [StudentController::class, 'checkTitle'])->name('student.checkTitle');
     Route::get('/submitted/', [StudentController::class, 'submitted_studies_page'])->name('student.submitted');
     Route::get('/view_submitted/{id}', [StudentController::class, 'view_submitted_page'])->name('student.view_submitted');
+    Route::post('/view_submitted/{id}/toggle-abandon', [StudentController::class, 'toggleAbandon'])->name('student.toggleAbandon');
     Route::delete('/abandon/{id}', [StudentController::class, 'abandon'])->name('student.abandon');
     Route::get('/account_setting', [StudentController::class, 'account_setting_page'])->name('student.account_setting');
 
@@ -65,6 +66,7 @@ Route::middleware('auth.session:teacher')->prefix('teacher')->group(function (){
     Route::post('/document/{id}/approve', [TeacherController::class, 'pdf_approve'])->name('teacher.document.approve');
     Route::post('/document/{id}/revise', [TeacherController::class, 'pdf_revise'])->name('teacher.document.revise');
     Route::post('/document/{id}/reject', [TeacherController::class, 'pdf_reject'])->name('teacher.document.reject');
+    Route::post('/document/{id}/revert', [TeacherController::class, 'pdf_revert'])->name('teacher.document.revert');
     Route::get('/account_setting', [TeacherController::class, 'account_setting_page'])->name('teacher.account_setting');
 
     Route::post('/account_setting/verify', [TeacherController::class, 'verify_identity'])->name('teacher.verify_identity');

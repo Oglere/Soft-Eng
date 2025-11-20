@@ -173,38 +173,56 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const abandonBtn = document.getElementById('abandonBtn');
-            const abandonForm = document.getElementById('abandonForm');
+            const documentId = '{{ $document->document_id }}';
+            let currentStatus = '{{ strtolower($document->status) }}';
+
+            function updateButton(status) {
+                if (status === 'abandoned') {
+                    abandonBtn.textContent = '♻️ Revert Document';
+                    abandonBtn.style.backgroundColor = '#4CAF50';
+                } else {
+                    abandonBtn.textContent = '❌ Abandon Document';
+                    abandonBtn.style.backgroundColor = '#ff4d4d';
+                }
+                currentStatus = status;
+            }
+
+            updateButton(currentStatus);
 
             abandonBtn.addEventListener('click', function() {
+                let actionText = currentStatus === 'abandoned' ? 'Revert this document?' : 'Abandon this document?';
+                let confirmBtn = currentStatus === 'abandoned' ? 'Revert' : 'Abandon';
+
                 Swal.fire({
-                    title: 'Abandon Document?',
-                    text: 'This action cannot be undone.',
+                    title: actionText,
+                    text: 'This action can be undone only if reverting.',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes, abandon it',
-                    cancelButtonText: 'Revert'
+                    confirmButtonText: confirmBtn,
+                    cancelButtonText: 'Cancel'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        fetch(abandonForm.action, {
-                            method: 'DELETE',
+                        fetch(`/student/view_submitted/${documentId}/toggle-abandon`, {
+                            method: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': '{{ csrf_token() }}',
                                 'Accept': 'application/json',
                             }
                         })
-                        .then(res => {
-                            if (res.ok) {
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.success) {
                                 Swal.fire({
-                                    title: 'Abandoned!',
-                                    text: 'Your document has been deleted successfully.',
+                                    title: data.message,
                                     icon: 'success',
-                                    timer: 1800,
+                                    timer: 1500,
                                     showConfirmButton: false
-                                }).then(() => {
-                                    window.location.href = "{{ route('student.submitted') }}";
                                 });
+                                updateButton(data.status);
+                                document.querySelector('.status-badge').textContent = data.status.charAt(0).toUpperCase() + data.status.slice(1);
+                                document.querySelector('.status-badge').className = 'status-badge ' + data.status;
                             } else {
                                 Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
                             }
@@ -214,6 +232,7 @@
             });
         });
     </script>
+
     <script>
         async function loadNotifications(saveToStorage = true) {
             const notifBadge = document.getElementById('notifBadge');
