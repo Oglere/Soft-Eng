@@ -168,84 +168,112 @@
       </main>
   </div>
 
-  {{-- SweetAlert Dialog --}}
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          const abandonBtn = document.getElementById('abandonBtn');
-          const abandonForm = document.getElementById('abandonForm');
+    {{-- SweetAlert Dialog --}}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const abandonBtn = document.getElementById('abandonBtn');
+            const abandonForm = document.getElementById('abandonForm');
 
-          abandonBtn.addEventListener('click', function() {
-              Swal.fire({
-                  title: 'Abandon Document?',
-                  text: 'This action cannot be undone.',
-                  icon: 'warning',
-                  showCancelButton: true,
-                  confirmButtonColor: '#3085d6',
-                  cancelButtonColor: '#d33',
-                  confirmButtonText: 'Yes, abandon it',
-                  cancelButtonText: 'Revert'
-              }).then((result) => {
-                  if (result.isConfirmed) {
-                      fetch(abandonForm.action, {
-                          method: 'DELETE',
-                          headers: {
-                              'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                              'Accept': 'application/json',
-                          }
-                      })
-                      .then(res => {
-                          if (res.ok) {
-                              Swal.fire({
-                                  title: 'Abandoned!',
-                                  text: 'Your document has been deleted successfully.',
-                                  icon: 'success',
-                                  timer: 1800,
-                                  showConfirmButton: false
-                              }).then(() => {
-                                  window.location.href = "{{ route('student.submitted') }}";
-                              });
-                          } else {
-                              Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
-                          }
-                      });
-                  }
-              });
-          });
-      });
-  </script>
-  <script>
+            abandonBtn.addEventListener('click', function() {
+                Swal.fire({
+                    title: 'Abandon Document?',
+                    text: 'This action cannot be undone.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, abandon it',
+                    cancelButtonText: 'Revert'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        fetch(abandonForm.action, {
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json',
+                            }
+                        })
+                        .then(res => {
+                            if (res.ok) {
+                                Swal.fire({
+                                    title: 'Abandoned!',
+                                    text: 'Your document has been deleted successfully.',
+                                    icon: 'success',
+                                    timer: 1800,
+                                    showConfirmButton: false
+                                }).then(() => {
+                                    window.location.href = "{{ route('student.submitted') }}";
+                                });
+                            } else {
+                                Swal.fire('Error', 'Something went wrong. Please try again.', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
         async function loadNotifications(saveToStorage = true) {
-        const notifBadge = document.getElementById('notifBadge');
-        const notifList = document.getElementById('notifList');
+            const notifBadge = document.getElementById('notifBadge');
+            const notifList = document.getElementById('notifList');
 
-        try {
-            const res = await fetch('{{ route("student.notifications") }}');
-            const data = await res.json();
+            try {
+                const res = await fetch('{{ route("student.notifications") }}');
+                const data = await res.json();
 
-            notifList.innerHTML = '';
+                notifList.innerHTML = '';
 
-            if (data.length === 0) {
+                if (data.length === 0) {
                 notifBadge.style.display = 'none';
                 notifList.innerHTML = '<li>No new notifications.</li>';
                 if (saveToStorage) localStorage.setItem('notifCount', 0);
                 return;
-            }
+                }
 
-            notifBadge.style.display = 'inline-block';
-            notifBadge.textContent = data.length;
+                // Get read notifications from localStorage
+                const readNotifs = JSON.parse(localStorage.getItem('readNotifs') || '[]');
 
-            // store count so it persists across pages
-            if (saveToStorage) localStorage.setItem('notifCount', data.length);
+                // Filter unread notifications for badge
+                const unreadCount = data.filter(n => !readNotifs.includes(n.message)).length;
+
+                notifBadge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+                notifBadge.textContent = unreadCount;
+
+                // store count so it persists across pages
+                if (saveToStorage) localStorage.setItem('notifCount', unreadCount);
 
             data.forEach(n => {
-                const li = document.createElement('li');
+            const li = document.createElement('li');
+
+            // If notification has been read, bg is white; else yellow
+            const isRead = readNotifs.includes(n.message);
+                li.style.backgroundColor = isRead ? '#fff' : '#fef9c3';
+                li.style.cursor = 'pointer';
                 li.innerHTML = `
                     ${n.icon}
                     <a href="${n.link}" class="notif-link">${n.message}</a>
                     <br>
                     <small>${n.time}</small>
                 `;
+
+            // On click: mark as read, set bg white, update badge
+            li.addEventListener('click', () => {
+                if (!readNotifs.includes(n.message)) {
+                readNotifs.push(n.message);
+                localStorage.setItem('readNotifs', JSON.stringify(readNotifs));
+
+                li.style.backgroundColor = '#fff';
+
+                // update badge
+                const currentBadge = parseInt(notifBadge.textContent) || 0;
+                const newBadge = Math.max(currentBadge - 1, 0);
+                notifBadge.textContent = newBadge;
+                if (newBadge === 0) notifBadge.style.display = 'none';
+                }
+            });
+
                 notifList.appendChild(li);
                 });
             } catch (error) {
@@ -255,34 +283,34 @@
 
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
-        const notifBadge = document.getElementById('notifBadge');
+            const notifBadge = document.getElementById('notifBadge');
 
         // Load saved count from localStorage (keep number after page change)
         const savedCount = localStorage.getItem('notifCount');
-        if (savedCount && parseInt(savedCount) > 0) {
-            notifBadge.textContent = savedCount;
-            notifBadge.style.display = 'inline-block';
-        } else {
-            notifBadge.style.display = 'none';
+            if (savedCount && parseInt(savedCount) > 0) {
+                notifBadge.textContent = savedCount;
+                notifBadge.style.display = 'inline-block';
+            } else {
+                notifBadge.style.display = 'none';
         }
 
-        // Fetch new notifications immediately
-        loadNotifications();
-
-        // Refresh notifications every 10 seconds
-        setInterval(() => {
+            // Fetch new notifications immediately
             loadNotifications();
-        }, 10000); // 10 seconds
+
+            // Refresh notifications every 10 seconds
+            setInterval(() => {
+                loadNotifications();
+            }, 10000); // 10 seconds
         });
 
         // Toggle dropdown on bell click
         document.getElementById('notifBtn').addEventListener('click', async () => {
-            const dropdown = document.getElementById('notifDropdown');
-            dropdown.classList.toggle('hidden');
-            if (!dropdown.classList.contains('hidden')) {
-                await loadNotifications(false); // don’t overwrite saved count every click
-            }
-        });
-    </script>
+        const dropdown = document.getElementById('notifDropdown');
+        dropdown.classList.toggle('hidden');
+        if (!dropdown.classList.contains('hidden')) {
+            await loadNotifications(false); // don’t overwrite saved count every click
+        }
+    });
+</script>
 </body>
 </html>

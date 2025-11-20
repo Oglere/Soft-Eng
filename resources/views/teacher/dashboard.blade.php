@@ -131,66 +131,89 @@
             </div>
         </main>
     </div>
-    <script>
+<script>
     async function loadNotifications(saveToStorage = true) {
         const notifBadge = document.getElementById('notifBadge');
         const notifList = document.getElementById('notifList');
 
         try {
+            // Fetch teacher notifications
             const res = await fetch('{{ route("teacher.notifications") }}');
             const data = await res.json();
 
             notifList.innerHTML = '';
 
-            if (!data || data.length === 0) {
+            if (data.length === 0) {
                 notifBadge.style.display = 'none';
                 notifList.innerHTML = '<li>No new notifications.</li>';
-                if (saveToStorage) localStorage.setItem('notifCount', 0);
+                if (saveToStorage) localStorage.setItem('teacherNotifCount', 0);
                 return;
             }
 
-            notifBadge.textContent = data.length;
-            notifBadge.style.display = 'inline-block';
-            if (saveToStorage) localStorage.setItem('notifCount', data.length);
+            // Get read notifications from localStorage
+            const readNotifs = JSON.parse(localStorage.getItem('teacherReadNotifs') || '[]');
+
+            // Filter unread notifications for badge
+            const unreadCount = data.filter(n => !readNotifs.includes(n.message)).length;
+
+            notifBadge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+            notifBadge.textContent = unreadCount;
+
+            if (saveToStorage) localStorage.setItem('teacherNotifCount', unreadCount);
 
             data.forEach(n => {
                 const li = document.createElement('li');
+                const isRead = readNotifs.includes(n.message);
+                li.style.backgroundColor = isRead ? '#fff' : '#fef9c3';
+                li.style.cursor = 'pointer';
                 li.innerHTML = `
-                    <div class="notif-item">
-                        <span class="notif-icon">${n.icon}</span>
-                        <div class="notif-content">
-                            <a href="${n.link}" class="notif-link">${n.message}</a>
-                            <small>${n.time}</small>
-                        </div>
-                    </div>`;
+                    ${n.icon}
+                    <a href="${n.link}" class="notif-link">${n.message}</a>
+                    <br>
+                    <small>${n.time}</small>
+                `;
+
+                li.addEventListener('click', () => {
+                    if (!readNotifs.includes(n.message)) {
+                        readNotifs.push(n.message);
+                        localStorage.setItem('teacherReadNotifs', JSON.stringify(readNotifs));
+                        li.style.backgroundColor = '#fff';
+
+                        const currentBadge = parseInt(notifBadge.textContent) || 0;
+                        const newBadge = Math.max(currentBadge - 1, 0);
+                        notifBadge.textContent = newBadge;
+                        if (newBadge === 0) notifBadge.style.display = 'none';
+                    }
+                });
+
                 notifList.appendChild(li);
             });
-        } catch (err) {
-            console.error('Error loading notifications:', err);
+
+        } catch (error) {
+            console.error('Error loading notifications:', error);
         }
     }
 
     // --- INITIALIZATION ---
     document.addEventListener('DOMContentLoaded', () => {
-    const notifBadge = document.getElementById('notifBadge');
+        const notifBadge = document.getElementById('notifBadge');
 
-    // Load saved count from localStorage (keep number after page change)
-    const savedCount = localStorage.getItem('notifCount');
-    if (savedCount && parseInt(savedCount) > 0) {
-        notifBadge.textContent = savedCount;
-        notifBadge.style.display = 'inline-block';
-    } else {
-        notifBadge.style.display = 'none';
-    }
+        // Load saved count from localStorage
+        const savedCount = localStorage.getItem('teacherNotifCount');
+        if (savedCount && parseInt(savedCount) > 0) {
+            notifBadge.textContent = savedCount;
+            notifBadge.style.display = 'inline-block';
+        } else {
+            notifBadge.style.display = 'none';
+        }
 
         // Fetch new notifications immediately
         loadNotifications();
 
         // Refresh notifications every 10 seconds
         setInterval(() => {
-
             loadNotifications();
-        }, 10000); // 10 seconds
+        }, 10000);
     });
 
     // Toggle dropdown on bell click
@@ -198,7 +221,7 @@
         const dropdown = document.getElementById('notifDropdown');
         dropdown.classList.toggle('hidden');
         if (!dropdown.classList.contains('hidden')) {
-            await loadNotifications(false); // don’t overwrite saved count every click
+            await loadNotifications(false);
         }
     });
 </script>

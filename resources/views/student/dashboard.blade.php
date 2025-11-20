@@ -196,31 +196,59 @@
                 notifList.innerHTML = '';
 
                 if (data.length === 0) {
-                    notifBadge.style.display = 'none';
-                    notifList.innerHTML = '<li>No new notifications.</li>';
-                    if (saveToStorage) localStorage.setItem('notifCount', 0);
-                    return;
+                notifBadge.style.display = 'none';
+                notifList.innerHTML = '<li>No new notifications.</li>';
+                if (saveToStorage) localStorage.setItem('notifCount', 0);
+                return;
                 }
 
-                notifBadge.style.display = 'inline-block';
-                notifBadge.textContent = data.length;
+                // Get read notifications from localStorage
+                const readNotifs = JSON.parse(localStorage.getItem('readNotifs') || '[]');
+
+                // Filter unread notifications for badge
+                const unreadCount = data.filter(n => !readNotifs.includes(n.message)).length;
+
+                notifBadge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+                notifBadge.textContent = unreadCount;
 
                 // store count so it persists across pages
-                if (saveToStorage) localStorage.setItem('notifCount', data.length);
+                if (saveToStorage) localStorage.setItem('notifCount', unreadCount);
 
                 data.forEach(n => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `
-                        ${n.icon}
-                        <a href="${n.link}" class="notif-link">${n.message}</a>
-                        <br>
-                        <small>${n.time}</small>
-                    `;
-                    notifList.appendChild(li);
-                    });
-                } catch (error) {
-                    console.error('Error loading notifications:', error);
-                }
+                const li = document.createElement('li');
+
+                // If notification has been read, bg is white; else yellow
+                const isRead = readNotifs.includes(n.message);
+                li.style.backgroundColor = isRead ? '#fff' : '#fef9c3';
+                li.style.cursor = 'pointer';
+                li.innerHTML = `
+                    ${n.icon}
+                    <a href="${n.link}" class="notif-link">${n.message}</a>
+                    <br>
+                    <small>${n.time}</small>
+                `;
+
+                // On click: mark as read, set bg white, update badge
+                li.addEventListener('click', () => {
+                    if (!readNotifs.includes(n.message)) {
+                    readNotifs.push(n.message);
+                    localStorage.setItem('readNotifs', JSON.stringify(readNotifs));
+
+                    li.style.backgroundColor = '#fff';
+
+                    // update badge
+                    const currentBadge = parseInt(notifBadge.textContent) || 0;
+                    const newBadge = Math.max(currentBadge - 1, 0);
+                    notifBadge.textContent = newBadge;
+                    if (newBadge === 0) notifBadge.style.display = 'none';
+                    }
+                });
+
+                notifList.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error loading notifications:', error);
+            }
             }
 
             // --- INITIALIZATION ---
@@ -247,12 +275,12 @@
 
             // Toggle dropdown on bell click
             document.getElementById('notifBtn').addEventListener('click', async () => {
-                const dropdown = document.getElementById('notifDropdown');
-                dropdown.classList.toggle('hidden');
-                if (!dropdown.classList.contains('hidden')) {
-                    await loadNotifications(false); // don’t overwrite saved count every click
-                }
-            });
-        </script>
-    </body>
+            const dropdown = document.getElementById('notifDropdown');
+            dropdown.classList.toggle('hidden');
+            if (!dropdown.classList.contains('hidden')) {
+                await loadNotifications(false); // don’t overwrite saved count every click
+            }
+        });
+    </script>
+</body>
 </html>
