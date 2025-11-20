@@ -439,12 +439,10 @@ document.addEventListener('DOMContentLoaded', () => {
     @endif
 </main>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 <script>
     const form = document.querySelector('form[action="{{ route("student.update_account") }}"]');
-        if (form) {
+    if (form) {
         form.addEventListener('submit', function(event) {
             const passwordInput = document.getElementById('password');
             const confirmInput = document.getElementById('password_confirmation');
@@ -465,19 +463,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Check if passwords match
             if (password !== confirmPassword) {
-            event.preventDefault();
-            confirmError.textContent = 'The password field confirmation does not match.';
-            confirmInput.style.borderColor = '#dc2626';
-            return;
+                event.preventDefault();
+                confirmError.textContent = 'The password field confirmation does not match.';
+                confirmInput.style.borderColor = '#dc2626';
+                return;
             }
 
             // Check password strength (must contain number + special char)
             const strongPattern = /^(?=.*[0-9])(?=.*[!@#$%^&*]).{6,}$/;
             if (!strongPattern.test(password)) {
-            event.preventDefault();
-            passwordError.textContent = 'Password must be strong: include at least one number and one special character.';
-            passwordInput.style.borderColor = '#dc2626';
-            return;
+                event.preventDefault();
+                passwordError.textContent = 'Password must be strong: include at least one number and one special character.';
+                passwordInput.style.borderColor = '#dc2626';
+                return;
             }
         });
     }
@@ -489,7 +487,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let value = e.target.value.replace(/\D/g, '');
 
         // Automatically add 9 if not yet typed
-            if (!value.startsWith('9')) {
+        if (!value.startsWith('9')) {
             value = '9' + value;
         }
 
@@ -509,15 +507,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ✅ Prevent multiple "+63" when submitting
     const updateForm = document.querySelector('form[action="{{ route("student.update_account") }}"]');
-        updateForm.addEventListener('submit', function (e) {
-            const phoneInput = document.getElementById('phone_number');
-            let currentValue = phoneInput.value.trim();
+    updateForm.addEventListener('submit', function (e) {
+        const phoneInput = document.getElementById('phone_number');
+        let currentValue = phoneInput.value.trim();
 
-            // Only prepend if not yet starting with +63
-            if (!currentValue.startsWith('+63')) {
+        // Only prepend if not yet starting with +63
+        if (!currentValue.startsWith('+63')) {
             phoneInput.value = '+63 ' + currentValue.replace(/^\+63\s?/, '');
-            }
-        });
+        }
+    });
+
     const emailInput = document.getElementById('email');
     const emailError = document.getElementById('emailError');
 
@@ -556,16 +555,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Reset timer when user interacts
         const resetTimer = () => inactivityTime = 0;
-            ['mousemove', 'keydown', 'click', 'scroll'].forEach(evt => {
-                document.addEventListener(evt, resetTimer);
+        ['mousemove', 'keydown', 'click', 'scroll'].forEach(evt => {
+            document.addEventListener(evt, resetTimer);
         });
 
-    // Timer checker (run once). Store interval id so we can clear it on expiry
-    let inactivityTimerId = setInterval(() => {
-    inactivityTime++;
-        if (inactivityTime >= maxInactivity) {
-        // prevent multiple executions
-            clearInterval(inactivityTimerId);
+        // Timer checker (run once). Store interval id so we can clear it on expiry
+        let inactivityTimerId = setInterval(() => {
+            inactivityTime++;
+            if (inactivityTime >= maxInactivity) {
+                // prevent multiple executions
+                clearInterval(inactivityTimerId);
                 if (window._accountExpiredHandled) return;
                 window._accountExpiredHandled = true;
 
@@ -573,27 +572,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 fetch("{{ route('student.cancel_update') }}", {
                     method: 'POST',
                     headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     }
                 })
                 .then(() => {
                     Swal.fire({
-                    icon: 'info',
-                    title: 'Session Expired',
-                    text: 'You’ve been inactive for a while. Please verify your identity again.',
-                    confirmButtonColor: '#0a0099',
+                        icon: 'info',
+                        title: 'Session Expired',
+                        text: 'You’ve been inactive for a while. Please verify your identity again.',
+                        confirmButtonColor: '#0a0099',
                     }).then(() => {
-                    window.location.href = "{{ route('student.account_setting') }}";
+                        window.location.href = "{{ route('student.account_setting') }}";
                     });
                 }).catch(() => {
                     // On error still redirect once
                     Swal.fire({
-                    icon: 'info',
-                    title: 'Session Expired',
-                    text: 'You’ve been inactive for a while. Please verify your identity again.',
-                    confirmButtonColor: '#0a0099',
+                        icon: 'info',
+                        title: 'Session Expired',
+                        text: 'You’ve been inactive for a while. Please verify your identity again.',
+                        confirmButtonColor: '#0a0099',
                     }).then(() => {
-                    window.location.href = "{{ route('student.account_setting') }}";
+                        window.location.href = "{{ route('student.account_setting') }}";
                     });
                 });
             }
@@ -643,10 +642,10 @@ document.addEventListener('DOMContentLoaded', () => {
             notifList.innerHTML = '';
 
             if (data.length === 0) {
-            notifBadge.style.display = 'none';
-            notifList.innerHTML = '<li>No new notifications.</li>';
-            if (saveToStorage) localStorage.setItem('notifCount', 0);
-            return;
+                notifBadge.style.display = 'none';
+                notifList.innerHTML = '<li>No new notifications.</li>';
+                if (saveToStorage) localStorage.setItem('notifCount', 0);
+                return;
             }
 
             // Get read notifications from localStorage
@@ -661,37 +660,37 @@ document.addEventListener('DOMContentLoaded', () => {
             // store count so it persists across pages
             if (saveToStorage) localStorage.setItem('notifCount', unreadCount);
 
-        data.forEach(n => {
-        const li = document.createElement('li');
+            data.forEach(n => {
+                const li = document.createElement('li');
 
-        // If notification has been read, bg is white; else yellow
-        const isRead = readNotifs.includes(n.message);
-            li.style.backgroundColor = isRead ? '#fff' : '#fef9c3';
-            li.style.cursor = 'pointer';
-            li.innerHTML = `
-                ${n.icon}
-                <a href="${n.link}" class="notif-link">${n.message}</a>
-                <br>
-                <small>${n.time}</small>
-            `;
+                // If notification has been read, bg is white; else yellow
+                const isRead = readNotifs.includes(n.message);
+                li.style.backgroundColor = isRead ? '#fff' : '#fef9c3';
+                li.style.cursor = 'pointer';
+                li.innerHTML = `
+                    ${n.icon}
+                    <a href="${n.link}" class="notif-link">${n.message}</a>
+                    <br>
+                    <small>${n.time}</small>
+                `;
 
-        // On click: mark as read, set bg white, update badge
-        li.addEventListener('click', () => {
-            if (!readNotifs.includes(n.message)) {
-            readNotifs.push(n.message);
-            localStorage.setItem('readNotifs', JSON.stringify(readNotifs));
+                // On click: mark as read, set bg white, update badge
+                li.addEventListener('click', () => {
+                    if (!readNotifs.includes(n.message)) {
+                        readNotifs.push(n.message);
+                        localStorage.setItem('readNotifs', JSON.stringify(readNotifs));
 
-            li.style.backgroundColor = '#fff';
+                        li.style.backgroundColor = '#fff';
 
-            // update badge
-            const currentBadge = parseInt(notifBadge.textContent) || 0;
-            const newBadge = Math.max(currentBadge - 1, 0);
-            notifBadge.textContent = newBadge;
-            if (newBadge === 0) notifBadge.style.display = 'none';
-            }
-        });
+                        // update badge
+                        const currentBadge = parseInt(notifBadge.textContent) || 0;
+                        const newBadge = Math.max(currentBadge - 1, 0);
+                        notifBadge.textContent = newBadge;
+                        if (newBadge === 0) notifBadge.style.display = 'none';
+                    }
+                });
 
-            notifList.appendChild(li);
+                notifList.appendChild(li);
             });
         } catch (error) {
             console.error('Error loading notifications:', error);
@@ -702,14 +701,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('DOMContentLoaded', () => {
         const notifBadge = document.getElementById('notifBadge');
 
-    // Load saved count from localStorage (keep number after page change)
-    const savedCount = localStorage.getItem('notifCount');
+        // Load saved count from localStorage (keep number after page change)
+        const savedCount = localStorage.getItem('notifCount');
         if (savedCount && parseInt(savedCount) > 0) {
             notifBadge.textContent = savedCount;
             notifBadge.style.display = 'inline-block';
         } else {
             notifBadge.style.display = 'none';
-    }
+        }
 
         // Fetch new notifications immediately
         loadNotifications();
@@ -720,8 +719,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 10000); // 10 seconds
     });
 
-        // Toggle dropdown on bell click
-        document.getElementById('notifBtn').addEventListener('click', async () => {
+    // Toggle dropdown on bell click
+    document.getElementById('notifBtn').addEventListener('click', async () => {
         const dropdown = document.getElementById('notifDropdown');
         dropdown.classList.toggle('hidden');
         if (!dropdown.classList.contains('hidden')) {
@@ -733,95 +732,95 @@ document.addEventListener('DOMContentLoaded', () => {
 <script>
     // SweetAlert confirmation for Update and Cancel buttons
     document.addEventListener('DOMContentLoaded', function () {
-    const updateBtn = document.getElementById('updateBtn');
-    const cancelBtn = document.getElementById('cancelBtn');
-    const mainForm = document.getElementById('mainEditForm');
-    const cancelForm = document.getElementById('cancelUpdateForm');
+        const updateBtn = document.getElementById('updateBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const mainForm = document.getElementById('mainEditForm');
+        const cancelForm = document.getElementById('cancelUpdateForm');
 
-    if (updateBtn) {
-        // Capture initial values so we can detect whether anything changed
-        const snapshot = {
-        first_name: document.getElementById('first_name') ? document.getElementById('first_name').value.trim() : '',
-        last_name: document.getElementById('last_name') ? document.getElementById('last_name').value.trim() : '',
-        email: document.getElementById('email') ? document.getElementById('email').value.trim() : '',
-        phone_number: document.getElementById('phone_number') ? document.getElementById('phone_number').value.trim() : '',
-        // password fields are considered changed only if user types something
-        };
+        if (updateBtn) {
+            // Capture initial values so we can detect whether anything changed
+            const snapshot = {
+                first_name: document.getElementById('first_name') ? document.getElementById('first_name').value.trim() : '',
+                last_name: document.getElementById('last_name') ? document.getElementById('last_name').value.trim() : '',
+                email: document.getElementById('email') ? document.getElementById('email').value.trim() : '',
+                phone_number: document.getElementById('phone_number') ? document.getElementById('phone_number').value.trim() : '',
+                // password fields are considered changed only if user types something
+            };
 
-        function hasChanges() {
-            const first_name = document.getElementById('first_name') ? document.getElementById('first_name').value.trim() : '';
-            const last_name = document.getElementById('last_name') ? document.getElementById('last_name').value.trim() : '';
-            const email = document.getElementById('email') ? document.getElementById('email').value.trim() : '';
-            const phone_number = document.getElementById('phone_number') ? document.getElementById('phone_number').value.trim() : '';
-            const password = document.getElementById('password') ? document.getElementById('password').value.trim() : '';
-            const confirmPassword = document.getElementById('password_confirmation') ? document.getElementById('password_confirmation').value.trim() : '';
+            function hasChanges() {
+                const first_name = document.getElementById('first_name') ? document.getElementById('first_name').value.trim() : '';
+                const last_name = document.getElementById('last_name') ? document.getElementById('last_name').value.trim() : '';
+                const email = document.getElementById('email') ? document.getElementById('email').value.trim() : '';
+                const phone_number = document.getElementById('phone_number') ? document.getElementById('phone_number').value.trim() : '';
+                const password = document.getElementById('password') ? document.getElementById('password').value.trim() : '';
+                const confirmPassword = document.getElementById('password_confirmation') ? document.getElementById('password_confirmation').value.trim() : '';
 
-            // If password fields are filled, treat as change
-            if (password !== '' || confirmPassword !== '') return true;
+                // If password fields are filled, treat as change
+                if (password !== '' || confirmPassword !== '') return true;
 
-            return (
-                first_name !== snapshot.first_name ||
-                last_name !== snapshot.last_name ||
-                email !== snapshot.email ||
-                phone_number !== snapshot.phone_number
-            );
-        }
-
-        updateBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-
-            // If there are no changes, show a SweetAlert info and do not submit
-            if (!hasChanges()) {
-                Swal.fire({
-                icon: 'info',
-                title: 'No changes detected',
-                text: 'Please update at least one field before submitting.',
-                confirmButtonColor: '#0a0099'
-                });
-                return;
+                return (
+                    first_name !== snapshot.first_name ||
+                    last_name !== snapshot.last_name ||
+                    email !== snapshot.email ||
+                    phone_number !== snapshot.phone_number
+                );
             }
 
-            // Otherwise ask for confirmation and submit (this will trigger existing form submit handlers)
-            Swal.fire({
-                title: 'Confirm Update',
-                text: 'Are you sure you want to update your account information?',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, update',
-                cancelButtonText: 'No, keep editing',
-                confirmButtonColor: '#0a0099'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                // Use requestSubmit if available to respect form validation/custom submit handlers
-                if (typeof mainForm.requestSubmit === 'function') {
-                    mainForm.requestSubmit();
-                } else {
-                    mainForm.submit();
-                }
-                }
-            });
-        });
-    }
+            updateBtn.addEventListener('click', function (e) {
+                e.preventDefault();
 
-    if (cancelBtn) {
-        cancelBtn.addEventListener('click', function (e) {
-            e.preventDefault();
-            Swal.fire({
-                title: 'Cancel Update',
-                text: 'Are you sure you want to cancel? Any unsaved changes will be lost.',
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, cancel',
-                cancelButtonText: 'No, continue editing',
-                confirmButtonColor: '#b30000'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Submit the cancel form to server to clear session verification
-                    if (typeof cancelForm.requestSubmit === 'function') {
-                        cancelForm.requestSubmit();
-                    } else {
-                        cancelForm.submit();
+                // If there are no changes, show a SweetAlert info and do not submit
+                if (!hasChanges()) {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'No changes detected',
+                        text: 'Please update at least one field before submitting.',
+                        confirmButtonColor: '#0a0099'
+                    });
+                    return;
+                }
+
+                // Otherwise ask for confirmation and submit (this will trigger existing form submit handlers)
+                Swal.fire({
+                    title: 'Confirm Update',
+                    text: 'Are you sure you want to update your account information?',
+                    icon: 'question',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, update',
+                    cancelButtonText: 'No, keep editing',
+                    confirmButtonColor: '#0a0099'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Use requestSubmit if available to respect form validation/custom submit handlers
+                        if (typeof mainForm.requestSubmit === 'function') {
+                            mainForm.requestSubmit();
+                        } else {
+                            mainForm.submit();
+                        }
                     }
+                });
+            });
+        }
+
+        if (cancelBtn) {
+            cancelBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Cancel Update',
+                    text: 'Are you sure you want to cancel? Any unsaved changes will be lost.',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, cancel',
+                    cancelButtonText: 'No, continue editing',
+                    confirmButtonColor: '#b30000'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Submit the cancel form to server to clear session verification
+                        if (typeof cancelForm.requestSubmit === 'function') {
+                            cancelForm.requestSubmit();
+                        } else {
+                            cancelForm.submit();
+                        }
                     }
                 });
             });
