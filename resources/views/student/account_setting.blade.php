@@ -19,418 +19,405 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>D.A.R.A Dashboard</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-   <link rel="stylesheet" href="{{ asset('css/sidenav.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/student/std_control.css') }}">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D.A.R.A Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/sidenav.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/student/std_control.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-  <div class="navbar">
-    <h1>D.A.R.A</h1>
+    <div class="navbar">
+        <h1>D.A.R.A</h1>
 
- <div class="navbar-right">
-  <div class="notification-wrapper">
-    <button id="notifBtn" class="notif-btn">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-          viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-      </svg>
-      <span id="notifBadge" class="notif-badge">0</span>
-    </button>
+        <div class="navbar-right">
+            <div class="notification-wrapper">
+                <button id="notifBtn" class="notif-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" width="24" height="24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V4a2 2 0 10-4 0v1.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                    </svg>
+                    <span id="notifBadge" class="notif-badge">0</span>
+                </button>
 
-    <div id="notifDropdown" class="notif-dropdown hidden">
-      <h4>Notifications</h4>
-      <ul id="notifList"></ul>
-    </div>
-  </div>
+                <div id="notifDropdown" class="notif-dropdown hidden">
+                    <h4>Notifications</h4>
+                    <ul id="notifList"></ul>
+                </div>
+            </div>
 
-  <div class="profile">
-    <div class="profile-info">
-      <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
-      <p>Student</p>
-    </div>
-  </div>
-</div>
-@if (session('success'))
-<script>
-  // Ensure success SweetAlert shows after redirect (fires on full load)
-  window.addEventListener('load', function () {
-    if (typeof Swal !== 'undefined') {
-      Swal.fire({
-        icon: 'success',
-        title: 'Success!',
-        text: @json(session('success')),
-        confirmButtonColor: '#0a0099'
-      });
-    }
-  });
-</script>
-@endif
-  </div>
-
-
-
-  <div class="layout">
-     <!-- Sidebar -->
-    <aside class="sidebar">
-      <div>
-        <div class="menu-section">
-          <p class="menu-title">Menu</p>
-          <div class="menu">
-            <a href="<?php echo e(url('/student/dashboard')); ?>">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M3 10h4v11H3zM10 3h4v18h-4zM17 6h4v15h-4z" />
-              </svg>
-              Dashboard
-            </a>
-            <a href="<?php echo e(url('/')); ?>">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-         viewBox="0 0 24 24" stroke="currentColor">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M21 21l-4.35-4.35m1.1-5.4a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
-    </svg>
-    Search Studies
-  </a>
-            <a href="<?php echo e(url('/student/submission')); ?>" > 
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M12 4v16m8-8H4" />
-              </svg>
-              Submit Studies
-            </a>
-            <a href="<?php echo e(url('/student/submitted')); ?>">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M4 6h16M4 10h16M4 14h16M4 18h16" />
-              </svg>
-              Submitted Studies
-            </a>
-          </div>
+            <div class="profile">
+                <div class="profile-info">
+                    <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
+                    <p>Student</p>
+                </div>
+            </div>
         </div>
 
-        <div class="menu-section">
-          <p class="menu-title">Settings</p>
-          <div class="menu">
-            <a href="<?php echo e(url('/student/account_setting')); ?>" class="active">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                   viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M5.121 17.804A1 1 0 015 17V7a1 1 0 011-1h3.382a1 1 0 01.894.553l1.382 2.764a1 1 0 00.894.553H19a1 1 0 011 1v6a1 1 0 01-.121.496l-2.382 4.764a1 1 0 01-.894.553H6a1 1 0 01-.879-.496z" />
-              </svg>
-              Account
-            </a>
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
-  @csrf
-</form>
+        @if (session('success'))
+            <script>
+                // Ensure success SweetAlert shows after redirect (fires on full load)
+                window.addEventListener('load', function () {
+                    if (typeof Swal !== 'undefined') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: @json(session('success')),
+                            confirmButtonColor: '#0a0099'
+                        });
+                    }
+                });
+            </script>
+        @endif
+    </div>
 
-<a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="inline-flex items-center gap-2">
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
-  </svg>
-  Log out
-</a>
-
-          </div>
-        </div>
-      </div>
-    </aside>
-
-  <!-- Main -->
-<main class="main">
-    <h2>Account Setting</h2>
-
-
-    @php
-        $attempts = session('login_attempts', 0);
-        $locked_until = session('locked_until', null);
-    @endphp
-
-    {{-- If account is not verified, show verify form --}}
-@if (!session('account_verified'))
-<div class="verify-wrapper">
-  <form class="verify-form" id="verifyForm" method="POST" action="{{ route('student.verify_identity') }}">
-      @csrf
-      <div class="verify-card">
-          <h1>Verify Your Identity</h1>
-
-          {{-- Error Message --}}
-          @if ($errors->has('login_error'))
-              <div class="errors">{{ $errors->first('login_error') }}</div>
-          @endif
-
-          {{-- Lockout Message --}}
-          @if ($locked_until && now()->lt($locked_until))
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const lockoutSeconds = 60; // Adjust as needed
-  const lockoutEndTime = localStorage.getItem('lockoutEndTime') 
-    ? parseInt(localStorage.getItem('lockoutEndTime')) 
-    : Date.now() + lockoutSeconds * 1000;
-
-  localStorage.setItem('lockoutEndTime', lockoutEndTime);
-
-  let remaining = Math.floor((lockoutEndTime - Date.now()) / 1000);
-
-  const modal = Swal.fire({
-    title: 'Account Locked 🔒',
-    html: `
-      <div >
-        Too many failed attempts.<br>
-        Please wait <b><span id="countdown">${remaining}</span></b> seconds before trying again.
-      </div>
-    `,
-    icon: 'error',
-    allowOutsideClick: false,
-    showConfirmButton: false,
-    didOpen: () => {
-      const countdownEl = Swal.getHtmlContainer().querySelector('#countdown');
-      const timer = setInterval(() => {
-        remaining = Math.max(0, Math.floor((lockoutEndTime - Date.now()) / 1000));
-        countdownEl.textContent = remaining;
-        if (remaining <= 0) {
-          clearInterval(timer);
-          localStorage.removeItem('lockoutEndTime');
-          Swal.close();
-          location.reload();
-        }
-      }, 1000);
-    }
-  });
-});
-</script>
-@endif
-
-
-          <div class="input-group">
-              <label for="password">Enter your password</label>
-              <input
-                  type="password"
-                  id="password"
-                  name="password"
-                  @if ($locked_until && now()->lt($locked_until)) disabled @endif
-              >
-              <!-- Custom error message placeholder -->
-              <div id="passwordError" class="error-message"></div>
-          </div>
-
-          <button type="submit"
-                  @if ($locked_until && now()->lt($locked_until)) disabled @endif>
-              Verify
-          </button>
-      </div>
-  </form>
-</div>
-
-
-{{-- Countdown Script --}}
-@if ($locked_until && now()->lt($locked_until))
-<script>
-    const countdownElement = document.getElementById('countdown');
-
-    if (!localStorage.getItem('lockoutEndTime')) {
-        const endTime = Date.now() + 60000; // 60 seconds
-        localStorage.setItem('lockoutEndTime', endTime);
-    }
-
-    const endTime = parseInt(localStorage.getItem('lockoutEndTime'));
-
-    const timer = setInterval(() => {
-        const now = Date.now();
-        const remaining = Math.max(0, Math.floor((endTime - now) / 1000));
-        countdownElement.textContent = remaining;
-
-        if (remaining <= 0) {
-            clearInterval(timer);
-            localStorage.removeItem('lockoutEndTime');
-            location.reload();
-        }
-    }, 1000);
-</script>
-@endif
-    @else
-        {{-- If verified, show edit account form --}}
-       <div class="edit-account-wrapper">
-  <div class="edit-account-card">
-
-                
-                <!-- @if ($errors->any())
-                    <div class="error" style="color: red;">
-                        <ul style="list-style: none; padding: 0; text-align: center;">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div>
+                <div class="menu-section">
+                    <p class="menu-title">Menu</p>
+                    <div class="menu">
+                        <a href="<?php echo e(url('/student/dashboard')); ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M3 10h4v11H3zM10 3h4v18h-4zM17 6h4v15h-4z" />
+                            </svg>
+                            Dashboard
+                        </a>
+                        <a href="<?php echo e(url('/')); ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-4.35-4.35m1.1-5.4a7.5 7.5 0 11-15 0 7.5 7.5 0 0115 0z" />
+                            </svg>
+                            Search Studies
+                        </a>
+                        <a href="<?php echo e(url('/student/submission')); ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M12 4v16m8-8H4" />
+                            </svg>
+                            Submit Studies
+                        </a>
+                        <a href="<?php echo e(url('/student/submitted')); ?>">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                            </svg>
+                            Submitted Studies
+                        </a>
                     </div>
-                @endif
-                 -->
+                </div>
 
-        <form id="mainEditForm" method="POST" action="{{ route('student.update_account') }}">
+                <div class="menu-section">
+                    <p class="menu-title">Settings</p>
+                    <div class="menu">
+                        <a href="<?php echo e(url('/student/account_setting')); ?>" class="active">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5.121 17.804A1 1 0 015 17V7a1 1 0 011-1h3.382a1 1 0 01.894.553l1.382 2.764a1 1 0 00.894.553H19a1 1 0 011 1v6a1 1 0 01-.121.496l-2.382 4.764a1 1 0 01-.894.553H6a1 1 0 01-.879-.496z" />
+                            </svg>
+                            Account
+                        </a>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+                            @csrf
+                        </form>
+
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="inline-flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7" />
+                            </svg>
+                            Log out
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main -->
+        <main class="main">
+            <h2>Account Setting</h2>
+
+            @php
+                $attempts = session('login_attempts', 0);
+                $locked_until = session('locked_until', null);
+            @endphp
+
+            {{-- If account is not verified, show verify form --}}
+            @if (!session('account_verified'))
+                <div class="verify-wrapper">
+                    <form class="verify-form" id="verifyForm" method="POST" action="{{ route('student.verify_identity') }}">
+                        @csrf
+                        <div class="verify-card">
+                            <h1>Verify Your Identity</h1>
+
+                            {{-- Error Message --}}
+                            @if ($errors->has('login_error'))
+                                <div class="errors">{{ $errors->first('login_error') }}</div>
+                            @endif
+
+                            {{-- Lockout Message --}}
+                            @if ($locked_until && now()->lt($locked_until))
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', () => {
+                                        const lockoutSeconds = 60; // Adjust as needed
+                                        const lockoutEndTime = localStorage.getItem('lockoutEndTime') 
+                                            ? parseInt(localStorage.getItem('lockoutEndTime')) 
+                                            : Date.now() + lockoutSeconds * 1000;
+
+                                        localStorage.setItem('lockoutEndTime', lockoutEndTime);
+
+                                        let remaining = Math.floor((lockoutEndTime - Date.now()) / 1000);
+
+                                        const modal = Swal.fire({
+                                            title: 'Account Locked 🔒',
+                                            html: `
+                                                <div>
+                                                    Too many failed attempts.<br>
+                                                    Please wait <b><span id="countdown">${remaining}</span></b> seconds before trying again.
+                                                </div>
+                                            `,
+                                            icon: 'error',
+                                            allowOutsideClick: false,
+                                            showConfirmButton: false,
+                                            didOpen: () => {
+                                                const countdownEl = Swal.getHtmlContainer().querySelector('#countdown');
+                                                const timer = setInterval(() => {
+                                                    remaining = Math.max(0, Math.floor((lockoutEndTime - Date.now()) / 1000));
+                                                    countdownEl.textContent = remaining;
+                                                    if (remaining <= 0) {
+                                                        clearInterval(timer);
+                                                        localStorage.removeItem('lockoutEndTime');
+                                                        Swal.close();
+                                                        location.reload();
+                                                    }
+                                                }, 1000);
+                                            }
+                                        });
+                                    });
+                                </script>
+                            @endif
+
+                            <div class="input-group">
+                                <label for="password">Enter your password</label>
+                                <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    @if ($locked_until && now()->lt($locked_until)) disabled @endif
+                                >
+                                <!-- Custom error message placeholder -->
+                                <div id="passwordError" class="error-message"></div>
+                            </div>
+
+                            <button type="submit"
+                                    @if ($locked_until && now()->lt($locked_until)) disabled @endif>
+                                Verify
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                {{-- Countdown Script --}}
+                @if ($locked_until && now()->lt($locked_until))
+                    <script>
+                        const countdownElement = document.getElementById('countdown');
+
+                        if (!localStorage.getItem('lockoutEndTime')) {
+                            const endTime = Date.now() + 60000; // 60 seconds
+                            localStorage.setItem('lockoutEndTime', endTime);
+                        }
+
+                        const endTime = parseInt(localStorage.getItem('lockoutEndTime'));
+
+                        const timer = setInterval(() => {
+                            const now = Date.now();
+                            const remaining = Math.max(0, Math.floor((endTime - now) / 1000));
+                            countdownElement.textContent = remaining;
+
+                            if (remaining <= 0) {
+                                clearInterval(timer);
+                                localStorage.removeItem('lockoutEndTime');
+                                location.reload();
+                            }
+                        }, 1000);
+                    </script>
+                @endif
+            @else
+                {{-- If verified, show edit account form --}}
+                <div class="edit-account-wrapper">
+                    <div class="edit-account-card">
+                <!--
+                    @if ($errors->any())
+                        <div class="error" style="color: red;">
+                            <ul style="list-style: none; padding: 0; text-align: center;">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                -->
+
+                <form id="mainEditForm" method="POST" action="{{ route('student.update_account') }}">
                     @csrf
-<h2 style="color: #0a0099; font-weight: 800; text-align: center; margin-bottom: 10px;">
-                    Edit Your Account
-                </h2>
+                    <h2 style="color: #0a0099; font-weight: 800; text-align: center; margin-bottom: 10px;">
+                        Edit Your Account
+                    </h2>
 
                     <!-- Username -->
                     <label for="usn">Username</label>
-<input 
-  type="text" 
-  name="usn" 
-  id="usn" 
-  value="{{ old('usn', Auth::user()->usn ?? '') }}" 
-  disabled
->
+                    <input 
+                        type="text" 
+                        name="usn" 
+                        id="usn" 
+                        value="{{ old('usn', Auth::user()->usn ?? '') }}" 
+                        disabled
+                    >
 
-                  <!-- First + Last Name -->
-<div style="display: flex; gap: 40px; ">
-    <!-- First Name -->
-    <div style="flex: 1; display: flex; flex-direction: column;">
-        <label for="first_name">First Name</label>
-        <input 
-            type="text" 
-            name="first_name" 
-            id="first_name"
-            value="{{ old('first_name', Auth::user()->first_name ?? '') }}"
-            maxlength="30"
-        >
-        @if ($errors->has('first_name'))
-            <span class="text-danger" style="font-size: 0.9rem; margin-top: -15px; color: red;">
-                {{ $errors->first('first_name') }}
-            </span>
-        @endif
-    </div>
+                    <!-- First + Last Name -->
+                    <div style="display: flex; gap: 40px;">
+                        <!-- First Name -->
+                        <div style="flex: 1; display: flex; flex-direction: column;">
+                            <label for="first_name">First Name</label>
+                            <input 
+                                type="text" 
+                                name="first_name" 
+                                id="first_name"
+                                value="{{ old('first_name', Auth::user()->first_name ?? '') }}"
+                                maxlength="30"
+                            >
+                            @if ($errors->has('first_name'))
+                                <span class="text-danger" style="font-size: 0.9rem; margin-top: -15px; color: red;">
+                                    {{ $errors->first('first_name') }}
+                                </span>
+                            @endif
+                        </div>
 
-    <!-- Last Name -->
-    <div style="flex: 1; display: flex; flex-direction: column;">
-        <label for="last_name">Last Name</label>
-        <input 
-            type="text" 
-            name="last_name" 
-            id="last_name"
-            value="{{ old('last_name', Auth::user()->last_name ?? '') }}"
-            maxlength="30"
-        >
-        @if ($errors->has('last_name'))
-            <span class="text-danger" style="font-size: 0.9rem; margin-top: -15px; color: red">
-                {{ $errors->first('last_name') }}
-            </span>
-        @endif
-    </div>
-</div>
+                        <!-- Last Name -->
+                        <div style="flex: 1; display: flex; flex-direction: column;">
+                            <label for="last_name">Last Name</label>
+                            <input 
+                                type="text" 
+                                name="last_name" 
+                                id="last_name"
+                                value="{{ old('last_name', Auth::user()->last_name ?? '') }}"
+                                maxlength="30"
+                            >
+                            @if ($errors->has('last_name'))
+                                <span class="text-danger" style="font-size: 0.9rem; margin-top: -15px; color: red;">
+                                    {{ $errors->first('last_name') }}
+                                </span>
+                            @endif
+                        </div>
+                    </div>
 
-<!-- Email -->
-<div style="display: flex; flex-direction: column; margin-top: 3px;">
-  <label for="email">Email Address</label>
-  <input 
-    type="email" 
-    name="email" 
-    id="email"
-    value="{{ old('email', Auth::user()->email ?? '') }}"
-    placeholder="example@gmail.com"
-    maxlength="30"
-   
-  >
-  @if ($errors->has('email'))
-            <span class="text-danger" style="font-size: 0.9rem; margin-top: -15px; color: red">
-                {{ $errors->first('email') }}
-            </span>
-        @endif
-</div>
+                    <!-- Email -->
+                    <div style="display: flex; flex-direction: column; margin-top: 3px;">
+                        <label for="email">Email Address</label>
+                        <input 
+                            type="email" 
+                            name="email" 
+                            id="email"
+                            value="{{ old('email', Auth::user()->email ?? '') }}"
+                            placeholder="example@gmail.com"
+                            maxlength="30"
+                        >
+                        @if ($errors->has('email'))
+                            <span class="text-danger" style="font-size: 0.9rem; margin-top: -15px; color: red;">
+                                {{ $errors->first('email') }}
+                            </span>
+                        @endif
+                    </div>
 
+                    <!-- Phone Number -->
+                    <div style="display: flex; flex-direction: column;">
+                        <label for="phone_number">Phone Number</label>
+                        <input 
+                            type="text" 
+                            name="phone_number" 
+                            id="phone_number" 
+                            maxlength="13" 
+                            placeholder="9XX-XXX-XXXX"
+                            value="{{ old('phone_number', isset(Auth::user()->phone_number) ? preg_replace('/^\+63\s?/', '', Auth::user()->phone_number) : '') }}"
+                        >
+                        @if ($errors->has('phone_number'))
+                            <span class="text-danger" style="font-size: 0.9rem; margin-top: -15px; color: red;">
+                                {{ $errors->first('phone_number') }}
+                            </span>
+                        @endif
+                    </div>
 
-<!-- Phone Number -->
-<div style="display: flex; flex-direction: column; ">
-  <label for="phone_number">Phone Number</label>
-  <input 
-    type="text" 
-    name="phone_number" 
-    id="phone_number" 
-    maxlength="13" 
-    placeholder="9XX-XXX-XXXX"
-    value="{{ old('phone_number', isset(Auth::user()->phone_number) ? preg_replace('/^\+63\s?/', '', Auth::user()->phone_number) : '') }}"
-  >
-  @if ($errors->has('phone_number'))
-    <span class="text-danger" style="font-size: 0.9rem; margin-top: -15px; color: red;">
-      {{ $errors->first('phone_number') }}
-    </span>
-  @endif
-</div>
+                    <!-- New Password -->
+                    <div style="display: flex; flex-direction: column; margin-bottom: 10px;">
+                        <label for="password">
+                            New Password
+                            <span style="font-weight: normal; font-size: 13px; color: #333;">
+                                (leave blank to keep current password)
+                            </span>
+                        </label>
+                        <input 
+                            type="password" 
+                            name="password" 
+                            id="password" 
+                            minlength="6"
+                            placeholder="Enter new password"
+                        />
+                        <span id="passwordError" style="font-size: 0.9rem; color:red; margin-top: -10px;"></span>
+                        @if ($errors->has('password'))
+                            <span>
+                                {{ $errors->first('password') }}
+                            </span>
+                        @endif
+                    </div>
 
-<!-- New Password -->
-<div style="display: flex; flex-direction: column; margin-bottom: 10px;">
-  <label for="password">
-    New Password
-    <span style="font-weight: normal; font-size: 13px; color: #333;">
-      (leave blank to keep current password)
-    </span>
-  </label>
-  <input 
-    type="password" 
-    name="password" 
-    id="password" 
-    minlength="6"
-    placeholder="Enter new password"
-  />
-  <span id="passwordError" style="font-size: 0.9rem;color:red; margin-top: -10px; "></span>
-  @if ($errors->has('password'))
-      <span >
-        {{ $errors->first('password') }}
-      </span>
-  @endif
-</div>
-
-<!-- Confirm Password -->
-<div style="display: flex; flex-direction: column;">
-  <label for="password_confirmation">Confirm Password</label>
-  <input 
-    type="password" 
-    name="password_confirmation" 
-    id="password_confirmation" 
-    minlength="6"
-    placeholder="Re-enter new password"
-  />
-  <span id="confirmPasswordError"  style="font-size: 0.9rem; color: red; margin-top: -10px;"></span>
-  @if ($errors->has('password_confirmation'))
-      <span >
-        {{ $errors->first('password_confirmation') }}
-      </span>
-  @endif
-</div>
-
-
+                    <!-- Confirm Password -->
+                    <div style="display: flex; flex-direction: column;">
+                        <label for="password_confirmation">Confirm Password</label>
+                        <input 
+                            type="password" 
+                            name="password_confirmation" 
+                            id="password_confirmation" 
+                            minlength="6"
+                            placeholder="Re-enter new password"
+                        />
+                        <span id="confirmPasswordError" style="font-size: 0.9rem; color: red; margin-top: -10px;"></span>
+                        @if ($errors->has('password_confirmation'))
+                            <span>
+                                {{ $errors->first('password_confirmation') }}
+                            </span>
+                        @endif
+                    </div>
 
                     <!-- Buttons -->
                     <!-- Wrap both forms in a flex container -->
-<div class="update-btn">
+                    <div class="update-btn">
+                        <!-- Update & Cancel buttons: Update button will submit the outer edit form -->
+                        <button id="updateBtn" type="button"
+                            style="background-color: #0a0099; color: white; border: none;
+                                padding: 12px 30px; border-radius: 8px; font-size: 16px;
+                                font-weight: bold; cursor: pointer; transition: 0.3s; margin-top:-10px">
+                            Update Account
+                        </button>
+                    </div>
+                </form>
 
-  <!-- Update & Cancel buttons: Update button will submit the outer edit form -->
-    <button id="updateBtn" type="button"
-        style="background-color: #0a0099; color: white; border: none;
-             padding: 12px 30px; border-radius: 8px; font-size: 16px;
-             font-weight: bold; cursor: pointer; transition: 0.3s;margin-top:-10px">
-      Update Account
-    </button>
-
-</div>
-</form>
-
-                    <!-- Cancel form placed outside the edit form to avoid nested forms -->
-                    <div class="cancel-btn">
+                <!-- Cancel form placed outside the edit form to avoid nested forms -->
+                <div class="cancel-btn">
                     <form id="cancelUpdateForm" method="POST" action="{{ route('student.cancel_update') }}" style="display:inline-block;">
                         @csrf
                         <button id="cancelBtn" type="button"
                             style="background-color: #b30000; color: white; border: none;
                                 padding: 12px 30px; border-radius: 8px; font-size: 16px;
                                 font-weight: bold; cursor: pointer; transition: 0.3s;">
-                        Cancel
+                            Cancel
                         </button>
                     </form>
                 </div>

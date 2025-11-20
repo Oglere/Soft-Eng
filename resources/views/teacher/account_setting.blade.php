@@ -448,6 +448,100 @@
         }
     });
 </script>
+
+<script>
+    // Password + confirm validation
+    const form = document.getElementById('mainEditForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const password = document.getElementById('password').value.trim();
+            const confirm = document.getElementById('password_confirmation').value.trim();
+            const passwordError = document.getElementById('passwordError');
+            const confirmError = document.getElementById('confirmPasswordError');
+
+            passwordError.textContent = '';
+            confirmError.textContent = '';
+
+            if(password !== '' || confirm !== '') {
+                if(password !== confirm){
+                    e.preventDefault();
+                    confirmError.textContent = 'Passwords do not match';
+                    return;
+                }
+                const strongPattern = /^(?=.*[0-9])(?=.*[!@#$%^&*]).{6,}$/;
+                if(!strongPattern.test(password)){
+                    e.preventDefault();
+                    passwordError.textContent = 'Password must include at least one number and special character';
+                    return;
+                }
+            }
+        });
+    }
+
+    // Phone formatting
+    const phoneInput = document.getElementById('phone_number');
+    phoneInput.addEventListener('input', function(e){
+        let value = e.target.value.replace(/\D/g,'');
+        if(!value.startsWith('9')) value='9'+value;
+        value = value.substring(0,10);
+        const formatted = value.replace(/^(\d{1,3})(\d{0,3})(\d{0,4}).*/, function(_,a,b,c){return a+(b?'-'+b:'')+(c?'-'+c:'');});
+        e.target.value = formatted;
+    });
+
+    // Email validation
+    const emailInput = document.getElementById('email');
+    const emailError = document.getElementById('emailError');
+    emailInput.addEventListener('input', function(){
+        let val = emailInput.value.trim();
+        if(val.includes('@gmail.com')){
+            val = val.split('@gmail.com')[0] + '@gmail.com';
+        }
+        emailInput.value = val;
+        const pattern = /^[A-Za-z0-9._%+-]{1,15}@gmail\.com$/;
+        if(val !== '' && !pattern.test(val)){
+            emailError.textContent = 'Invalid Gmail format';
+            emailInput.style.borderColor = '#dc2626';
+        }else{
+            emailError.textContent = '';
+            emailInput.style.borderColor = '#ccc';
+        }
+    });
+
+    // SweetAlert for Update & Cancel
+    const updateBtn = document.getElementById('updateBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const cancelForm = document.getElementById('cancelUpdateForm');
+
+    updateBtn.addEventListener('click', function(){
+        Swal.fire({
+            title: 'Confirm Update',
+            text: 'Are you sure you want to update your account?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, update',
+            cancelButtonText: 'No, cancel',
+        }).then(result=>{
+            if(result.isConfirmed){
+                form.submit();
+            }
+        });
+    });
+
+    cancelBtn.addEventListener('click', function(){
+        Swal.fire({
+            title:'Cancel Update',
+            text:'Are you sure? Unsaved changes will be lost.',
+            icon:'warning',
+            showCancelButton:true,
+            confirmButtonText:'Yes, cancel',
+            cancelButtonText:'No, continue',
+        }).then(result=>{
+            if(result.isConfirmed){
+                cancelForm.submit();
+            }
+        });
+    });
+</script>
 </body>
 </html>
 
