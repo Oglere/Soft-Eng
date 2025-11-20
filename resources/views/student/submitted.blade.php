@@ -12,9 +12,8 @@
 
     <!-- Navbar -->
     <div class="navbar">
-        <div>
-            {{-- <img src="{{ asset('images/DARA.png') }}" alt="Logo"> --}}
-        </div>
+        <h1>D.A.R.A</h1>
+
         <div class="navbar-right">
             <div class="notification-wrapper">
                 <button id="notifBtn" class="notif-btn">
@@ -207,7 +206,7 @@
         <div class="pagination-container">
             {{ $submissions->withQueryString()->links('vendor.pagination.custom') }}
         </div>
-
+        
         <!-- Modal -->
         <div id="submissionModal" class="modal" style="display:none;">
             <div class="modal-content">
@@ -217,6 +216,7 @@
                     <p><strong>Submitted Date:</strong> <span id="modalDate"></span></p>
                     <p><strong>Status:</strong> <span id="modalStatus"></span></p>
 
+
                     <p id="modalApprovedByContainer" style="display:none;">
                         <strong>Approved By:</strong> <span id="modalApprovedBy"></span>
                     </p>
@@ -225,9 +225,9 @@
                     <p id="modalAbstract" class="scrollable-text"></p>
 
                     <div id="modalPdfContainer" style="height:400px;">
-                        <iframe
-                            id="modalFilePdf"
-                            src=""
+                        <iframe 
+                            id="modalFilePdf" 
+                            src="" 
                             style="width:100%; height:100%; border:1px solid #ccc; border-radius:6px;">
                         </iframe>
                         <div id="noFileMessage" class="no-file" style="display:none; text-align:center; padding:20px; color:gray;">
@@ -235,9 +235,10 @@
                         </div>
                     </div>
                     <!-- Review Button -->
-                    <div style="margin-top: 1rem; text-align: right;">
-                        <a id="reviewButton" href="#" class="review-btn">Review Submitted Studies</a>
-                    </div>
+                      <div style="margin-top: 1rem; text-align: right; display: none;">
+    <a id="reviewButton" href="#" class="review-btn">Review Submitted Studies</a>
+</div>
+
                 </div>
             </div>
         </div>
@@ -408,74 +409,101 @@
     });
 
     async function loadNotifications(saveToStorage = true) {
-        const notifBadge = document.getElementById('notifBadge');
-        const notifList = document.getElementById('notifList');
+  const notifBadge = document.getElementById('notifBadge');
+  const notifList = document.getElementById('notifList');
 
-        try {
-            const res = await fetch('{{ route("student.notifications") }}');
-            const data = await res.json();
+  try {
+    const res = await fetch('{{ route("student.notifications") }}');
+    const data = await res.json();
 
-            notifList.innerHTML = '';
+    notifList.innerHTML = '';
 
-            if (data.length === 0) {
-            notifBadge.style.display = 'none';
-            notifList.innerHTML = '<li>No new notifications.</li>';
-            if (saveToStorage) localStorage.setItem('notifCount', 0);
-            return;
-        }
+    if (data.length === 0) {
+      notifBadge.style.display = 'none';
+      notifList.innerHTML = '<li>No new notifications.</li>';
+      if (saveToStorage) localStorage.setItem('notifCount', 0);
+      return;
+    }
 
-        notifBadge.style.display = 'inline-block';
-        notifBadge.textContent = data.length;
+    // Get read notifications from localStorage
+    const readNotifs = JSON.parse(localStorage.getItem('readNotifs') || '[]');
+
+    // Filter unread notifications for badge
+    const unreadCount = data.filter(n => !readNotifs.includes(n.message)).length;
+
+    notifBadge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+    notifBadge.textContent = unreadCount;
 
     // store count so it persists across pages
-    if (saveToStorage) localStorage.setItem('notifCount', data.length);
-        data.forEach(n => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            ${n.icon}
-            <a href="${n.link}" class="notif-link">${n.message}</a>
-            <br>
-            <small>${n.time}</small>
-        `;
-            notifList.appendChild(li);
-        });
+    if (saveToStorage) localStorage.setItem('notifCount', unreadCount);
 
-        } catch (error) {
-            console.error('Error loading notifications:', error);
+    data.forEach(n => {
+      const li = document.createElement('li');
+
+      // If notification has been read, bg is white; else yellow
+      const isRead = readNotifs.includes(n.message);
+      li.style.backgroundColor = isRead ? '#fff' : '#fef9c3';
+      li.style.cursor = 'pointer';
+      li.innerHTML = `
+        ${n.icon}
+        <a href="${n.link}" class="notif-link">${n.message}</a>
+        <br>
+        <small>${n.time}</small>
+      `;
+
+      // On click: mark as read, set bg white, update badge
+      li.addEventListener('click', () => {
+        if (!readNotifs.includes(n.message)) {
+          readNotifs.push(n.message);
+          localStorage.setItem('readNotifs', JSON.stringify(readNotifs));
+
+          li.style.backgroundColor = '#fff';
+
+          // update badge
+          const currentBadge = parseInt(notifBadge.textContent) || 0;
+          const newBadge = Math.max(currentBadge - 1, 0);
+          notifBadge.textContent = newBadge;
+          if (newBadge === 0) notifBadge.style.display = 'none';
         }
-    }
+      });
 
-    // --- INITIALIZATION ---
-    document.addEventListener('DOMContentLoaded', () => {
-    const notifBadge = document.getElementById('notifBadge');
-
-    // Load saved count from localStorage (keep number after page change)
-    const savedCount = localStorage.getItem('notifCount');
-    if (savedCount && parseInt(savedCount) > 0) {
-        notifBadge.textContent = savedCount;
-        notifBadge.style.display = 'inline-block';
-    } else {
-        notifBadge.style.display = 'none';
-    }
-
-        // Fetch new notifications immediately
-        loadNotifications();
-
-        // Refresh notifications every 10 seconds
-        setInterval(() => {
-
-            loadNotifications();
-        }, 10000); // 10 seconds
+      notifList.appendChild(li);
     });
+  } catch (error) {
+    console.error('Error loading notifications:', error);
+  }
+}
 
-    // Toggle dropdown on bell click
-    document.getElementById('notifBtn').addEventListener('click', async () => {
-        const dropdown = document.getElementById('notifDropdown');
-        dropdown.classList.toggle('hidden');
-        if (!dropdown.classList.contains('hidden')) {
-            await loadNotifications(false); // don’t overwrite saved count every click
-        }
-    });
+// --- INITIALIZATION ---
+document.addEventListener('DOMContentLoaded', () => {
+  const notifBadge = document.getElementById('notifBadge');
+
+  // Load saved count from localStorage (keep number after page change)
+  const savedCount = localStorage.getItem('notifCount');
+  if (savedCount && parseInt(savedCount) > 0) {
+    notifBadge.textContent = savedCount;
+    notifBadge.style.display = 'inline-block';
+  } else {
+    notifBadge.style.display = 'none';
+  }
+
+  // Fetch new notifications immediately
+  loadNotifications();
+
+  // Refresh notifications every 10 seconds
+  setInterval(() => {
+    loadNotifications();
+  }, 10000); // 10 seconds
+});
+
+// Toggle dropdown on bell click
+document.getElementById('notifBtn').addEventListener('click', async () => {
+  const dropdown = document.getElementById('notifDropdown');
+  dropdown.classList.toggle('hidden');
+  if (!dropdown.classList.contains('hidden')) {
+    await loadNotifications(false); // don’t overwrite saved count every click
+  }
+});
 </script>
 </body>
 </html>

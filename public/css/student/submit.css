@@ -1,239 +1,375 @@
+/* --- DESKTOP (Default): No scrolling --- */
 html, body {
-  overflow: hidden;
+  overflow: hidden;     /* remove scrollbars on desktop */
+  height: 100%;         /* prevents accidental scroll */
 }
 
+/* --- RESPONSIVE: Enable scroll on smaller screens --- */
+@media (max-width: 1024px) {
+  html, body {
+    overflow-y: auto !important;  /* bring back vertical scroll */
+    overflow-x: hidden !important;
+    height: auto !important;
+  }
+}
+
+
 .main {
-    flex: 1;
-    padding: 2rem;
+  flex: 1;
+  padding: 2rem;
 }
 
 .main h2 {
-font-size: 1.5rem;
-font-weight: 700;
-
-color: #0a1444;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #0a1444;
 }
 
+/* --- Upload Box --- */
 .upload-box {
-    border: 2px dashed #d1d5db;
-    border-radius: 10px;
-    padding: 2rem;
-    text-align: center;
-    background-color: #fff;
-
+  border: 2px dashed #d1d5db;
+  border-radius: 10px;
+  padding: 2rem;
+  text-align: center;
+  background-color: #fff;
+  transition: all 0.3s ease; /* smooth resizing */
 }
 
 .upload-box a {
-    color: #0a1444;
-    font-weight: 600;
-    cursor: pointer;
+  color: #0a1444;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
 }
 
+/* --- Form and Inputs --- */
 form {
-    background: #f9fafb;
-    padding: 1.5rem;
-    border-radius: 1rem;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    height:78vh;
+  background: #f9fafb;
+  padding: 1.8rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+   min-height: 78.3vh; /* allows extending when content grows */
+  height: auto;  
 }
 
 .form-row {
-    display: flex;
-    gap: 1rem;
+  display: flex;
+  gap: 1rem;
+  margin-top: 20px;
 }
 
 .form-group {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  margin-top: -20px;
 }
-
+.form-groupt {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 3vh;
+  margin-top: -20px;
+}
 label {
-    font-weight: 600;
-    margin-bottom: 0.3rem;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  margin-top: 0.1rem;
 }
 
 input, textarea, select {
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
-    font-size: 0.95rem;
-    outline: none;
-    background: #f9fafb;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  outline: none;
+  background: #f9fafb;
 }
 
 input:focus, textarea:focus, select:focus {
-    border-color: #1e3a8a;
-    background: #fff;
+  border-color: #1e3a8a;
+  background: #fff;
 }
 
 textarea {
-    resize: none;
-    min-height: 120px;
+  resize: none;
+  min-height: 140px;
 }
 
+/* --- Type Buttons --- */
 .type-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-bottom: 1rem;
-    margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  margin-top: 5px;
 }
 
 .type-buttons input[type="checkbox"] {
-    display: none;
+  display: none;
 }
 
 .type-buttons label {
-    padding: 0.5rem 1rem;
-    border: 1px solid #d1d5db;
-    background: white;
-    border-radius: 2rem;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: all 0.3s;
-    user-select: none;
+  padding: 0.5rem 1rem;
+  border: 1px solid #d1d5db;
+  background: white;
+  border-radius: 2rem;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s;
+  user-select: none;
 }
 
 .type-buttons label:hover {
-    background: #0a1444;
-    color: white;
-    border-color: #1e3a8a;
+  background: #0a1444;
+  color: white;
+  border-color: #1e3a8a;
 }
 
 .type-buttons input[type="checkbox"]:checked + label {
-    background: #0a1444;
-    color: white;
-    border-color: #1e3a8a;
+  background: #0a1444;
+  color: white;
+  border-color: #1e3a8a;
 }
+
+/* --- Submit Button --- */
 .submit-btn {
-    background: #0a1444;
-    color: white;
-    border: none;
-    padding: 0.75rem 2.5rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    cursor: pointer;
-    float: right;
-    transition: 0.3s;
-    margin-top: 10px;
+  background: #0a1444;
+  color: white;
+  border: none;
+  padding: 0.75rem 2.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  float: right;
+  transition: 0.3s;
+  margin-top: 20px;
 }
 
 .submit-btn:hover {
-    background: #10236b;
+  background: #10236b;
 }
+
+/* --- Error Message --- */
 .error-message {
-    color: red;
-    font-size: 0.85rem;
+  color: red;
+  font-size: 0.95rem;
 
 }
+
+/* --- Teacher Section --- */
 .teacher-container {
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    margin-top: -2px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: -2px;
 }
 
 .teacher-group {
   display: flex;
   flex-direction: column;
-  gap: -10px;
 }
 
 .teacher-group label {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .teacher-group .teacher-select {
-    width: 100%;
-    height: 43px;
-    padding: 0.75rem;
-    border: 1px solid #d1d5db;
-    border-radius: 0.5rem;
-    font-size: 0.95rem;
-    background: #f9fafb;
-    outline: none;
+  width: 100%;
+  height: 50px;
+  padding: 0.65rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background: #f9fafb;
+  outline: none;
 }
 
 .teacher-group .teacher-select:focus {
-    border-color: #1e3a8a;
-    background: #fff;
+  border-color: #1e3a8a;
+  background: #fff;
 }
 
+/* ============================
+   ENABLE SCROLL WHEN RESPONSIVE
+   ============================ */
+
+/* Tablets & Smaller (≤ 1024px) */
+@media (max-width: 1024px) {
+  html, body {
+    overflow: auto !important;
+  }
+
+  form {
+    height: auto; /* allow form to expand */
+  }
+
+  .main {
+    padding-bottom: 3rem; /* spacing for scroll */
+  }
+}
+
+/* Mobile (≤ 768px) */
+@media (max-width: 768px) {
+  html, body {
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+  }
+
+  form {
+    height: auto !important;   /* remove fixed height restriction */
+  }
+
+  .form-row {
+    flex-direction: column;    /* stack fields */
+  }
+}
+
+
+@media (max-width: 768px) {
+  .submit-btn {
+    width: 100%;
+    float: none;
+    display: block;
+    margin-top: 15px;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  form {
+    padding-bottom: 80px; /* extra space for submit button */
+  }
+}
+
+/* Notification Bell */
 .notification-wrapper {
-    position: relative;
+  position: relative;
 }
 
 .notif-btn {
-    position: relative;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 5px;
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
 }
 
 .notif-badge {
-    position: absolute;
-    top: -3px;
-    right: -3px;
-    background: #ff4d4d;
-    color: white;
-    font-size: 11px;
-    font-weight: bold;
-    border-radius: 50%;
-    padding: 2px 6px;
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  background: #ff4d4d;
+  color: white;
+  font-size: 11px;
+  font-weight: bold;
+  border-radius: 50%;
+  padding: 2px 6px;
 }
 
 .notif-dropdown {
-    position: absolute;
-    top: 40px;
-    right: 0;
-    background: white;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    border-radius: 10px;
-    width: 500px;
-    z-index: 100;
-    padding: 10px;
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: white;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  border-radius: 10px;
+  width: 500px;
+  z-index: 100;
+  padding: 10px;
 }
 
 .notif-dropdown h4 {
-    margin: 0 0 10px 5px;
-    font-size: 16px;
-    font-weight: 600;
-    color: #0a1444;
+  margin: 0 0 10px 5px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #0a1444;
 }
 
 .notif-dropdown ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    max-height: 250px;
-    overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 250px;
+  overflow-y: auto;
 }
 
 .notif-dropdown ul li {
-    padding: 10px;
-    border-bottom: 1px solid #f0f0f0;
-    font-size: 14px;
-    color: #333;
+  padding: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  color: #333;
 }
 
 .notif-dropdown ul li small {
-    display: block;
-    font-size: 12px;
-    color: #888;
+  display: block;
+  font-size: 12px;
+  color: #888;
 }
 
 .hidden {
-    display: none;
+  display: none;
 }
 .notif-link {
-    color: #0a1444;
-    text-decoration: none;
-    font-weight: 600;
+  color: #0a1444;
+  text-decoration: none;
+  font-weight: 600;
 }
 
 .notif-link:hover {
-    text-decoration: underline;
-    color: #0056b3;
+  text-decoration: underline;
+  color: #0056b3;
 }
+/* ---------- RESPONSIVE NOTIF-DROPDOWN ---------- */
+
+/* Tablets (≤ 1024px) */
+@media (max-width: 1024px) {
+  .notif-dropdown {
+    width: 380px;
+    right: -20px;  /* shift slightly so it stays inside */
+  }
+}
+
+@media (max-width: 768px) {
+  .notif-dropdown {
+    position: fixed;           /* attach to the viewport */
+    top: 70px;                 /* adjust as needed */
+    left: 50%;                 /* center horizontally */
+    transform: translateX(-50%);
+    
+    width: 90vw;
+    max-width: 400px;
+
+    border-radius: 12px;
+    z-index: 9999;
+  }
+
+  .notif-dropdown h4 {
+    font-size: 15px;
+  }
+
+  .notif-dropdown ul li {
+    font-size: 13px;
+    padding: 8px;
+  }
+}
+
+/* Small phones (≤ 480px) */
+@media (max-width: 480px) {
+  .notif-dropdown {
+    width: 95vw;
+    padding: 8px;
+    top: 48px;
+  }
+
+  .notif-dropdown h4 {
+    font-size: 14px;
+  }
+
+  .notif-dropdown ul li {
+    font-size: 12px;
+    padding: 7px;
+  }
+}
+
